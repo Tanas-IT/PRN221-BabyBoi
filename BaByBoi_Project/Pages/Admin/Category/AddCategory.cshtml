@@ -1,0 +1,55 @@
+﻿@page
+@model PRN221-BabyBoi.Pages.Admin.AddCategoryModel
+@{
+    ViewData["Title"] = "Add Category";
+}
+
+<h2>Add Category</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Category.CagetoryCode" class="control-label"></label>
+        <input type="text" class="form-control" asp-for="Category.CagetoryCode" />
+        <span asp-validation-for="Category.CagetoryCode" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Category.CagetoryName" class="control-label"></label>
+        <input type="text" class="form-control" asp-for="Category.CagetoryName" />
+        <span asp-validation-for="Category.CagetoryName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Category.CreateDate" class="control-label"></label>
+        <input type="date" class="form-control" asp-for="Category.CreateDate" />
+        <span asp-validation-for="Category.CreateDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Category.UpdateDate" class="control-label"></label>
+        <input type="date" class="form-control" asp-for="Category.UpdateDate" />
+        <span asp-validation-for="Category.UpdateDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Category.UpdateBy" class="control-label"></label>
+        <input type="text" class="form-control" asp-for="Category.UpdateBy" />
+        <span asp-validation-for="Category.UpdateBy" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Category.CreateBy" class="control-label"></label>
+        <input type="text" class="form-control" asp-for="Category.CreateBy" />
+        <span asp-validation-for="Category.CreateBy" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Category.Status" class="control-label"></label>
+        <input type="number" class="form-control" asp-for="Category.Status" />
+        <span asp-validation-for="Category.Status" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Category.UserId" class="control-label"></label>
+        <input type="number" class="form-control" asp-for="Category.UserId" />
+        <span asp-validation-for="Category.UserId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
