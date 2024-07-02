@@ -1,4 +1,5 @@
 ﻿using BaByBoi.Domain.Models;
+using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,9 @@ namespace DataAccess.Repositories
 {
     public class CategoryRepository : ICategoryRepository
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BaByBoiContext _context;
 
-        public CategoryRepository(ApplicationDbContext context)
+        public CategoryRepository(BaByBoiContext context)
         {
             _context = context;
         }

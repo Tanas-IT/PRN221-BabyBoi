@@ -1,0 +1,89 @@
+﻿@page
+@model BaByBoi.Pages.Admin.CategoryAdminModel
+@{
+    ViewData["Title"] = "Category Admin";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Category Admin</h2>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h4>Create New Category</h4>
+                <form method="post">
+                    <div class="form-group">
+                        <label asp-for="Category.CagetoryName" class="control-label"></label>
+                        <input type="text" class="form-control" asp-for="Category.CagetoryName" required />
+                        <span asp-validation-for="Category.CagetoryName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Category.CagetoryCode" class="control-label"></label>
+                        <input type="text" class="form-control" asp-for="Category.CagetoryCode" required />
+                        <span asp-validation-for="Category.CagetoryCode" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Category.CreateBy" class="control-label"></label>
+                        <input type="text" class="form-control" asp-for="Category.CreateBy" required />
+                        <span asp-validation-for="Category.CreateBy" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h4>Existing Categories</h4>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>CategoryID</th>
+                            <th>CategoryCode</th>
+                            <th>CategoryName</th>
+                            <th>CreateDate</th>
+                            <th>UpdateDate</th>
+                            <th>UpdateBy</th>
+                            <th>CreateBy</th>
+                            <th>Status</th>
+                            <th>UserID</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var category in Model.Categories)
+                        {
+                            <tr>
+                                <td>@category.CagetoryId</td>
+                                <td>@category.CagetoryCode</td>
+                                <td>@category.CagetoryName</td>
+                                <td>@category.CreateDate?.ToString("yyyy-MM-dd")</td>
+                                <td>@category.UpdateDate?.ToString("yyyy-MM-dd")</td>
+                                <td>@category.UpdateBy</td>
+                                <td>@category.CreateBy</td>
+                                <td>@category.Status</td>
+                                <td>@category.UserId</td>
+                                <td>
+                                    <a href="/EditCategory/@category.CagetoryId" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="/DeleteCategory/@category.CagetoryId" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
