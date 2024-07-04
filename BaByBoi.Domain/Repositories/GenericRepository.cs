@@ -1,5 +1,6 @@
 ﻿using BaByBoi.Domain.Models;
 using BaByBoi.Domain.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,51 +18,57 @@ namespace BaByBoi.Domain.Repositories
         {
             _context = context;
         }
-        public void Add(T entity)
+        public virtual async Task Add(T entity)
         {
-            _context.Set<T>().Add(entity);
-            _context.SaveChanges();
+           await _context.Set<T>().AddAsync(entity);
+           await _context.SaveChangesAsync();
+        }
+        public virtual async Task<bool> AddAsync(T entity)
+        {
+            await _context.Set<T>().AddAsync(entity);
+            var result = await _context.SaveChangesAsync()> 0 ? true :false;
+            return result;
         }
 
-        public void AddRange(IEnumerable<T> entities)
+        public virtual async Task AddRange(IEnumerable<T> entities)
         {
             _context.Set<T>().AddRange(entities);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
+        public virtual async Task<IEnumerable<T>> Find(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().Where(predicate);
+            return await _context.Set<T>().Where(predicate).ToListAsync();
         }
 
-        public IEnumerable<T> GetAll()
+        public virtual async Task<IEnumerable<T>> GetAll()
         {
-            return _context.Set<T>().ToList();
+            return await _context.Set<T>().ToListAsync();
         }
 
-        public T GetById(int id)
+        public virtual async Task<T> GetById(int id)
         {
-            var a = _context.Set<T>().Find(id);
-            return _context.Set<T>().Find(id);
+            var a = await _context.Set<T>().FindAsync(id);
+            return a;
         }
 
-        public T GetById(string id)
+        public virtual async Task<T> GetById(string id)
         {
-            var a = _context.Set<T>().Find(id);
-            return _context.Set<T>().Find(id);
+            var a = await _context.Set<T>().FindAsync(id);
+            return a;
         }
 
-        public void Remove(T entity)
+        public virtual async Task Remove(T entity)
         {
             _context.Set<T>().Remove(entity);
-            _context.SaveChanges();
+           await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> RemovebyId(int id)
+        public virtual async Task<bool> RemovebyId(int id)
         {
             try
             {
-                var entityID = GetById(id);
+                var entityID = await GetById(id);
 
                 if (entityID != null)
                 {
@@ -81,11 +88,11 @@ namespace BaByBoi.Domain.Repositories
             }
         }
 
-        public  async Task<bool> RemovebyId(string id)
+        public virtual async Task<bool> RemovebyId(string id)
         {
             try
             {
-                var entityID = GetById(id);
+                var entityID = await GetById(id);
 
                 if (entityID != null)
                 {
@@ -105,16 +112,23 @@ namespace BaByBoi.Domain.Repositories
             }
         }
 
-        public void RemoveRange(IEnumerable<T> entities)
+        public virtual async Task RemoveRange(IEnumerable<T> entities)
         {
             _context.Set<T>().RemoveRange(entities);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(T entity)
+        public virtual async Task Update(T entity)
         {
             _context.Set<T>().Update(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+        }
+
+        public virtual async Task<bool> UpdateAsync(T entity)
+        {
+            _context.Set<T>().Update(entity);
+           var result = await _context.SaveChangesAsync() > 0 ? true : false;
+            return result;
         }
     }
 }

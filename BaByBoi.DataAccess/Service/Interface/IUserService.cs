@@ -9,6 +9,6 @@ namespace BaByBoi.DataAccess.Service.Interface
 {
     public interface IUserService
     {
-        public List<User> GetAll();
+        public Task<List<User>> GetAll();
     }
 }
