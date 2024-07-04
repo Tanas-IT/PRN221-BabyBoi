@@ -3,6 +3,7 @@ using BaByBoi.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using BaByBoi.Domain.Models;
 using BaByBoi.DataAccess.Service;
+using BaByBoi.DataAccess.Service.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,19 @@ builder.Services.AddDbContext<BaByBoiContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DB"));
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+//service
 builder.Services.AddScoped(typeof(UserService));
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,11 +39,18 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapControllers();
+
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/CustomerViewPage/CusViewProduct");
+    return Task.CompletedTask;
+});
 
 app.Run();

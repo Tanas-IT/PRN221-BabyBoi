@@ -17,9 +17,10 @@ namespace BaByBoi.DataAccess.Service
         {
             _unitOfWork = unitOfWork;
         }
-        public List<User> GetAll()
+        public async Task<List<User>> GetAll()
         {
-            return _unitOfWork.UserRepository.GetAll().ToList();
+            var users = await _unitOfWork.UserRepository.GetAll();
+            return  users.ToList();
         }
     }
 }

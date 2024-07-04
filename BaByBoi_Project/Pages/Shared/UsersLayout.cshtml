@@ -1,0 +1,110 @@
+﻿@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var currentPath = HttpContextAccessor.HttpContext?.Request.Path;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BaByBoi Store</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BaByBoi_Project.styles.css" asp-append-version="true" />
+    <style>
+        header {
+            margin-bottom: 100px;
+        }
+
+        .list-group {
+            max-width: 200px;
+            position: fixed;
+            left: 0;
+            top: 150px;
+            z-index: 1000;
+            margin-left: 100px;
+        }
+
+        .list-group-item {
+            cursor: pointer;
+        }
+
+            .list-group-item:hover {
+                font-weight: bold;
+                text-decoration: underline;
+            }
+
+        .category {
+            margin-top: 150px;
+            margin-left: 320px;
+            padding-left: 20px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            padding: 10px 0;
+            text-align: center;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <header class="p-3 container-fluid text-white" style="background-color: #21409A">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <img src="~/image/babiboi.png" class="bi me-2" width="40" height="32" alt="BaByBoi">
+                </a>
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="#" class="nav-link px-2 text-white">Trang chủ</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">Sản phẩm</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">Chính sách</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">Giới thiệu</a></li>
+                </ul>
+                <form class="col-12 col-sm-10 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                    <input type="search" name="searchValue" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+                </form>
+                <div class="text-end">
+                    <button type="button" class="btn btn-outline-light me-2">Đăng nhập</button>
+                    <button type="button" class="btn btn-warning">Đăng ký</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="category">
+        <div class="list-group border rounded">
+            <a href="#" class="list-group-item">Sữa</a>
+            <a href="#" class="list-group-item">Sữa 1</a>
+            <a href="#" class="list-group-item">Sữa 2</a>
+            <a href="#" class="list-group-item">Sữa 3</a>
+            <a href="#" class="list-group-item">Sữa 4</a>
+            <a href="#" class="list-group-item">Sữa 5</a>
+            <a href="#" class="list-group-item">Sữa 6</a>
+            <a href="#" class="list-group-item">Sữa 7</a>
+            <a href="#" class="list-group-item">Sữa 8</a>
+            <a href="#" class="list-group-item">Sữa 9</a>
+            <a href="#" class="list-group-item">Sữa 10</a>
+            <a href="#" class="list-group-item">Sữa 11</a>
+            <a href="#" class="list-group-item">Sữa 12</a>
+        </div>
+        @RenderBody()
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - BaByBoi Store - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>
