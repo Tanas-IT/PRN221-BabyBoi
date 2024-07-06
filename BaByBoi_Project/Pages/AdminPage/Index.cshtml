@@ -1,0 +1,111 @@
+﻿@page
+@model BaByBoi_Project.Pages.AdminPage.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            @* <th>
+                @Html.DisplayNameFor(model => model.User[0].UserName)
+            </th> *@
+            @* <th>
+                @Html.DisplayNameFor(model => model.User[0].Password)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.User[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User[0].Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User[0].FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User[0].CreateDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User[0].UpdateDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User[0].BirthDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User[0].Gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User[0].Role.RoleName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.User)
+        {
+            <tr>
+               @*  <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td> *@
+               @*  <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td> *@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @item.CreateDate?.ToString("yyyy-MM-dd")
+                </td>
+                <td>
+                    @item.UpdateDate?.ToString("yyyy-MM-dd")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @item.BirthDate?.ToString("yyyy-MM-dd")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Role.RoleName)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.UserId">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.UserId">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.UserId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    Page @(Model.User.PageIndex) of @(Model.User.TotalPages)
+</div>
+<div class="btn-group" role="group" aria-label="Pagination">
+    @if (Model.User.HasPreviousPage)
+    {
+        <a class="btn btn-default" asp-page="./Index" asp-route-pageIndex="@(Model.User.PageIndex - 1)">Previous</a>
+    }
+    @if (Model.User.HasNextPage)
+    {
+        <a class="btn btn-default" asp-page="./Index" asp-route-pageIndex="@(Model.User.PageIndex + 1)">Next</a>
+    }
+</div>

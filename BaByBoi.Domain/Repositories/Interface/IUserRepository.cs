@@ -11,5 +11,7 @@ namespace BaByBoi.Domain.Repositories.Interface
     {
         User GetUserByFullName(string fullName);
         User CheckLogin(string email, string password);
+        Task<IEnumerable<User>> GetAll();
+        Task<bool> ExistsAsync(int id);
     }
 }
