@@ -14,8 +14,24 @@ builder.Services.AddDbContext<BaByBoiContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DB"));
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+
+//service
 builder.Services.AddScoped(typeof(UserService));
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IOrderService, OrderSerivce>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,11 +43,18 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapControllers();
+
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/CustomerViewPage/CusViewProduct");
+    return Task.CompletedTask;
+});
 
 app.Run();

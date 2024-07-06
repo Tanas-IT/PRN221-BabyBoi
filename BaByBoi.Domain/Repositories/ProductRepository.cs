@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+﻿using BaByBoi.Domain.Common.Enum;
+
 
 namespace BaByBoi.Domain.Repositories
 {
@@ -192,7 +194,75 @@ namespace BaByBoi.Domain.Repositories
             return false;
         }
 
+        public async Task<List<ProductSize>> getProductSize(string searchValue)
+        {
+            var sizeID = await _context.Sizes.Where(x => x.SizeName!.Equals("Small")).Select(x => x.SizeId).FirstOrDefaultAsync();
+            if (string.IsNullOrEmpty(searchValue))
+            {
+                var productSizes = await _context.ProductSizes
+            //.Where(ps => ps.SizeId == sizeID)
+            .Include(x => x.Product)
+            .Include(ps => ps.Size)
+            .ToListAsync();
 
+                return productSizes.DistinctBy(ps => ps.ProductId).ToList();
+            }
+            else
+            {
+                var productSizes = await _context.ProductSizes
+            .Where(ps =>  ps.Product.ProductName!.ToLower().Contains(searchValue.ToLower()))
+            .Include(ps => ps.Product)
+            .Include(ps => ps.Size)
+            .ToListAsync();
+
+                return productSizes.DistinctBy(ps => ps.ProductId).ToList();
+                
+            }
+        }
+
+        public async Task<ProductSize> GetProductsSizesBySpecificSizeAsync(int productId, int sizeId)
+        {
+            var productSize = await _context.ProductSizes
+                .Include(x => x.Product)
+                .ThenInclude( x => x.ProductImages)
+                .Include(x => x.Size)
+                .Where(x => x.ProductId == productId && x.SizeId == sizeId)
+                .FirstOrDefaultAsync();
+            return productSize!;
+        }
+
+            public async Task<List<Product>> Search(string searchValue)
+        {
+
+            // building query
+            var products = _context.Products.AsQueryable();
+
+
+            var isNumber = false;
+
+            // is integer number
+            if (int.TryParse(searchValue, out var num))
+            {
+                // flag is number
+                isNumber = true;
+
+                products = products.Where(x => x.ProductId == num || x.ProductCode!.ToString().Contains(searchValue));
+            }
+
+            // Check if searchValue contains "Active" or "Inactive" or is string 
+            if (!String.IsNullOrEmpty(searchValue) && !isNumber)
+            {
+                products = products.Where(x => (x.Status == (byte)ProductStatus.Active && "Active".Contains(searchValue, StringComparison.OrdinalIgnoreCase))
+                                             || (x.Status == (byte)ProductStatus.InActive && "InActive".Contains(searchValue, StringComparison.OrdinalIgnoreCase))
+                                             || x.ProductName!.Contains(searchValue));
+
+            }
+
+
+            var result = await products.ToListAsync();
+
+            return result;
+        }
 
     }
 }

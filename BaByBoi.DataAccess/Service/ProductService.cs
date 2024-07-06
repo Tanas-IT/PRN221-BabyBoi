@@ -69,6 +69,60 @@ namespace BaByBoi.DataAccess.Service
         {
             return await _unitOfWork.ProductRepository.DeleteProduct(productId);
         }
+         public async Task<bool> deleteById(int id)
+        {
+            var getProduct = await _unitOfWork.ProductRepository.GetById(id);
+            var result = false;
+            if (getProduct != null)
+            {
+                result = await _unitOfWork.ProductRepository.RemovebyId(id);
+                result = true;
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<Product>> getAllProduct()
+        {
+            var products = await _unitOfWork.ProductRepository.GetAll();
+            return products;
+        }
+
+        public async Task<Product> getProductById(int id)
+        {
+            var product = await _unitOfWork.ProductRepository.GetById(id);
+            return product;
+        }
+
+        public async Task<Product> Insert(Product entity)
+        {
+            var result = false;
+            result = await _unitOfWork.ProductRepository.AddAsync(entity);
+            if (result)
+            {
+                return entity;
+            }
+            return null!;
+        }
+
+        public async Task<List<Product>> Search(string searchKey) 
+            => await _unitOfWork.ProductRepository.Search(searchKey);
+        
+
+        public async Task<Product> update(Product entityUpdate)
+        {
+            var result = await _unitOfWork.ProductRepository.UpdateAsync(entityUpdate);
+            if (result)
+            {
+                return entityUpdate;
+            }
+            return null!;
+
+        }
+        public async Task<List<ProductSize>> getProductWithSize(string searchKey)
+        => await _unitOfWork.ProductRepository.getProductSize(searchKey);
+
+        public async Task<ProductSize> GetProductsSizesBySpecificSizeAsync(int productId, int sizeId)
+        => await _unitOfWork.ProductRepository.GetProductsSizesBySpecificSizeAsync(productId, sizeId);
 
     }
 }

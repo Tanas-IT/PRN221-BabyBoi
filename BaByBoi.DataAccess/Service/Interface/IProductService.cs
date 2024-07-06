@@ -21,6 +21,15 @@ namespace BaByBoi.DataAccess.Service.Interface
         public Task<bool> RemoveImagesAndSize(int productId);
         public Task<List<ProductImage>> GetImages();
         public Task<bool> DeleteProduct(int productId);
+        Task<Product> getProductById(int id);
+        Task<IEnumerable<Product>> getAllProduct();
+        Task<Product> Insert(Product entity);
+        Task<Product> update(Product entityUpdate);
+        Task<bool> deleteById(int id);
+        Task<List<Product>> Search(string searchKey);
+        Task<List<ProductSize>> getProductWithSize(string searchKey);
+
+        Task<ProductSize> GetProductsSizesBySpecificSizeAsync(int productId, int sizeId);
 
 
     }

@@ -9,10 +9,10 @@ namespace BaByBoi.Domain.Models
         public int ProductId { get; set; }
         public int? Quantity { get; set; }
         public double? Price { get; set; }
-        public int? ProductSizeId { get; set; }
+        public int SizeId { get; set; }
 
         public virtual Order Order { get; set; } = null!;
         public virtual Product Product { get; set; } = null!;
-        public virtual ProductSize? ProductNavigation { get; set; }
+        public virtual ProductSize ProductSize { get; set; } = null!;
     }
 }

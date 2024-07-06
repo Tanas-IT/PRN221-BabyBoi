@@ -1,0 +1,127 @@
+﻿@page
+@model BaByBoi_Project.Pages.CustomerViewPage.PaymentOrderModel
+@{
+    Layout = "UsersLayout";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"] - BaByBoi Store</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+
+        .address-container, .order-details, .payment-method {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border-radius:10px;
+        }
+
+        .total-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff5722;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background-color: #ff5722;
+            color: white;
+            font-size: 20px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Shipping Address
+         <div class="address-container">
+             <h4>Địa chỉ nhận hàng</h4>
+             <p>/*Model.Customer.FullName */ (Model.Customer.Phone)</p>
+             <input type="type" name="shiping address" value="Model.order.Address" />
+         </div>
+         -->
+        <!-- Order Details -->
+        <div class="order-details">
+            <h4>Order Details</h4>
+            @{
+                var totalprice = new double();
+            }
+            @foreach (var item in Model.orderDetailsPurchase)
+            {
+                <div class="row">
+                    <div class="col-2">
+                        <img src="@item.Product.ProductImages.FirstOrDefault()" alt="@item.Product.ProductName" class="img-fluid" />
+                    </div>
+                    <div class="col-4">
+                        <p>@item.Product.ProductName</p>
+                        <p>Size: @item.ProductSize.Size.SizeName</p>
+                    </div>
+                    <div class="col-2">
+                        <p>@item.ProductSize.Price</p>
+                    </div>
+                    <div class="col-2">
+                        <p>Quantity: @item.Quantity</p>
+                    </div>
+                    <div class="col-2">
+                        <p>@(item.Price!.Value.ToString("C"))</p>
+                        @{
+                            totalprice += item.Price!.Value;
+                        }
+                    </div>
+                </div>
+                <hr />
+            }
+            <div class="row">
+                <div class="col-12 text-end">
+                    <p class="total-price">Total: @(totalprice.ToString("C"))</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Method -->
+        <form asp-page-handler="PlaceOrder" method="post">
+            @if (Model.paymentMethod != null)
+            {
+                <div class="payment-method">
+                    <h4>Payment Method</h4>
+                    @{
+                        var paymentDefault = "Cash on Delivery";
+                    }
+                    @foreach (var paymethod in Model.paymentMethod)
+                    {
+                        if (paymethod.PaymentName.Equals(paymentDefault))
+                        {
+                            <input type="radio" id="@paymethod.PaymentName" name="paymentID" value="@paymethod.PaymentId" checked = "checked" />
+                            <label  for="@paymethod.PaymentName">@paymethod.PaymentName</label>
+                        }
+                        else
+                        {
+                            <input type="radio" id="@paymethod.PaymentName" name="paymentID" value="@paymethod.PaymentId" />
+                            <label for="@paymethod.PaymentName">@paymethod.PaymentName</label>
+                        }
+                    }
+                </div>
+            }
+
+            <!-- Submit Button -->
+            <div class="row">
+                <div class="col-12">
+                    <input type="hidden" name="totalPrice" value="@totalprice" />
+                    <button type="submit" class="btn btn-submit">Place Order</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>
