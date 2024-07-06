@@ -1,0 +1,1108 @@
+﻿@page
+@model BaByBoi_Project.Pages.Admin.ProductModel
+@{
+    Layout = "";
+    string message = ViewData["Message"] as string;
+    string errorMessage = ViewData["ErrorMessage"] as string;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>BabyBoi - Admin Dashboard</title>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+          name="viewport" />
+    <link rel="icon"
+          href="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/img%2Ffavicon_Logo_BabyBoi.png?alt=media&token=26e79e70-5b81-4a63-9c17-2c2b96a6646d"
+          type="image/x-icon" />
+
+    <!-- Fonts and icons -->
+    <script src="/assets/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+        WebFont.load({
+            google: { families: ["Public Sans:300,400,500,600,700"] },
+            custom: {
+                families: [
+                    "Font Awesome 5 Solid",
+                    "Font Awesome 5 Regular",
+                    "Font Awesome 5 Brands",
+                    "simple-line-icons",
+                ],
+                urls: ["/assets/css/fonts.min.css"],
+            },
+            active: function () {
+                sessionStorage.fonts = true;
+            },
+        });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/css/plugins.min.css" />
+    <link rel="stylesheet" href="/assets/css/kaiadmin.min.css" />
+    <link rel="stylesheet" href="/css//upload_image.css" />
+</head>
+<body>
+    <style>
+        .product-image {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%; 
+            overflow: hidden; 
+            position: relative;
+            cursor: pointer;
+        }
+
+            .product-image img {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                object-fit: cover; 
+            }
+
+            .product-image .overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .product-image:hover .overlay {
+                opacity: 1;
+            }
+
+            .product-image .overlay .preview {
+                color: white;
+                font-size: 12px;
+                font-weight: bold;
+            }
+
+        .product-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 10;
+        }
+
+            .product-popup.show {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .product-popup .popup-content {
+                max-width: 80%;
+                max-height: 80%;
+            }
+
+            .product-popup .popup-content img {
+                    width: 600px;
+                    height: 550px;
+                    object-fit: contain;
+            }
+            .upload__box {
+               margin-bottom: 1px;
+            }
+            .upload__inputfile {
+              margin-top: 10px;
+              margin-bottom: 10px;
+            }
+            .upload__btn {
+              display: inline-block;
+              font-weight: 600;
+              color: #fff;
+              text-align: center;
+              min-width: 116px;
+              padding: 5px;
+              transition: all 0.3s ease;
+              cursor: pointer;
+              border: 2px solid;
+              background-color: #4045ba;
+              border-color: #4045ba;
+              border-radius: 10px;
+              line-height: 26px;
+              font-size: 14px;
+            }
+            .upload__btn:hover {
+              background-color: unset;
+              color: #4045ba;
+              transition: all 0.3s ease;
+            }
+            .upload__btn-box {
+              margin-bottom: 10px;
+            }
+            .upload__img-wrap {
+              display: flex;
+              flex-wrap: wrap;
+              margin: 0 -10px;
+            }
+            .upload__img-box {
+              width: 200px;
+              padding: 0 10px;
+              margin-bottom: 12px;
+            }
+            .upload__img-close {
+              width: 24px;
+              height: 24px;
+              border-radius: 50%;
+              background-color: rgba(0, 0, 0, 0.5);
+              position: absolute;
+              top: 10px;
+              right: 10px;
+              text-align: center;
+              line-height: 24px;
+              z-index: 1;
+              cursor: pointer;
+            }
+            .upload__img-close:after {
+              content: "✖";
+              font-size: 14px;
+              color: white;
+            }
+
+            .img-bg {
+              background-repeat: no-repeat;
+              background-position: center;
+              background-size: cover;
+              position: relative;
+              padding-bottom: 100%;
+                    } 
+    </style>
+    <div class="wrapper">
+        @if (errorMessage != null)
+        {
+            <div class="position-fixed top-0 end-0 p-3" style="z-index: 2000">
+                <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" data-delay="1000" data-autohide="true">
+                    <div class="toast-header">
+                        <img src="https://www.pngplay.com/wp-content/uploads/6/Exit-PNG-Clipart-Background.png" style="width: 20px; height: 20px" class="rounded me-2" alt="error">
+                        <strong class="me-auto">Error</strong>
+                        <small>A few seconds ago</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        @errorMessage. Please try again!
+                    </div>
+                </div>
+            </div>
+        }
+        @if (message != null)
+        {
+            <div class="position-fixed top-0 end-0 p-3" style="z-index: 2000">
+                <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" data-delay="1000" data-autohide="true">
+                    <div class="toast-header">
+                        <img src="https://w7.pngwing.com/pngs/873/563/png-transparent-computer-icons-icon-design-business-success-miscellaneous-angle-text-thumbnail.png" style="width: 20px; height: 20px" class="rounded me-2" alt="error">
+                        <strong class="me-auto">Success</strong>
+                        <small>A few seconds ago</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        @message!
+                    </div>
+                </div>
+            </div>
+        }
+        <!-- Sidebar -->
+        <div class="sidebar" data-background-color="dark">
+            <div class="sidebar-logo">
+                <!-- Logo Header -->
+                <div class="logo-header" data-background-color="dark">
+                    <a href="index.html" class="logo">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/img%2FLogo_BabyBoi.png?alt=media&token=b4a8b4ed-e9a5-49e8-9b14-9a73a07b8ba1"
+                             alt="navbar brand"
+                             class="navbar-brand"
+                             height="75"
+                             style="margin-bottom: 14px" />
+                    </a>
+                    <div class="nav-toggle">
+                        <button class="btn btn-toggle toggle-sidebar">
+                            <i class="gg-menu-right"></i>
+                        </button>
+                        <button class="btn btn-toggle sidenav-toggler">
+                            <i class="gg-menu-left"></i>
+                        </button>
+                    </div>
+                    <button class="topbar-toggler more">
+                        <i class="gg-more-vertical-alt"></i>
+                    </button>
+                </div>
+                <!-- End Logo Header -->
+            </div>
+            <div class="sidebar-wrapper scrollbar scrollbar-inner">
+                <div class="sidebar-content">
+                    <ul class="nav nav-secondary">
+                        <li class="nav-item">
+                            <a
+                               href="Home"
+                               class="collapsed"
+                               aria-expanded="false">
+                                <i class="fas fa-home"></i>
+                                <p style="margin-top: 5px">Báo cáo</p>
+                            </a>
+                        </li>
+                        <li class="nav-section">
+                            <span class="sidebar-mini-icon">
+                                <i class="fa fa-ellipsis-h"></i>
+                            </span>
+                            <h4 class="text-section">Danh sách</h4>
+                        </li>
+                        <li class="nav-item active">
+                            <a href="Product">
+                                <i class="fas fa-shopping-bag"></i>
+                                <p>Sản phẩm</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#sidebarLayouts">
+                                <i class="fas fa-folder"></i>
+                                <p>Danh mục</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a  href="#forms">
+                                <i class="fas fa-ticket-alt"></i>
+                                <p>Khuyến mãi</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a  href="#tables">
+                                <i class="fas fa-shopping-cart"></i>
+                                <p>Đơn hàng</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a  href="#maps">
+                                <i class="fas fa-users"></i>
+                                <p>Tài khoản</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- End Sidebar -->
+        <div class="main-panel">
+            <div class="main-header">
+                <div class="main-header-logo">
+                    <!-- Logo Header -->
+                    <div class="logo-header" data-background-color="dark">
+                        <a href="index.html" class="logo">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/img%2FLogo_BabyBoi.png?alt=media&token=b4a8b4ed-e9a5-49e8-9b14-9a73a07b8ba1"
+                                 alt="navbar brand"
+                                 class="navbar-brand"
+                                 height="20" />
+                        </a>
+                        <div class="nav-toggle">
+                            <button class="btn btn-toggle toggle-sidebar">
+                                <i class="gg-menu-right"></i>
+                            </button>
+                            <button class="btn btn-toggle sidenav-toggler">
+                                <i class="gg-menu-left"></i>
+                            </button>
+                        </div>
+                        <button class="topbar-toggler more">
+                            <i class="gg-more-vertical-alt"></i>
+                        </button>
+                    </div>
+                    <!-- End Logo Header -->
+                </div>
+                <!-- Navbar Header -->
+                <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+                    <div class="container-fluid">
+                        <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                            <li class="nav-item topbar-user dropdown hidden-caret">
+                                <a class="dropdown-toggle profile-pic"
+                                   data-bs-toggle="dropdown"
+                                   href="#"
+                                   aria-expanded="false">
+                                    <div class="avatar-sm">
+                                        <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/img%2Fprofile.jpg?alt=media&token=edbb29fa-eb1c-4111-ad8c-f1b049401b7b"
+                                             alt="..."
+                                             class="avatar-img rounded-circle" />
+                                    </div>
+                                    <span class="profile-username">
+                                        <span class="op-7">Xin chào,</span>
+                                        <span class="fw-bold">Admin</span>
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user animated fadeIn">
+                                    <div class="dropdown-user-scroll scrollbar-outer">
+                                    <li>
+                                        <div class="user-box">
+                                            <div class="avatar-lg">
+                                                <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/img%2Fprofile.jpg?alt=media&token=edbb29fa-eb1c-4111-ad8c-f1b049401b7b"
+                                                     alt="image profile"
+                                                     class="avatar-img rounded" />
+                                            </div>
+                                            <div class="u-text">
+                                                <h4>Admin</h4>
+                                                <p class="text-muted">admin@example.com</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger" href="#">Logout</a>
+                                    </li>
+                    </div>
+                    </ul>
+                    </li>
+                    </ul>
+            </div>
+            </nav>
+            <!-- End Navbar -->
+        </div>
+        <div class="container">
+            <div class="page-inner">
+                <div class="page-header">
+                    <h3 class="fw-bold mb-3">Sản phẩm</h3>
+                    <ul class="breadcrumbs mb-3">
+                        <li class="nav-home">
+                            <a href="Home">
+                                <i class="icon-home"></i>
+                            </a>
+                        </li>
+                        <li class="separator">
+                            <i class="icon-arrow-right"></i>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#">Sản phẩm</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex align-items-center">
+                                    <h4 class="card-title">Quản lý sản phẩm</h4>
+                                    <div class="d-flex align-items-center" style="margin: 0 auto">
+                                    <form asp-page-handler="SearchProduct" method="post" style="margin: 0 auto; display: flex; align-self: baseline">
+                                        <input class="form-control" style="
+                                                    height: 40px;
+                                                    border-radius: 10px;
+                                                    width: 330px;
+                                                    padding: 10px;" type="search" id="searchInput" asp-for="SearchValue" placeholder="Search" />
+                                        <button style="border-radius: 8px; margin-left: 22px;" type="submit" class="btn btn-info">Search</button>
+                                    </form>
+                                    <form method="post" asp-page-handler="ResetProduct">
+                                        <button style="border-radius: 8px; margin-left: 22px; color: white" type="submit" class="btn btn-warning">Reset Page</button>
+                                    </form>
+                                    </div>
+                                    <button class="btn btn-primary btn-round ms-auto"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#addRowModal">
+                                        <i class="fa fa-plus"></i>
+                                        Thêm sản phẩm
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <!-- Modal -->
+                                <div class="modal fade"
+                                     id="addRowModal"
+                                     tabindex="-1"
+                                     role="dialog"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <form method="post" asp-page-handler="AddProduct" enctype="multipart/form-data">
+                                        <div class="modal-content">
+                                            <div class="modal-header border-0">
+                                                <h5 class="modal-title">
+                                                    <span class="fw-mediumbold"> Thêm</span>
+                                                    <span class="fw-light"> Sản Phẩm </span>
+                                                </h5>
+                                                <button type="button"
+                                                        class="close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group form-group-default">
+                                                                <label for="addProductCode">Mã sản phẩm</label>
+                                                                <input id="addProductCode"
+                                                                       type="text"
+                                                                       class="form-control"
+                                                                       asp-for="AddProduct.ProductCode"
+                                                                       />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group form-group-default">
+                                                                <label for="addProductName">Tên sản phẩm</label>
+                                                                <input id="addProductName"
+                                                                       type="text"
+                                                                       class="form-control"
+                                                                       asp-for="AddProduct.ProductName"
+                                                                       />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group form-group-default">
+                                                                <label for="addProductDescription">Mô tả sản phẩm</label>
+                                                                <input id="addProductDescription"
+                                                                       type="text"
+                                                                       class="form-control"
+                                                                       asp-for="AddProduct.Description"
+                                                                      />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="addProductDescription">Trạng thái</label>
+                                                                <br/>
+                                                                <label for="activeProduct">Active</label>
+                                                                <input id="activeProduct"
+                                                                       type="radio"
+                                                                       value="1"
+                                                                       style="margin: 15px;"
+                                                                           name="productStatus"
+                                                                       />
+                                                                <label for="bannedProduct">Banned</label>
+                                                                <input id="bannedProduct"
+                                                                       type="radio"
+                                                                       style="margin: 15px;"
+                                                                       value="0"
+                                                                       name="productStatus" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12" style="margin-left: 5px;">
+                                                                <label for="idCategory">Danh mục</label>
+                                                                    <select class="form-control mt-3 mb-4" id="idCategory" asp-for="AddProduct.CategoryId">
+                                                                        @foreach(var category in Model.listCagetory)
+                                                                        {
+                                                                    <option value="@category.CategoryId">@category.CategoryName</option>
+                                                                        }
+                                                                    </select>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group form-group-default">
+                                                                <label for="addProductDescription">Khuyến mãi</label>
+                                                                <input id="addProductDescription"
+                                                                       type="number"
+                                                                       class="form-control" 
+                                                                       asp-for="AddProduct.Discount" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group form-group-default">
+                                                                <label for="addProductDescription" style="margin-bottom: 10px;">Kích cỡ</label>
+                                                                    @foreach(var size in Model.listSize)
+                                                                    {
+                                                                       <div class="d-flex align-items-center mx-3">
+                                                                        <label for="@size.SizeId">@size.SizeName</label>
+                                                                        <input id="@size.SizeId"
+                                                                               type="checkbox"
+                                                                               value="@size.SizeId"
+                                                                               style="margin: 15px;"
+                                                                               name="SelectedSize" />
+                                                                        </div>
+                                                                    <div class="d-flex align-items-center mx-3 my-2">
+                                                                        <label for="quantity-@size.SizeId">Số lượng</label>
+                                                                        <input style="margin-left: 10px;" id="quantity-@size.SizeId" type="number" name="productAmount" />
+                                                                    </div>
+                                                                    <div class="d-flex align-items-center mx-3 my-2">
+                                                                        <label for="price-@size.SizeId">Giá</label>
+                                                                        <input style="margin-left: 50px;" id="price-@size.SizeId" type="number" name="productPrice" />
+                                                                    </div>
+                                                                    }
+                                                                </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group form-group-default upload__box">
+                                                                    <label for="upload-image">Hình ảnh</label>
+                                                                <input id="upload-image" type="file" accept="image/*" multiple data-max_length="20" class="upload__inputfile" name="ListImgURL">
+                                                            <div class="upload__img-wrap"></div>
+                                                             </div>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                            <div class="modal-footer border-0">
+                                                <button type="submit"
+                                                        id="addRowButton"
+                                                        class="btn btn-primary">
+                                                    Thêm
+                                                </button>
+                                                <button type="button"
+                                                        class="btn btn-danger"
+                                                        data-bs-dismiss="modal">
+                                                    Đóng
+                                                </button>
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table id="add-row"
+                                           class="display table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>ProductID</th>
+                                                <th>ProductCode</th>
+                                                <th>ProductName</th>
+                                                <th>CreateDate</th>
+                                                <th>Image</th>
+                                                <th>Description</th>
+                                                <th>Status</th>
+                                                <th>Category</th>
+                                                <th>Discount</th>
+                                                <th style="width: 10%">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                @foreach(var product in Model.ListProductPagin)
+                                                {
+                                                <tr>
+                                                    <td>@product.ProductId</td>
+                                                    <td>@product.ProductCode</td>
+                                                    <td>@product.ProductName</td>
+                                                    <td>@product.CreateDate?.ToString("dd-MM-yyyy")</td>
+                                                    <td class="image-row">
+                                                             @if(product.ProductImages.Count > 0 )
+                                                                {
+                                                                <div class="product-image">
+                                                                    <img src="@product.ProductImages.First().ImageUrl"
+                                                                     alt="@product.ProductImages.First().ImageName"
+                                                                     class="avatar-img rounded-circle" />
+                                                                    <div class="overlay">
+                                                                        <span class="preview">Preview</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="product-popup">
+                                                                    <div class="popup-content">
+                                                                    <img src="@product.ProductImages.First().ImageUrl" alt="@product.ProductImages.First().ImageName">
+                                                                    </div>
+                                                                    </div>
+                                                                }
+                                                            @if(product.ProductImages.Count == 0)
+                                                            {
+                                                            <div class="product-image">
+                                                                <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/product%2Fdefault-product-image.png?alt=media&token=76492637-3b09-4a43-8d7e-6426fe976faf"
+                                                                     alt="Default Product Image"
+                                                                     class="avatar-img rounded-circle" />
+                                                                <div class="overlay">
+                                                                    <span class="preview">Preview</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-popup">
+                                                                <div class="popup-content">
+                                                                    <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/product%2Fdefault-product-image.png?alt=media&token=76492637-3b09-4a43-8d7e-6426fe976faf" alt="Default Product Image">
+                                                                </div>
+                                                            </div>
+                                                            }
+                                                        </td>
+                                                    <td>@product.Description</td>
+                                                        @if(product.Status == 1)
+                                                        {
+                                                            <td>
+                                                            <span style="display: block;
+                                                                border: 1px solid;
+                                                                padding: 5px;
+                                                                border-radius: 8px;
+                                                                background-color: #31ce36;
+                                                                font-weight: bold;
+                                                                text-align: center;
+                                                                color: white;">Active</span>
+                                                            </td>
+                                                        } else
+                                                        {
+                                                        <td>
+                                                            <span style="display: block;
+                                                                border: 1px solid;
+                                                                padding: 5px;
+                                                                border-radius: 8px;
+                                                                background-color: red;
+                                                                font-weight: bold;
+                                                                text-align: center;
+                                                                color: white;">Banned</span>
+                                                        </td>
+                                                        }
+                                                        <td>@product.Category.CategoryName</td>
+                                                    <td>@product.Discount</td>
+                                                    <td>
+                                                        <div class="form-button-action">
+                                                            <button type="button"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#updateModal_@product.ProductId"
+                                                                    title=""
+                                                                    class="btn btn-link btn-primary btn-lg"
+                                                                    data-original-title="Edit Product">
+                                                                <i class="fa fa-edit"></i>
+                                                            </button>
+                                                            <!-- Modal -->
+                                                            <div class="modal fade"
+                                                                 id="updateModal_@product.ProductId"
+                                                                 tabindex="-1"
+                                                                 role="dialog"
+                                                                 aria-hidden="true">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <form method="post" asp-page-handler="UpdateProduct" enctype="multipart/form-data">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header border-0">
+                                                                                <h5 class="modal-title text-center">
+                                                                                    <span class="fw-mediumbold"> Chỉnh sửa</span>
+                                                                                    <span class="fw-light"> Sản Phẩm </span>
+                                                                                </h5>
+                                                                                <button type="button"
+                                                                                        class="close"
+                                                                                        data-bs-dismiss="modal"
+                                                                                        aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <div class="row">
+                                                                                    <div class="col-sm-6">
+                                                                                        <div class="form-group form-group-default">
+                                                                                            <label for="updateProductCode">Mã sản phẩm</label>
+                                                                                            <input id="updateProductCode"
+                                                                                                   type="text"
+                                                                                                   class="form-control"
+                                                                                                   value="@product.ProductCode"
+                                                                                                   asp-for="UpdateProduct.ProductCode" />
+                                                                                                   <input type="hidden" value="@product.ProductId" asp-for="UpdateProduct.ProductId" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="form-group form-group-default">
+                                                                                            <label for="updateProductName">Tên sản phẩm</label>
+                                                                                            <input id="updateProductName"
+                                                                                                   type="text"
+                                                                                                   class="form-control"
+                                                                                                   value="@product.ProductName"
+                                                                                                   asp-for="UpdateProduct.ProductName" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                   
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="form-group form-group-default">
+                                                                                            <label for="updateProductDescription">Khuyến mãi</label>
+                                                                                            <input id="updateProductDescription"
+                                                                                                   type="number"
+                                                                                                   class="form-control"
+                                                                                                   value="@product.Discount"
+                                                                                                   asp-for="UpdateProduct.Discount" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <div>
+                                                                                            <label for="addProductDescription">Trạng thái</label>
+                                                                                            <br />
+                                                                                            <label for="activeProduct">Active</label>
+                                                                                            <input id="activeProduct"
+                                                                                                   type="radio"
+                                                                                                   value="1"
+                                                                                                   checked ="@(product.Status == 1 ? true : false)"
+                                                                                                   style="margin: 15px;"
+                                                                                                   name="productStatus" />
+                                                                                            <label for="bannedProduct">Banned</label>
+                                                                                            <input id="bannedProduct"
+                                                                                                   type="radio"
+                                                                                                   style="margin: 15px;"
+                                                                                                   value="0"
+                                                                                                   checked="@(product.Status == 0 ? true : false)"
+                                                                                                   name="productStatus" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-12">
+                                                                                        <div class="form-group form-group-default">
+                                                                                            <label for="addProductDescription">Mô tả sản phẩm</label>
+                                                                                            <input id="addProductDescription"
+                                                                                                   type="text"
+                                                                                                   class="form-control"
+                                                                                                   value="@product.Description"
+                                                                                                   asp-for="UpdateProduct.Description" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-12" style="margin-left: 5px;">
+                                                                                        <label for="idCategory">Danh mục</label>
+                                                                                        <select class="form-control mt-3 mb-4" id="idCategory" asp-for="UpdateProduct.CategoryId">
+                                                                                                @foreach (var category in Model.listCagetory)
+                                                                                                {
+                                                                                                <option selected="@(product.CategoryId == category.CategoryId ? true : false)" value="@category.CategoryId">@category.CategoryName</option>
+                                                                                                }
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="col-md-12">
+                                                                                        <div class="form-group form-group-default">
+                                                                                            <label for="addProductDescription" style="margin-bottom: 10px;">Kích cỡ</label>
+                                                                                                    @if(product.ProductSizes.Count > 0)
+                                                                                                    {
+                                                                                                        @foreach (var size in Model.listSize)
+                                                                                                        {
+                                                                                                        bool flag = true;
+                                                                                                        @foreach (var productSize in product.ProductSizes)
+                                                                                                            {
+                                                                                                                if(productSize.SizeId == size.SizeId)
+                                                                                                                {
+                                                                                                                    <div class="d-flex align-items-center mx-3">
+
+                                                                                                                        <label for="@productSize.SizeId">@productSize.Size.SizeName</label>
+                                                                                                                        <input id="@productSize.SizeId"
+                                                                                                                               type="checkbox"
+                                                                                                                               checked="@(productSize.SizeId == @productSize.SizeId ? true : false)"
+                                                                                                                               value="@productSize.SizeId"
+                                                                                                                               style="margin: 15px;"
+                                                                                                                               name="SelectedUpdateSize" />
+
+
+                                                                                                                    </div>
+                                                                                                                    <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                                        <label for="quantity-@productSize.SizeId">Số lượng</label>
+                                                                                                                        <input style="margin-left: 10px;" value="@productSize.Quantity" id="quantity-@productSize.SizeId" type="number" name="productUpdateAmount" />
+                                                                                                                    </div>
+                                                                                                                    <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                                        <label for="price-@productSize.SizeId">Giá</label>
+                                                                                                                        <input style="margin-left: 50px;" value="@productSize.Price" id="price-@productSize.SizeId" type="number" name="productUpdatePrice" />
+                                                                                                                </div>
+                                                                                                                flag = false;
+                                                                                                            }  
+                                                                                                            }
+                                                                                                        @if(flag)
+                                                                                                        {
+                                                                                                            <div class="d-flex align-items-center mx-3">
+                                                                                                                <label for="@size.SizeId">@size.SizeName</label>
+                                                                                                                <input id="@size.SizeId"
+                                                                                                                       type="checkbox"
+                                                                                                                       value="@size.SizeId"
+                                                                                                                       style="margin: 15px;"
+                                                                                                                       name="SelectedUpdateSize" />
+                                                                                                            </div>
+                                                                                                            <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                                <label for="quantity-@size.SizeId">Số lượng</label>
+                                                                                                                <input style="margin-left: 10px;" id="quantity-@size.SizeId" type="number" name="productUpdateAmount" />
+                                                                                                            </div>
+                                                                                                            <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                                <label for="price-@size.SizeId">Giá</label>
+                                                                                                                <input style="margin-left: 50px;" id="price-@size.SizeId" type="number" name="productUpdatePrice" />
+                                                                                                            </div>
+                                                                                                        }
+                                                                                                        }
+                                                                                                    } 
+                                                                                                    else
+                                                                                                    {
+                                                                                                    @foreach (var size in Model.listSize)
+                                                                                                    {
+                                                                                                    <div class="d-flex align-items-center mx-3">
+                                                                                                        <label for="@size.SizeId">@size.SizeName</label>
+                                                                                                        <input id="@size.SizeId"
+                                                                                                               type="checkbox"
+                                                                                                               value="@size.SizeId"
+                                                                                                               style="margin: 15px;"
+                                                                                                               name="SelectedUpdateSize" />
+                                                                                                    </div>
+                                                                                                    <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                        <label for="quantity-@size.SizeId">Số lượng</label>
+                                                                                                        <input style="margin-left: 10px;" id="quantity-@size.SizeId" type="number" name="productUpdateAmount" />
+                                                                                                    </div>
+                                                                                                    <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                        <label for="price-@size.SizeId">Giá</label>
+                                                                                                        <input style="margin-left: 50px;" id="price-@size.SizeId" type="number" name="productUpdatePrice" />
+                                                                                                    </div>
+                                                                                                    }
+                                                                                                    }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-12">
+                                                                                        <div class="form-group form-group-default">
+                                                                                            <label for="upload-image">Hình ảnh</label>
+                                                                                            <div class="image-gallery">
+                                                                                                        @foreach (var productImages in product.ProductImages)
+                                                                                                        {
+                                                                                                        <div class="upload_image-container">
+                                                                                                            <img src="@productImages.ImageUrl" alt="@productImages.ImageName">
+                                                                                                        <input type="hidden" value="@productImages.ImageUrl" name="imageUrlsUpLoad" />
+                                                                                                            <div class="preview">
+                                                                                                                Preview
+                                                                                                            </div>
+                                                                                                            <span class="close-icon">x</span>
+                                                                                                        </div>
+                                                                                                        }
+                                                                                                </div>
+
+                                                                                            <div class="upload-container">
+                                                                                                    <input type="file" accept="image/*" multiple data-max_length="20" class="upload-btn" name="imageUrls">
+                                                                                            </div>
+
+                                                                                            <div class="upload_overlay">
+                                                                                                <img src="" alt="Expanded Image">
+                                                                                                <div class="close-btn">&times;</div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="modal-footer border-0">
+                                                                                <button type="submit"
+                                                                                        id="UpdateButtonSubmit"
+                                                                                        class="btn btn-primary">
+                                                                                    Thay đổi
+                                                                                </button>
+                                                                                <button type="button"
+                                                                                        class="btn btn-danger"
+                                                                                        data-bs-dismiss="modal">
+                                                                                    Đóng
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <input type="hidden" asp-for="CurrentIndex" value="@Model.CurrentIndex" />
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                            <button type="button"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#removeModal_@product.ProductId"
+                                                                    class="btn btn-link btn-danger"
+                                                                    data-original-title="Remove">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                            <!-- Modal -->
+                                                            <div class="modal fade"
+                                                                 id="removeModal_@product.ProductId"
+                                                                 tabindex="-1"
+                                                                 role="dialog"
+                                                                 aria-hidden="true">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <form method="post" asp-page-handler="RemoveProduct">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header border-0">
+                                                                                <h5 class="modal-title text-center">
+                                                                                    <span class="fw-mediumbold">Xóa Sản Phẩm</span>
+                                                                                </h5>
+                                                                                <button type="button"
+                                                                                        class="close"
+                                                                                        data-bs-dismiss="modal"
+                                                                                        aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <input type="hidden" asp-for="ProductIdRemove" value="@product.ProductId" />
+                                                                                <p>Bạn có chắc chắn muốn xóa sản phẩm này không</p>
+                                                                            </div>
+                                                                            <div class="modal-footer border-0">
+                                                                                <button type="submit"
+                                                                                        id="RemoveButtonSubmit"
+                                                                                        class="btn btn-danger">
+                                                                                    Xác nhận
+                                                                                </button>
+                                                                                <button type="button"
+                                                                                        class="btn btn-secondary"
+                                                                                        data-bs-dismiss="modal">
+                                                                                    Đóng
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <input type="hidden" asp-for="CurrentIndex" value="@Model.CurrentIndex" />
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                }
+                                            </tbody>
+                                    </table>
+                                    <nav aria-label="..." style="display: flex; justify-content: center">
+                                        <ul class="pagination">
+                                                @if(Model.CurrentIndex > 1)
+                                                {
+                                                <li class="page-item">
+                                                    <a asp-route-PageIndex="@(Model.CurrentIndex - 1)" asp-route-PageSize="5" class="page-link" tabindex="-1">Previous</a>
+                                                    </li>
+                                                } else
+                                                {
+                                                <li class="page-item disabled">
+                                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                                </li>
+                                                }
+                                                @for (int i = 1; i <= Model.TotalPage; i++)
+                                                {
+                                                <li style="margin: 0 10px;" class="page-item @(Model.CurrentIndex == i ? "active" : "")"><a asp-route-PageIndex="@i" asp-route-PageSize="5" class="page-link">@i</a></li>
+                                                }
+                                                @if (Model.CurrentIndex < Model.TotalPage)
+                                                {
+                                                <li class="page-item"><a asp-route-PageIndex="@(Model.CurrentIndex + 1)" asp-route-PageSize="5" class="page-link">Next</a></li>
+                                                }
+                                                else
+                                                {
+                                                <li class="page-item disabled"><a class="page-link">Next</a></li>
+                                                }
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container-fluid d-flex justify-content-between">
+                <nav class="pull-left">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="http://www.themekita.com">
+                                BabyBoi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"> Help </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"> Licenses </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="copyright">
+                    2024, made with <i class="fa fa-heart heart text-danger"></i> by
+                    <a href="http://www.themekita.com">BabyBoi</a>
+                </div>
+                <div>
+                    Distributed by
+                    <a target="_blank" href="https://themewagon.com/">BabyBoi</a>.
+                </div>
+            </div>
+        </footer>
+    </div>
+    </div>
+    <!--   Core JS Files   -->
+    <script src="/assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="/assets/js/core/popper.min.js"></script>
+    <script src="/assets/js/core/bootstrap.min.js"></script>
+    <!-- jQuery Scrollbar -->
+    <script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+    <!-- Chart JS -->
+    <script src="/assets/js/plugin/chart.js/chart.min.js"></script>
+
+    <!-- jQuery Sparkline -->
+    <script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Chart Circle -->
+    <script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
+
+    <!-- Bootstrap Notify -->
+    <script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+    <!-- jQuery Vector Maps -->
+    <script src="/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+    <script src="/assets/js/plugin/jsvectormap/world.js"></script>
+
+    <!-- Sweet Alert -->
+    <script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+    <script src="/js/upload_image.js"></script>
+
+    <!-- Kaiadmin JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+        const rows = document.querySelectorAll('.image-row');
+
+        rows.forEach(row => {
+            const image = row.querySelector('.product-image');
+            const popup = row.querySelector('.product-popup');
+            const overlay = row.querySelector('.overlay');
+
+            image.addEventListener('click', () => {
+                popup.classList.add('show');
+                overlay.classList.add('show');
+            });
+
+            popup.addEventListener('click', () => {
+                popup.classList.remove('show');
+                overlay.classList.remove('show');
+            });
+        });
+        $(document).ready(function () {
+           
+            
+        });
+        jQuery(document).ready(function () {
+            ImgUpload();
+        });
+        
+
+        function ImgUpload() {
+            var imgWrap = "";
+            var imgArray = [];
+
+            $('.upload__inputfile').each(function () {
+                $(this).on('change', function (e) {
+                    imgWrap = $(this).closest('.upload__box').find('.upload__img-wrap');
+                    var maxLength = $(this).attr('data-max_length');
+
+                    var files = e.target.files;
+                    var filesArr = Array.prototype.slice.call(files);
+                    var iterator = 0;
+                    filesArr.forEach(function (f, index) {
+
+                        if (!f.type.match('image.*')) {
+                            return;
+                        }
+
+                        if (imgArray.length > maxLength) {
+                            return false
+                        } else {
+                            var len = 0;
+                            for (var i = 0; i < imgArray.length; i++) {
+                                if (imgArray[i] !== undefined) {
+                                    len++;
+                                }
+                            }
+                            if (len > maxLength) {
+                                return false;
+                            } else {
+                                imgArray.push(f);
+
+                                var reader = new FileReader();
+                                reader.onload = function (e) {
+                                    var imgURL = URL.createObjectURL(f);
+                                    var html = "<div class='upload__img-box'><div style='background-image: url(" + imgURL + ")' data-number='" + $(".upload__img-close").length + "' data-file='" + f.name + "' class='img-bg'><div class='upload__img-close'></div></div></div>";
+                                    imgWrap.append(html);
+                                    console.log(imgWrap);
+                                    iterator++;
+                                }
+                                reader.readAsDataURL(f);
+                            }
+                        }
+                    });
+                });
+            });
+
+            $('body').on('click', ".upload__img-close", function (e) {
+                var file = $(this).parent().data("file");
+                for (var i = 0; i < imgArray.length; i++) {
+                    if (imgArray[i].name === file) {
+                        imgArray.splice(i, 1);
+                        break;
+                    }
+                }
+                $(this).parent().parent().remove();
+            });
+        }
+      
+    </script>
+</body>
+</html>
