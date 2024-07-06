@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BaByBoi_Project.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMS7GCCq9gE4C5Fdvv5ciy5Zg1v5vREnF6R4+5b" crossorigin="anonymous">
     <style>
         header {
             margin-bottom: 100px;
@@ -53,10 +52,6 @@
             text-align: center;
             z-index: 10;
         }
-
-        .cart-icon {
-            margin-right: 5px;
-        }
     </style>
 </head>
 <body>
@@ -76,9 +71,6 @@
                     <input type="search" name="searchValue" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
                 </form>
                 <div class="text-end">
-                    <a href="/CustomerViewPage/ShoppingCart" class="btn btn-outline-light">
-                        <i class="fas fa-shopping-cart cart-icon"></i>Giỏ hàng
-                    </a>
                     <a href="/LoginPage" class="btn btn-outline-light me-2">Đăng nhập</a>
                     <a href="#" class="btn btn-warning">Đăng ký</a>
                 </div>
@@ -86,7 +78,11 @@
         </div>
     </header>
 
-    @RenderBody()
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
@@ -98,6 +94,5 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://kit.fontawesome.com/d98e41de81.js" crossorigin="anonymous"></script>
-    @RenderSection("Scripts", required: false)
 </body>
 </html>
