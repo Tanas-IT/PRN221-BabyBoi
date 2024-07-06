@@ -19,6 +19,12 @@ namespace BaByBoi_Project.Pages.LoginPage
         }
 
         [BindProperty]
+        public string email { get; set; } = null!;
+
+        [BindProperty]
+        public string password { get; set; } = null!;
+
+        [BindProperty]
         public string ErrorMessage { get; set; } = null!;
 
         public IActionResult OnGet()
@@ -29,9 +35,19 @@ namespace BaByBoi_Project.Pages.LoginPage
             }
             return Page();
         }
-        public async Task<IActionResult> OnPostLogin(string email, string password)
+        public async Task<IActionResult> OnPostLogin()
         {
-            var user = _userService.CheckLogin(email, password);
+            if (email == null)
+            {
+                ErrorMessage = "Email không được để trống.";
+                return Page();
+            }
+            if (password == null)
+            {
+                ErrorMessage = "Mật khẩu không được để trống.";
+                return Page();
+            }
+            var user = await _userService.CheckLogin(email!, password!);
             if (user != null)
             {
                 HttpContext.Session.SetObjectAsJson("User", user);
@@ -70,12 +86,32 @@ namespace BaByBoi_Project.Pages.LoginPage
 
             var claims = authenticateResult.Principal.Claims;
 
-            var name = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-            var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var userId = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var fullName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-
-            return Content($"Login Google thành công. User: {name}, Email: {email}, UserId: {userId}");
+            var user = await _userService.GetUserByEmail(email!);
+            if (user == null)
+            {
+                user = new User
+                {
+                    Email = email!,
+                    FullName = fullName ?? string.Empty,
+                };
+                var result = await _userService.AddAsync(user);
+                if (result)
+                {
+                    user = await _userService.GetUserByEmail(email!);
+                }
+            }
+            HttpContext.Session.SetObjectAsJson("User", user);
+            if (user.RoleId == (int)UserRole.Admin)
+            {
+                return Content("Đây là trang admin nhé.");
+            }
+            else
+            {
+                return RedirectToPage("/CustomerViewPage/CusViewProduct");
+            }
         }
 
         public IActionResult OnPostLogout(string returnUrl = null!)

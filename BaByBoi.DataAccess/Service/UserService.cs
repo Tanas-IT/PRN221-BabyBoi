@@ -18,13 +18,18 @@ namespace BaByBoi.DataAccess.Service
             _unitOfWork = unitOfWork;
         }
 
-        public User CheckLogin(string email, string password)
+        public Task<User> CheckLogin(string email, string password)
                 => _unitOfWork.UserRepository.CheckLogin(email, password);
+
+        public Task<User> GetUserByEmail(string email)
+                => _unitOfWork.UserRepository.GetUserByEmail(email);
+        public Task<bool> AddAsync(User user)
+                => _unitOfWork.UserRepository.AddAsync(user);
 
         public async Task<List<User>> GetAll()
         {
             var users = await _unitOfWork.UserRepository.GetAll();
-            return  users.ToList();
+            return users.ToList();
         }
         public async Task<User> GetByIdAsync(int id)
         {

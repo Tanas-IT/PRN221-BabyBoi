@@ -95,11 +95,11 @@
                             @user.FullName
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" asp-page="/Profile/Index">Profile</a></li>
+                            <li><a class="dropdown-item" asp-page="/Profile/Index">Hồ sơ</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form method="post" asp-page="/LoginPage/Index" asp-page-handler="Logout" asp-route-returnUrl="/">
-                                    <button type="submit" class="dropdown-item">Logout</button>
+                                    <button type="submit" class="dropdown-item">Đăng xuất</button>
                                 </form>
                             </li>
                         </ul>

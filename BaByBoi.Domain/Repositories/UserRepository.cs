@@ -16,12 +16,12 @@ namespace BaByBoi.Domain.Repositories
 
         public User GetUserByFullName(string fullName)
         {
-          return _context.Users.FirstOrDefault(u => u.FullName == fullName)!;
+            return _context.Users.FirstOrDefault(u => u.FullName == fullName)!;
         }
 
-        public User CheckLogin(string email, string password)
+        public async Task<User> GetUserByEmail(string email)
         {
-            var user = _context.Users.FirstOrDefault(c => c.Email.Equals(email) && c.Password!.Equals(password) && c.Status == (int)StatusExist.Exist);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (user == null)
             {
                 return null!;
@@ -29,6 +29,18 @@ namespace BaByBoi.Domain.Repositories
 
             return user;
         }
+
+        public async Task<User> CheckLogin(string email, string password)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(c => c.Email.Equals(email) && c.Password!.Equals(password) && c.Status == (int)StatusExist.Exist);
+            if (user == null)
+            {
+                return null!;
+            }
+
+            return user;
+        }
+
         public override async Task<IEnumerable<User>> GetAll()
         {
             return await _context.Users.Include(u => u.Role).ToListAsync();
