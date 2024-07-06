@@ -84,7 +84,7 @@ namespace BaByBoi.Domain.Models
             modelBuilder.Entity<OrderDetail>(entity =>
             {
                 entity.HasKey(e => new { e.OrderId, e.ProductId, e.SizeId })
-                    .HasName("PK__OrderDet__53532AC881229744");
+                    .HasName("PK__OrderDet__53532AC868E6427B");
 
                 entity.ToTable("OrderDetail");
 
@@ -143,7 +143,7 @@ namespace BaByBoi.Domain.Models
             modelBuilder.Entity<ProductImage>(entity =>
             {
                 entity.HasKey(e => e.ImageId)
-                    .HasName("PK__ProductI__7516F4EC484FCAFA");
+                    .HasName("PK__ProductI__7516F4EC91F089BE");
 
                 entity.ToTable("ProductImage");
 
@@ -162,7 +162,7 @@ namespace BaByBoi.Domain.Models
             modelBuilder.Entity<ProductSize>(entity =>
             {
                 entity.HasKey(e => new { e.SizeId, e.ProductId })
-                    .HasName("PK__ProductS__48FDC534176C3F5B");
+                    .HasName("PK__ProductS__48FDC534F9AA408B");
 
                 entity.ToTable("ProductSize");
 
@@ -205,6 +205,9 @@ namespace BaByBoi.Domain.Models
             {
                 entity.ToTable("User");
 
+                entity.HasIndex(e => e.Email, "UQ__User__A9D105344E39BD8A")
+                    .IsUnique();
+
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.Property(e => e.BirthDate).HasColumnType("date");
@@ -220,8 +223,6 @@ namespace BaByBoi.Domain.Models
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
                 entity.Property(e => e.UpdateDate).HasColumnType("date");
-
-                entity.Property(e => e.UserName).HasMaxLength(100);
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Users)
@@ -248,3 +249,4 @@ namespace BaByBoi.Domain.Models
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
+

@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using BaByBoi.Domain.Models;
 using BaByBoi.DataAccess.Service;
 using BaByBoi.DataAccess.Service.Interface;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,16 +16,32 @@ builder.Services.AddDbContext<BaByBoiContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DB"));
 });
+
+builder.Services.AddControllers().AddJsonOptions(options => {
+    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+});
+
+// repository
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
 //service
 builder.Services.AddScoped(typeof(UserService));
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+
 builder.Services.AddScoped<IOrderService, OrderSerivce>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSession(options =>
@@ -31,6 +50,23 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+// config google
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+.AddCookie()
+.AddGoogle(googleOptions =>
+{
+    IConfigurationSection googleAuthNSection = builder.Configuration.GetSection("Authentication:Google");
+    googleOptions.ClientId = googleAuthNSection["ClientId"];
+    googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+    googleOptions.CallbackPath = "/dang-nhap-google";
+});
+
+
 
 var app = builder.Build();
 
@@ -46,6 +82,7 @@ app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
