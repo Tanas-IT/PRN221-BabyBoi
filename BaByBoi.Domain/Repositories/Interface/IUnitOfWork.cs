@@ -10,6 +10,8 @@ namespace BaByBoi.Domain.Repositories.Interface
     {
         IUserRepository UserRepository { get; }
         IProductRepository ProductRepository { get; }
+        IRoleRepository RoleRepository { get; }
+
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();
         Task CommitAsync();

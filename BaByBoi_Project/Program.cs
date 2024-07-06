@@ -15,9 +15,15 @@ builder.Services.AddDbContext<BaByBoiContext>(options =>
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+
 //service
 builder.Services.AddScoped(typeof(UserService));
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSession(options =>
