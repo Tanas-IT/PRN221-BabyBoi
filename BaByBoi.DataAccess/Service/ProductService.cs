@@ -11,14 +11,65 @@ namespace BaByBoi.DataAccess.Service
 {
     public class ProductService : IProductService
     {
-        public readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
         public ProductService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> deleteById(int id)
+        public async Task<List<Product>> GetAllProduct()
+        {
+           return  await _unitOfWork.ProductRepository.GetAllProductsAsync(); 
+        }
+        public async Task<List<Product>> SearchProduct(string searchValue)
+        {
+            return await _unitOfWork.ProductRepository.SearchProduct(searchValue);
+        }
+        public async Task<List<Product>> GetAllProductsPagingAsync(int pageIndex, int pageSize)
+        {
+            return await _unitOfWork.ProductRepository.GetAllProductsPagingAsync(pageIndex, pageSize);
+        }
+
+        public async Task<List<Category>> GetAllCagetory()
+        {
+            return await _unitOfWork.ProductRepository.GetAllCagetory();
+        }
+        public async Task<List<Size>> GetAllSize()
+        {
+            return await _unitOfWork.ProductRepository.GetAllSize();
+        }
+        public async Task<bool> AddImagesAndSize(Product product, List<ProductImage> productImagesLink, List<ProductSize> productSize)
+        {
+            return await _unitOfWork.ProductRepository.AddImagesAndSize(product, productImagesLink, productSize);
+        }
+        public async Task<Product> AddProduct(Product product)
+        {
+            return await _unitOfWork.ProductRepository.AddProduct(product);
+        }
+
+        public async Task<List<ProductImage>> GetImages()
+        {
+            return await _unitOfWork.ProductRepository.GetImages();
+        }
+        public async Task<Product> GetProductByProductId(int productId)
+        {
+            return await _unitOfWork.ProductRepository.GetProductByProductId(productId);
+        }
+        public async Task<bool> RemoveImagesAndSize(int productId)
+        {
+            return await _unitOfWork.ProductRepository.RemoveImagesAndSize(productId);
+        }
+
+        public async Task<Product> UpdateProduct(Product product)
+        {
+            return await _unitOfWork.ProductRepository.UpdateProduct(product);
+        }
+        public async Task<bool> DeleteProduct(int productId)
+        {
+            return await _unitOfWork.ProductRepository.DeleteProduct(productId);
+        }
+         public async Task<bool> deleteById(int id)
         {
             var getProduct = await _unitOfWork.ProductRepository.GetById(id);
             var result = false;
@@ -72,5 +123,6 @@ namespace BaByBoi.DataAccess.Service
 
         public async Task<ProductSize> GetProductsSizesBySpecificSizeAsync(int productId, int sizeId)
         => await _unitOfWork.ProductRepository.GetProductsSizesBySpecificSizeAsync(productId, sizeId);
+
     }
 }
