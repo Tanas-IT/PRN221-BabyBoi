@@ -16,5 +16,7 @@ namespace BaByBoi.DataAccess.Service.Interface
         Task<IEnumerable<Role>> GetAllRoles();
         Task CreateAsync(User user);
         Task<bool> DeleteUserAsync(int userId);
+        User CheckLogin(string email, string password);
+
     }
 }

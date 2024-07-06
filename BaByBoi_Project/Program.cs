@@ -16,7 +16,14 @@ builder.Services.AddDbContext<BaByBoiContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DB"));
 });
+
+builder.Services.AddControllers().AddJsonOptions(options => {
+    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+});
+
+// repository
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
@@ -26,12 +33,15 @@ builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
 //service
 builder.Services.AddScoped(typeof(UserService));
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 
 builder.Services.AddScoped<IOrderService, OrderSerivce>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSession(options =>
@@ -41,6 +51,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// config google
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -54,6 +65,8 @@ builder.Services.AddAuthentication(options =>
     googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
     googleOptions.CallbackPath = "/dang-nhap-google";
 });
+
+
 
 var app = builder.Build();
 
