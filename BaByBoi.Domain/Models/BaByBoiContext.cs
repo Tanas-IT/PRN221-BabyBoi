@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 namespace BaByBoi.Domain.Models
 {
@@ -17,7 +16,7 @@ namespace BaByBoi.Domain.Models
         {
         }
 
-        public virtual DbSet<Cagetory> Cagetories { get; set; } = null!;
+        public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderDetail> OrderDetails { get; set; } = null!;
         public virtual DbSet<Payment> Payments { get; set; } = null!;
@@ -33,37 +32,22 @@ namespace BaByBoi.Domain.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(GetConnectionString());
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=.;Database=BaByBoi;User Id=sa;Password=12345;TrustServerCertificate=True;");
             }
-        }
-        private string GetConnectionString()
-        {
-            IConfiguration config = new ConfigurationBuilder()
-             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", true, true)
-            .Build();
-            var strConn = config["ConnectionStrings:DB"];
-            return strConn;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Cagetory>(entity =>
+            modelBuilder.Entity<Category>(entity =>
             {
-                entity.ToTable("Cagetory");
+                entity.ToTable("Category");
 
-                entity.Property(e => e.CagetoryId).HasColumnName("CagetoryID");
+                entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
                 entity.Property(e => e.CreateDate).HasColumnType("date");
 
                 entity.Property(e => e.UpdateDate).HasColumnType("date");
-
-                entity.Property(e => e.UserId).HasColumnName("UserID");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Cagetories)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Cagetory__UserID__29572725");
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -90,7 +74,7 @@ namespace BaByBoi.Domain.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Order__UserID__37A5467C");
+                    .HasConstraintName("FK_Order_User");
 
                 entity.HasOne(d => d.Voucher)
                     .WithMany(p => p.Orders)
@@ -100,8 +84,8 @@ namespace BaByBoi.Domain.Models
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.HasKey(e => new { e.OrderId, e.ProductId })
-                    .HasName("PK__OrderDet__08D097C1307D4A7E");
+                entity.HasKey(e => new { e.OrderId, e.ProductId, e.SizeId })
+                    .HasName("PK__OrderDet__53532AC881229744");
 
                 entity.ToTable("OrderDetail");
 
@@ -109,17 +93,25 @@ namespace BaByBoi.Domain.Models
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
+                entity.Property(e => e.SizeId).HasColumnName("SizeID");
+
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__OrderDeta__Order__3A81B327");
+                    .HasConstraintName("FK_OrderDetail_Order");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__OrderDeta__Produ__3B75D760");
+                    .HasConstraintName("FK_OrderDetail_Product");
+
+                entity.HasOne(d => d.ProductSize)
+                    .WithMany(p => p.OrderDetails)
+                    .HasForeignKey(d => new { d.SizeId, d.ProductId })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderDetail_ProductSize");
             });
 
             modelBuilder.Entity<Payment>(entity =>
@@ -135,7 +127,7 @@ namespace BaByBoi.Domain.Models
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
-                entity.Property(e => e.CagetoryId).HasColumnName("CagetoryID");
+                entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
                 entity.Property(e => e.CreateDate).HasColumnType("date");
 
@@ -143,23 +135,16 @@ namespace BaByBoi.Domain.Models
 
                 entity.Property(e => e.UpdateDate).HasColumnType("date");
 
-                entity.Property(e => e.UserId).HasColumnName("UserID");
-
-                entity.HasOne(d => d.Cagetory)
+                entity.HasOne(d => d.Category)
                     .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.CagetoryId)
-                    .HasConstraintName("FK__Product__Cagetor__2C3393D0");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Product__UserID__2D27B809");
+                    .HasForeignKey(d => d.CategoryId)
+                    .HasConstraintName("FK_Product_Category");
             });
 
             modelBuilder.Entity<ProductImage>(entity =>
             {
                 entity.HasKey(e => e.ImageId)
-                    .HasName("PK__ProductI__7516F4EC3982D12F");
+                    .HasName("PK__ProductI__7516F4EC484FCAFA");
 
                 entity.ToTable("ProductImage");
 
@@ -178,7 +163,7 @@ namespace BaByBoi.Domain.Models
             modelBuilder.Entity<ProductSize>(entity =>
             {
                 entity.HasKey(e => new { e.SizeId, e.ProductId })
-                    .HasName("PK__ProductS__48FDC534145D7939");
+                    .HasName("PK__ProductS__48FDC534176C3F5B");
 
                 entity.ToTable("ProductSize");
 
@@ -190,13 +175,13 @@ namespace BaByBoi.Domain.Models
                     .WithMany(p => p.ProductSizes)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ProductSi__Produ__32E0915F");
+                    .HasConstraintName("FK_ProductSize_Product");
 
                 entity.HasOne(d => d.Size)
                     .WithMany(p => p.ProductSizes)
                     .HasForeignKey(d => d.SizeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ProductSi__SizeI__31EC6D26");
+                    .HasConstraintName("FK_ProductSize_Size");
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -242,7 +227,7 @@ namespace BaByBoi.Domain.Models
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.RoleId)
-                    .HasConstraintName("FK__User__RoleID__267ABA7A");
+                    .HasConstraintName("FK_User_Role");
             });
 
             modelBuilder.Entity<Voucher>(entity =>

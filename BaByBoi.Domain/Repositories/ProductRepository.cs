@@ -25,7 +25,7 @@ namespace BaByBoi.Domain.Repositories
             {
                 var productSizes = await _context.ProductSizes
             //.Where(ps => ps.SizeId == sizeID)
-            .Include(ps => ps.Product)
+            .Include(x => x.Product)
             .Include(ps => ps.Size)
             .ToListAsync();
 
@@ -46,7 +46,12 @@ namespace BaByBoi.Domain.Repositories
 
         public async Task<ProductSize> GetProductsSizesBySpecificSizeAsync(int productId, int sizeId)
         {
-            var productSize = await _context.ProductSizes.Where(x => x.ProductId == productId && x.SizeId == sizeId).FirstOrDefaultAsync();
+            var productSize = await _context.ProductSizes
+                .Include(x => x.Product)
+                .ThenInclude( x => x.ProductImages)
+                .Include(x => x.Size)
+                .Where(x => x.ProductId == productId && x.SizeId == sizeId)
+                .FirstOrDefaultAsync();
             return productSize!;
         }
 

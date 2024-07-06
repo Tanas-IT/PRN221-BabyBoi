@@ -19,6 +19,7 @@
         .product-image {
             position: relative;
         }
+
         .discount
         .discount-banner {
             position: absolute;
@@ -64,7 +65,23 @@
 {
     <div class="alert alert-success">@TempData["SuccessMessage"]</div>
 }
-
+<div class="category">
+    <div class="list-group border rounded">
+        <a href="#" class="list-group-item">Sữa</a>
+        <a href="#" class="list-group-item">Sữa 1</a>
+        <a href="#" class="list-group-item">Sữa 2</a>
+        <a href="#" class="list-group-item">Sữa 3</a>
+        <a href="#" class="list-group-item">Sữa 4</a>
+        <a href="#" class="list-group-item">Sữa 5</a>
+        <a href="#" class="list-group-item">Sữa 6</a>
+        <a href="#" class="list-group-item">Sữa 7</a>
+        <a href="#" class="list-group-item">Sữa 8</a>
+        <a href="#" class="list-group-item">Sữa 9</a>
+        <a href="#" class="list-group-item">Sữa 10</a>
+        <a href="#" class="list-group-item">Sữa 11</a>
+        <a href="#" class="list-group-item">Sữa 12</a>
+    </div>
+</div>
 @if (Model.Products != null && Model.Products.Any())
 {
     <div class="container">
@@ -85,7 +102,7 @@
                         {
 
                             <p class="price" style="text-decoration: line-through">@product.Price</p>
-                            <p class="price" style="color: dodgerblue" >
+                            <p class="price" style="color: dodgerblue">
                                 @{
                                     var priceAfterDiscount = Math.Ceiling((decimal)(product.Price - (product.Price * product.Product.Discount) / 100));
                                 }
@@ -112,7 +129,7 @@
                                 }
                             }
                         </div>
-                        <form method="post" asp-page-handler="AddToCart" asp-route-productId="@product.Product.ProductId" asp-route-sizeId="@product.SizeId" >
+                        <form method="post" asp-page-handler="AddToCart" asp-route-productId="@product.Product.ProductId" asp-route-sizeId="@product.SizeId">
                             <button type="submit" class="btn btn-primary">Thêm vào giỏ</button>
                         </form>
                     </div>

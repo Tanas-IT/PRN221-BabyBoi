@@ -7,9 +7,7 @@ namespace BaByBoi.Domain.Models
     {
         public User()
         {
-            Cagetories = new HashSet<Cagetory>();
             Orders = new HashSet<Order>();
-            Products = new HashSet<Product>();
         }
 
         public int UserId { get; set; }
@@ -26,8 +24,6 @@ namespace BaByBoi.Domain.Models
         public int? RoleId { get; set; }
 
         public virtual Role? Role { get; set; }
-        public virtual ICollection<Cagetory> Cagetories { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
-        public virtual ICollection<Product> Products { get; set; }
     }
 }

@@ -1,0 +1,88 @@
+﻿@page
+@model ShoppingCartModel
+@{
+    ViewData["Title"] = "Shopping Cart";
+    Layout = "UsersLayout";
+}
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
+
+<h1 class="text-center">Your Shopping Cart</h1>
+
+<div class="table-responsive mx-auto" style="width: 75%;">
+    <form asp-page-handler="Purchase" method="post">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model.OrderList)
+                {
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="SelectedProducts" value="@item.ProductId-@item.SizeId" />
+                        </td>
+                        <td>@item.Product.ProductName</td>
+                        <td>@item.Price</td>
+                        <td>
+                            <div class="input-group">
+                                @if (item.Quantity <= 1)
+                                {
+                                    <button type="submit" asp-page-handler="UpdateInCart" asp-route-ProductId="@item.ProductId" asp-route-Quantity="@(item.Quantity - 1)" asp-route-SizeID="@item.SizeId" class="btn btn-outline-secondary" disabled>-</button>
+                                }
+                                else
+                                {
+                                    <button type="submit" asp-page-handler="UpdateInCart" asp-route-ProductId="@item.ProductId" asp-route-Quantity="@(item.Quantity - 1)" asp-route-SizeID="@item.SizeId" class="btn btn-outline-secondary">-</button>
+                                }
+                                <input type="number" name="quantities" value="@item.Quantity" class="form-control text-center" min="1" max="@(item.ProductSize.Quantity)" />
+                                @if (item.ProductSize.Quantity > item.Quantity)
+                                {
+                                    <button type="submit" asp-page-handler="UpdateInCart" asp-route-ProductId="@item.ProductId" asp-route-Quantity="@(item.Quantity + 1)" asp-route-SizeID="@item.SizeId" class="btn btn-outline-secondary">+</button>
+                                }
+                                else
+                                {
+                                    <button type="submit" asp-page-handler="UpdateInCart" asp-route-ProductId="@item.ProductId" asp-route-Quantity="@(item.Quantity + 1)" asp-route-SizeID="@item.SizeId" class="btn btn-outline-secondary" disabled>+</button>
+                                }
+                            </div>
+                        </td>
+                        <td>@(item.Quantity * item.Price)</td>
+                        <td>
+                            <button type="submit" asp-page-handler="DeleteFormCart" asp-route-ProductId="@item.ProductId" asp-route-SizeID="@item.SizeId" class="btn btn-danger">Remove</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="text-right">
+            <button type="submit" class="btn btn-warning">Purchase</button>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('button[name="updateQuantity"]').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const form = button.closest('form');
+                form.submit();
+            });
+        });
+
+        document.querySelectorAll('button[name="removeItem"]').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const form = button.closest('form');
+                form.submit();
+            });
+        });
+    </script>
+}
