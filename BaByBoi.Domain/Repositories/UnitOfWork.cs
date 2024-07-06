@@ -14,11 +14,13 @@ namespace BaByBoi.Domain.Repositories
         private readonly BaByBoiContext _myDbContext;
         private IDbContextTransaction _transaction;
         public IUserRepository UserRepository { get; private set; }
+        public IProductRepository ProductRepository { get; private set; }
 
         public UnitOfWork(BaByBoiContext myDbContext)
         {
             _myDbContext = myDbContext;
             UserRepository = new UserRepository(_myDbContext);
+            ProductRepository = new ProductRepository(_myDbContext);
         }
 
         public async Task BeginTransactionAsync()

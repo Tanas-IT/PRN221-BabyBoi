@@ -11,4 +11,8 @@
     <ProjectReference Include="..\BaByBoi.Domain\BaByBoi.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
+  </ItemGroup>
+
 </Project>
