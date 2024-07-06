@@ -43,7 +43,7 @@ namespace BaByBoi_Project.Pages.Admin
         public Product UpdateProduct { get; set; }
 
         [BindProperty]
-        public List<Cagetory> listCagetory { get; set; }
+        public List<Category> listCagetory { get; set; }
         [BindProperty]
         public List<Size> listSize { get; set; }
         [BindProperty]
@@ -466,6 +466,12 @@ namespace BaByBoi_Project.Pages.Admin
             listCagetory = await _productService.GetAllCagetory();
             listSize = await _productService.GetAllSize();
             CurrentIndex = this.PageIndex;
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostResetProduct()
+        {
+            await LoadDataAsync("1", "5");
             return Page();
         }
     }

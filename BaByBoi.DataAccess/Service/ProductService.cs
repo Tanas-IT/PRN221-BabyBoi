@@ -31,7 +31,7 @@ namespace BaByBoi.DataAccess.Service
             return await _unitOfWork.ProductRepository.GetAllProductsPagingAsync(pageIndex, pageSize);
         }
 
-        public async Task<List<Cagetory>> GetAllCagetory()
+        public async Task<List<Category>> GetAllCagetory()
         {
             return await _unitOfWork.ProductRepository.GetAllCagetory();
         }

@@ -18,7 +18,7 @@ namespace BaByBoi.Domain.Repositories
         public async Task<List<Product>> GetAllProductsAsync()
         {
             return await _context.Products
-                .Include(x => x.Cagetory)
+                .Include(x => x.Category)
                 .Include(x => x.ProductImages)
                 .Include(x => x.ProductSizes)
                 .ThenInclude(x => x.Size)
@@ -32,7 +32,7 @@ namespace BaByBoi.Domain.Repositories
             if(checkSearch)
             {
                 return await _context.Products
-                                 .Include(x => x.Cagetory)
+                                 .Include(x => x.Category)
                                 .Include(x => x.ProductImages)
                                 .Include(x => x.ProductSizes)
                                 .Where(x => x.ProductId == checkSearchInt || x.Discount == checkSearchInt || x.Status == checkSearchInt)
@@ -45,7 +45,7 @@ namespace BaByBoi.Domain.Repositories
                 if(checkDateTime)
                 {
                     return await _context.Products
-                                   .Include(x => x.Cagetory)
+                                   .Include(x => x.Category)
                                .Include(x => x.ProductImages)
                                .Include(x => x.ProductSizes)
                                .Where(x => x.CreateDate == checkDate)
@@ -54,13 +54,13 @@ namespace BaByBoi.Domain.Repositories
                 else
                 {
                     return await _context.Products
-                                   .Include(x => x.Cagetory)
+                                   .Include(x => x.Category)
                                    .Include(x => x.ProductImages)
                                    .Include(x => x.ProductSizes)
                                    .Where(x => x.ProductCode.ToLower().Contains(searchValue.ToLower()) 
                                                || x.ProductName.ToLower().Contains(searchValue.ToLower()) 
-                                               || x.Decription.ToLower().Contains(searchValue.ToLower())
-                                               || x.Cagetory.CagetoryName.ToLower().Contains(searchValue.ToLower())
+                                               || x.Description.ToLower().Contains(searchValue.ToLower())
+                                               || x.Category.CategoryName.ToLower().Contains(searchValue.ToLower())
                                                )
                                    .ToListAsync();
                 }
@@ -70,7 +70,7 @@ namespace BaByBoi.Domain.Repositories
         {
             int skip = (pageIndex - 1) * pageSize;
             List<Product> listProduct = await _context.Products
-                .Include(x => x.Cagetory)
+                .Include(x => x.Category)
                 .Include(x => x.ProductImages)
                 .Include(x => x.ProductSizes)
                 .ThenInclude(x => x.Size)
@@ -80,9 +80,9 @@ namespace BaByBoi.Domain.Repositories
             return listProduct;
         }
 
-        public Task<List<Cagetory>> GetAllCagetory()
+        public Task<List<Category>> GetAllCagetory()
         {
-            return _context.Cagetories.ToListAsync();
+            return _context.Categories.ToListAsync();
         }
         public Task<List<Size>> GetAllSize()
         {
@@ -130,7 +130,7 @@ namespace BaByBoi.Domain.Repositories
         public async Task<Product> GetProductByProductId(int productId)
         {
              var product = await _context.Products
-                                    .Include(x => x.Cagetory)
+                                    .Include(x => x.Category)
                                     .Include(x => x.ProductImages)
                                     .Include(x => x.ProductSizes)
                                     .ThenInclude(x => x.Size)
@@ -167,9 +167,9 @@ namespace BaByBoi.Domain.Repositories
                 oldProduct.CreateBy = UpdateProduct.CreateBy;
                 oldProduct.UpdateDate = DateTime.Now;
                 oldProduct.UpdateBy = UpdateProduct.UpdateBy;
-                oldProduct.Decription = UpdateProduct.Decription;
+                oldProduct.Description = UpdateProduct.Description;
                 oldProduct.Status = UpdateProduct.Status;
-                oldProduct.CagetoryId = UpdateProduct.CagetoryId;
+                oldProduct.CategoryId = UpdateProduct.CategoryId;
                 oldProduct.Discount = UpdateProduct.Discount;
                 await _context.SaveChangesAsync();
                 return oldProduct;

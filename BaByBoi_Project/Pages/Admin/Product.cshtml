@@ -399,7 +399,7 @@
                                                     padding: 10px;" type="search" id="searchInput" asp-for="SearchValue" placeholder="Search" />
                                         <button style="border-radius: 8px; margin-left: 22px;" type="submit" class="btn btn-info">Search</button>
                                     </form>
-                                    <form method="post" asp-page-handler="ResetRoom" asp-route-ResetPage="Reset">
+                                    <form method="post" asp-page-handler="ResetProduct">
                                         <button style="border-radius: 8px; margin-left: 22px; color: white" type="submit" class="btn btn-warning">Reset Page</button>
                                     </form>
                                     </div>
@@ -461,7 +461,7 @@
                                                                 <input id="addProductDescription"
                                                                        type="text"
                                                                        class="form-control"
-                                                                       asp-for="AddProduct.Decription"
+                                                                       asp-for="AddProduct.Description"
                                                                       />
                                                             </div>
                                                         </div>
@@ -486,10 +486,10 @@
                                                         </div>
                                                         <div class="col-md-12" style="margin-left: 5px;">
                                                                 <label for="idCategory">Danh mục</label>
-                                                                    <select class="form-control mt-3 mb-4" id="idCategory" asp-for="AddProduct.CagetoryId">
+                                                                    <select class="form-control mt-3 mb-4" id="idCategory" asp-for="AddProduct.CategoryId">
                                                                         @foreach(var category in Model.listCagetory)
                                                                         {
-                                                                            <option value="@category.CagetoryId">@category.CagetoryName</option>
+                                                                    <option value="@category.CategoryId">@category.CategoryName</option>
                                                                         }
                                                                     </select>
                                                         </div>
@@ -611,7 +611,7 @@
                                                             </div>
                                                             }
                                                         </td>
-                                                    <td>@product.Decription</td>
+                                                    <td>@product.Description</td>
                                                         @if(product.Status == 1)
                                                         {
                                                             <td>
@@ -637,7 +637,7 @@
                                                                 color: white;">Banned</span>
                                                         </td>
                                                         }
-                                                        <td>@product.Cagetory.CagetoryName</td>
+                                                        <td>@product.Category.CategoryName</td>
                                                     <td>@product.Discount</td>
                                                     <td>
                                                         <div class="form-button-action">
@@ -730,16 +730,16 @@
                                                                                             <input id="addProductDescription"
                                                                                                    type="text"
                                                                                                    class="form-control"
-                                                                                                   value="@product.Decription"
-                                                                                                   asp-for="UpdateProduct.Decription" />
+                                                                                                   value="@product.Description"
+                                                                                                   asp-for="UpdateProduct.Description" />
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="col-md-12" style="margin-left: 5px;">
                                                                                         <label for="idCategory">Danh mục</label>
-                                                                                        <select class="form-control mt-3 mb-4" id="idCategory" asp-for="UpdateProduct.CagetoryId">
+                                                                                        <select class="form-control mt-3 mb-4" id="idCategory" asp-for="UpdateProduct.CategoryId">
                                                                                                 @foreach (var category in Model.listCagetory)
                                                                                                 {
-                                                                                                <option selected="@(product.CagetoryId == category.CagetoryId ? true : false)" value="@category.CagetoryId">@category.CagetoryName</option>
+                                                                                                <option selected="@(product.CategoryId == category.CategoryId ? true : false)" value="@category.CategoryId">@category.CategoryName</option>
                                                                                                 }
                                                                                         </select>
                                                                                     </div>
