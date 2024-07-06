@@ -12,7 +12,7 @@ namespace BaByBoi.Domain.Repositories.Interface
         public Task<List<Product>> GetAllProductsAsync();
         public Task<List<Product>> GetAllProductsPagingAsync(int pageIndex, int pageSize);
         public Task<List<Product>> SearchProduct(string searchValue);
-        public Task<List<Cagetory>> GetAllCagetory();
+        public Task<List<Category>> GetAllCagetory();
         public Task<List<Size>> GetAllSize();
         public Task<Product> AddProduct(Product product);
         public Task<bool> AddImagesAndSize(Product product, List<ProductImage> productImagesLink, List<ProductSize> productSize);
