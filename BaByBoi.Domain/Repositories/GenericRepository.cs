@@ -52,7 +52,7 @@ namespace BaByBoi.Domain.Repositories
             return a;
         }
 
-        public virtual async Task<T> GetById(string id)
+        public virtual async Task<T> GetByOrderCode(string id)
         {
             var a = await _context.Set<T>().FindAsync(id);
             return a;
@@ -92,7 +92,7 @@ namespace BaByBoi.Domain.Repositories
         {
             try
             {
-                var entityID = await GetById(id);
+                var entityID = await GetByOrderCode(id);
 
                 if (entityID != null)
                 {

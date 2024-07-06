@@ -18,6 +18,8 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
             _productService = productService;
         }
         public PaginatedList<ProductSize> Products { get; private set; }
+        public List<Category> Categories { get; private set; }
+
         [BindProperty(SupportsGet = true)]
         public int PageIndex { get; set; } = 1;
 
@@ -57,9 +59,13 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
             var productSize = await _productService.GetProductsSizesBySpecificSizeAsync(productId, sizeId);
             var orderDetail = new OrderDetail
             {
-                ProductId = productId,
+                ProductId = productSize.ProductId,
                 Price = Math.Ceiling((double)(productSize.Price -  (productSize.Price * product.Discount)/100)!),
                 Quantity = 1,
+                Product = product,
+                SizeId = productSize.SizeId,
+                ProductSize = productSize
+                
             };
             if (!OrderList.Contains(orderDetail))
             {
