@@ -222,7 +222,7 @@ namespace BaByBoi.Domain.Models
 
                 entity.Property(e => e.UpdateDate).HasColumnType("date");
 
-                entity.Property(e => e.UserName).HasMaxLength(100);
+                //entity.Property(e => e.UserName).HasMaxLength(100);
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Users)
