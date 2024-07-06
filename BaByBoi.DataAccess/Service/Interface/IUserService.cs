@@ -10,5 +10,7 @@ namespace BaByBoi.DataAccess.Service.Interface
     public interface IUserService
     {
         public Task<List<User>> GetAll();
+        User CheckLogin(string email, string password);
+
     }
 }

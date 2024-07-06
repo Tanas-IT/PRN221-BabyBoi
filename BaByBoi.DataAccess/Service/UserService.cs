@@ -17,6 +17,10 @@ namespace BaByBoi.DataAccess.Service
         {
             _unitOfWork = unitOfWork;
         }
+
+        public User CheckLogin(string email, string password)
+                => _unitOfWork.UserRepository.CheckLogin(email, password);
+
         public async Task<List<User>> GetAll()
         {
             var users = await _unitOfWork.UserRepository.GetAll();

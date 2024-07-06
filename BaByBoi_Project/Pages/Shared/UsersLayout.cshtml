@@ -1,5 +1,13 @@
-﻿@inject IHttpContextAccessor HttpContextAccessor
+﻿@using BaByBoi.Domain.Models
+@using BaByBoi_Project.Extensions
+@inject IHttpContextAccessor HttpContextAccessor
+
 @{
+    User user = null!;
+    if (HttpContextAccessor.HttpContext != null)
+    {
+        user = HttpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("User");
+    }
     var currentPath = HttpContextAccessor.HttpContext?.Request.Path;
 }
 
@@ -75,13 +83,34 @@
                 <form class="col-12 col-sm-10 col-lg-auto mb-3 mb-lg-0 me-lg-3">
                     <input type="search" name="searchValue" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
                 </form>
-                <div class="text-end">
+                <div class="text-end m-3">
                     <a href="/CustomerViewPage/ShoppingCart" class="btn btn-outline-light">
                         <i class="fas fa-shopping-cart cart-icon"></i>Giỏ hàng
                     </a>
+                </div>
+                @if (user != null)
+                {
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            @user.FullName
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" asp-page="/Profile/Index">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" asp-page="/LoginPage/Index" asp-page-handler="Logout" asp-route-returnUrl="/">
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
                     <a href="/LoginPage" class="btn btn-outline-light me-2">Đăng nhập</a>
                     <a href="#" class="btn btn-warning">Đăng ký</a>
-                </div>
+                }
+
             </div>
         </div>
     </header>
