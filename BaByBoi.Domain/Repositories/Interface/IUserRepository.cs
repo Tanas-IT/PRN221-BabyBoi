@@ -10,5 +10,7 @@ namespace BaByBoi.Domain.Repositories.Interface
     public interface IUserRepository : IGenericRepository<User>
     {
         User GetUserByFullName(string fullName);
+        Task<IEnumerable<User>> GetAll();
+        Task<bool> ExistsAsync(int id);
     }
 }

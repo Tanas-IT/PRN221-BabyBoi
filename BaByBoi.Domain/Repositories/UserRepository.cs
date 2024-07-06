@@ -1,5 +1,6 @@
 ﻿using BaByBoi.Domain.Models;
 using BaByBoi.Domain.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,15 @@ namespace BaByBoi.Domain.Repositories
         {
           return _context.Users.FirstOrDefault(u => u.FullName == fullName);
         }
+        public override async Task<IEnumerable<User>> GetAll()
+        {
+            return await _context.Users.Include(u => u.Role).ToListAsync();
+        }
+
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await _context.Users.AnyAsync(e => e.UserId == id);
+        }
+
     }
 }
