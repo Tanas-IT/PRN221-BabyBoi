@@ -57,7 +57,7 @@
                             <li><a class="dropdown-item" asp-page="/Profile/Index">Hồ sơ</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <form method="post" asp-page="/LoginPage/Index" asp-page-handler="Logout" asp-route-returnUrl="/">
+                                <form method="post" asp-page="/Guest/LoginPage/Index" asp-page-handler="Logout" asp-route-returnUrl="/">
                                     <button type="submit" class="dropdown-item">Đăng xuất</button>
                                 </form>
                             </li>
@@ -66,8 +66,8 @@
                 }
                 else
                 {
-                    <a href="/LoginPage" class="btn btn-outline-light me-2">Đăng nhập</a>
-                    <a href="/RegisterPage" class="btn btn-warning">Đăng ký</a>
+                    <a href="/Guest/LoginPage" class="btn btn-outline-light me-2">Đăng nhập</a>
+                    <a href="/Guest/RegisterPage" class="btn btn-warning">Đăng ký</a>
                 }
 
             </div>

@@ -110,7 +110,7 @@ namespace BaByBoi_Project.Pages.RegisterPage
                 return RedirectToPage("/CustomerViewPage/CusViewProduct");
             }
 
-            return RedirectToPage("/LoginPage");
+            return RedirectToPage("/Guest/LoginPage");
         }
     }
 }
