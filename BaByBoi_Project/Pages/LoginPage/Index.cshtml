@@ -17,12 +17,12 @@
         </div>
         <form asp-page-handler="Login" method="post">
             <div class="input-box">
-                <input name="Email" type="text" class="input-field" value="@Model.Email" id="email" autocomplete="off">
+                <input name="Email" type="text" class="input-field" id="email" autocomplete="off" value="@Model.Email" required>
                 <label for="email">Địa chỉ Email</label>
             </div>
 
             <div class="input-box">
-                <input name="Password" type="Password" class="input-field" value="@Model.Password" id="password" autocomplete="off">
+                <input name="Password" type="Password" class="input-field" id="password" value="@Model.Password" autocomplete="off" required>
                 <label for="password">Mật khẩu</label>
             </div>
 

@@ -15,8 +15,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 80vh;
-    margin: 30px 0;
+    min-height: 20vh;
 }
 
 .box {
@@ -160,7 +159,7 @@
 
 .btn-submit {
     color: #fff !important;
-    margin-bottom: 0
+    margin-bottom: 0 !important
 }
 
 .section-box .forgot-link {
