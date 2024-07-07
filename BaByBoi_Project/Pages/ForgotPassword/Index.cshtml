@@ -1,0 +1,41 @@
+﻿@page
+@model BaByBoi_Project.Pages.ForgotPassword.IndexModel
+@{
+    Layout = "AuthenLayout";
+    ViewData["Title"] = "Forgot Password";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/auth.css">
+</head>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="container-form">
+    <div class="box">
+        <div class="header-form">
+            <div class="header-form-title">Quên Mật Khẩu</div>
+            <p>Vui lòng nhập email để khôi phục mật khẩu!</p>
+        </div>
+        <form method="post">
+            <div class="input-box">
+                <input name="Email" type="text" class="input-field" value="@Model.Email" id="email" autocomplete="off" required>
+                <label for="email">Địa chỉ Email</label>
+            </div>
+            <div class="error-message">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="input-box">
+                <input type="submit" class="input-submit btn-submit" value="Xác nhận">
+            </div>
+        </form>
+    </div>
+</div>

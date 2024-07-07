@@ -19,16 +19,17 @@ namespace BaByBoi_Project.Pages.LoginPage
         }
 
         [BindProperty]
-        public string Email { get; set; } = null!;
+        public string Email { get; set; }
 
         [BindProperty]
-        public string Password { get; set; } = null!;
-
+        public string Password { get; set; }
         [BindProperty]
+
         public string ErrorMessage { get; set; } = null!;
 
         public IActionResult OnGet()
         {
+            //User = new User();
             if (HttpContext.Session.GetObjectFromJson<User>("User") != null)
             {
                 return RedirectToPage("/CustomerViewPage/CusViewProduct");
@@ -37,16 +38,7 @@ namespace BaByBoi_Project.Pages.LoginPage
         }
         public async Task<IActionResult> OnPostLogin()
         {
-            if (Email == null)
-            {
-                ErrorMessage = "Email không được để trống.";
-                return Page();
-            }
-            if (Password == null)
-            {
-                ErrorMessage = "Mật khẩu không được để trống.";
-                return Page();
-            }
+
             var user = await _userService.CheckLogin(Email!, Password!);
             if (user != null)
             {
