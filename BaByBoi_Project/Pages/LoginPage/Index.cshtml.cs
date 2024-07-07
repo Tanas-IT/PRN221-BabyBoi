@@ -19,10 +19,10 @@ namespace BaByBoi_Project.Pages.LoginPage
         }
 
         [BindProperty]
-        public string email { get; set; } = null!;
+        public string Email { get; set; } = null!;
 
         [BindProperty]
-        public string password { get; set; } = null!;
+        public string Password { get; set; } = null!;
 
         [BindProperty]
         public string ErrorMessage { get; set; } = null!;
@@ -37,17 +37,17 @@ namespace BaByBoi_Project.Pages.LoginPage
         }
         public async Task<IActionResult> OnPostLogin()
         {
-            if (email == null)
+            if (Email == null)
             {
                 ErrorMessage = "Email không được để trống.";
                 return Page();
             }
-            if (password == null)
+            if (Password == null)
             {
                 ErrorMessage = "Mật khẩu không được để trống.";
                 return Page();
             }
-            var user = await _userService.CheckLogin(email!, password!);
+            var user = await _userService.CheckLogin(Email!, Password!);
             if (user != null)
             {
                 HttpContext.Session.SetObjectAsJson("User", user);
@@ -96,6 +96,7 @@ namespace BaByBoi_Project.Pages.LoginPage
                 {
                     Email = email!,
                     FullName = fullName ?? string.Empty,
+                    CreateDate = DateTime.Now,
                 };
                 var result = await _userService.AddAsync(user);
                 if (result)
