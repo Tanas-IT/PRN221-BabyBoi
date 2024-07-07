@@ -62,7 +62,7 @@ namespace BaByBoi_Project.Pages.LoginPage
 
         public IActionResult OnGetGoogleLogin(string returnUrl = null!)
         {
-            var redirectUrl = Url.Page("/LoginPage/Index", pageHandler: "GoogleCallback", values: new { returnUrl });
+            var redirectUrl = Url.Page("/Guest/LoginPage/Index", pageHandler: "GoogleCallback", values: new { returnUrl });
             var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
             return new ChallengeResult(GoogleDefaults.AuthenticationScheme, properties);
         }
@@ -73,7 +73,7 @@ namespace BaByBoi_Project.Pages.LoginPage
 
             if (!authenticateResult.Succeeded || authenticateResult.Principal == null)
             {
-                return RedirectToPage("./Login");
+                return RedirectToPage("/Guest/LoginPage");
             }
 
             var claims = authenticateResult.Principal.Claims;

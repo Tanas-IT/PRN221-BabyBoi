@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BaByBoi_Project.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
 </head>
 <body>
     <header class="p-3 container-fluid text-white" style="background-color: #21409A">
@@ -39,8 +40,8 @@
                     </a>
                 </div>
                 <div class="text-end">
-                    <a href="/LoginPage" class="btn btn-outline-light me-2">Đăng nhập</a>
-                    <a href="/RegisterPage" class="btn btn-warning">Đăng ký</a>
+                    <a href="/Guest/LoginPage" class="btn btn-outline-light me-2">Đăng nhập</a>
+                    <a href="/Guest/RegisterPage" class="btn btn-warning">Đăng ký</a>
                 </div>
             </div>
         </div>
@@ -61,8 +62,9 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://kit.fontawesome.com/d98e41de81.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

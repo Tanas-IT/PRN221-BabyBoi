@@ -35,7 +35,7 @@ namespace BaByBoi_Project.Pages.ForgotPassword
                 // Lưu mã xác nhận vào session
                 HttpContext.Session.SetString("ResetPasswordVerificationCode", verificationCode);
                 HttpContext.Session.SetString("EmailForgotPass", Email);
-                var resetLink = $"https://localhost:7041/ResetPassword?token={verificationCode}";
+                var resetLink = $"https://localhost:7041/Guest/ResetPassword?token={verificationCode}";
                 await _emailService.SendEmailAsync(Email, "Đặt Lại Mật Khẩu", $"Nhấp vào đây để đặt lại mật khẩu: <a href='{resetLink}'>{resetLink}</a>");
                 TempData["SuccessMessage"] = "Một email đã được gửi đến địa chỉ của bạn để đặt lại mật khẩu.";
             }

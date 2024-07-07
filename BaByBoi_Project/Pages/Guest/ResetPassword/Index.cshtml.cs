@@ -25,12 +25,12 @@ namespace BaByBoi_Project.Pages.ResetPassword
             var token = HttpContext.Session.GetObjectFromJson<string>("ResetPasswordVerificationCode");
             if (token == null)
             {
-                return RedirectToPage("/LoginPage/Index");
+                return RedirectToPage("/Guest/LoginPage/Index");
             }
             if (tokenReq != token)
             {
                 TempData["ErrorMessage"] = "Mã xác nhận không chính xác.";
-                return RedirectToPage("/ForgotPassword/Index");
+                return RedirectToPage("/Guest/ForgotPassword/Index");
             }
             return Page();
         }
@@ -61,7 +61,7 @@ namespace BaByBoi_Project.Pages.ResetPassword
             {
                 HttpContext.Session.Remove("EmailForgotPass");
                 HttpContext.Session.Remove("ResetPasswordVerificationCode");
-                return RedirectToPage("/LoginPage/Index");
+                return RedirectToPage("/Guest/LoginPage/Index");
             }
             return Page();
         }
