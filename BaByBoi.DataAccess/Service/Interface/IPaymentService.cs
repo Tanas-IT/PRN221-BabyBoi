@@ -11,5 +11,6 @@ namespace BaByBoi.DataAccess.Service.Interface
     public interface IPaymentService 
     {
         Task<List<Payment>> getAllPaymentMethod();
+        Task<Payment> getPayment(int id);
     }
 }

@@ -23,5 +23,11 @@ namespace BaByBoi.DataAccess.Service
             var payments = await _unitOfWork.PaymentRepository.GetAll();
             return payments.ToList();
         }
+
+        public async Task<Payment> getPayment(int id)
+        {
+            var payment = await _unitOfWork.PaymentRepository.GetById(id);
+            return payment;
+        }
     }
 }
