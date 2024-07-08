@@ -45,7 +45,7 @@ namespace BaByBoi_Project.Pages.LoginPage
                 HttpContext.Session.SetObjectAsJson("User", user);
                 if (user.RoleId == (int)UserRole.Admin)
                 {
-                    return Content("Đây là trang admin nhé.");
+                    return RedirectToPage("/Admin/Home");
                 }
                 else
                 {
@@ -99,7 +99,7 @@ namespace BaByBoi_Project.Pages.LoginPage
             HttpContext.Session.SetObjectAsJson("User", user);
             if (user.RoleId == (int)UserRole.Admin)
             {
-                return Content("Đây là trang admin nhé.");
+                return RedirectToPage("/Admin/Home");
             }
             else
             {

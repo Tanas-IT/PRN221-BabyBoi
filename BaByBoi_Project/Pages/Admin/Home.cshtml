@@ -156,33 +156,31 @@
                                    href="#"
                                    aria-expanded="false">
                                     <div class="avatar-sm">
-                                        <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/img%2Fprofile.jpg?alt=media&token=edbb29fa-eb1c-4111-ad8c-f1b049401b7b"
-                                             alt="..."
-                                             class="avatar-img rounded-circle" />
+                                        <div class="avatar">
+                                            <span class="avatar-title rounded-circle border border-white">@(Model.CurrentUser != null ? Model.CurrentUser.FullName.Substring(0, 1) : "A")</span>
+                                        </div>
                                     </div>
                                     <span class="profile-username">
                                         <span class="op-7">Xin chào,</span>
-                                        <span class="fw-bold">Admin</span>
+                                        <span class="fw-bold">@(Model.CurrentUser != null ? Model.CurrentUser.FullName : "Admin") </span>
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-user animated fadeIn">
                                     <div class="dropdown-user-scroll scrollbar-outer">
                                     <li>
                                         <div class="user-box">
-                                            <div class="avatar-lg">
-                                                <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/img%2Fprofile.jpg?alt=media&token=edbb29fa-eb1c-4111-ad8c-f1b049401b7b"
-                                                     alt="image profile"
-                                                     class="avatar-img rounded" />
+                                            <div class="avatar">
+                                                <span class="avatar-title rounded-circle border border-white">@(Model.CurrentUser != null ? Model.CurrentUser.FullName.Substring(0, 1) : "A")</span>
                                             </div>
                                             <div class="u-text">
-                                                <h4>Admin</h4>
-                                                <p class="text-muted">admin@example.com</p>
+                                                <h4>@(Model.CurrentUser != null ? Model.CurrentUser.Role.RoleName : "Admin")</h4>
+                                                <p class="text-muted">@(Model.CurrentUser != null ? Model.CurrentUser.Email : "abc@gmail.com")</p>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item text-danger" href="#">Logout</a>
+                                        <a class="dropdown-item text-danger" href="/LoginPage/Index">Logout</a>
                                     </li>
                     </div>
                     </ul>
@@ -213,7 +211,7 @@
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
                                             <p class="card-category">Người dùng</p>
-                                            <h4 class="card-title">1303</h4>
+                                            <h4 class="card-title">@Model.NumberOfUser</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -232,7 +230,7 @@
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
                                             <p class="card-category">Doanh thu</p>
-                                            <h4 class="card-title">$ 1,345</h4>
+                                            <h4 class="card-title">$ @Model.Revenue</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -251,7 +249,7 @@
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
                                             <p class="card-category">Đơn hàng</p>
-                                            <h4 class="card-title">576</h4>
+                                            <h4 class="card-title">@Model.NumberOfOrder</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -268,10 +266,13 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="chart-container" style="min-height: 375px">
-                                    <canvas id="statisticsChart"></canvas>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="lineChart"></canvas>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div id="myChartLegend"></div>
                             </div>
                         </div>
                     </div>
@@ -279,26 +280,17 @@
                         <div class="card card-primary card-round">
                             <div class="card-header">
                                 <div class="card-head-row">
-                                    <div class="card-title">Doanh thu mỗi ngày</div>
-                                </div>
-                                <div class="card-category">March 25 - April 02</div>
-                            </div>
-                            <div class="card-body pb-0">
-                                <div class="mb-4 mt-2">
-                                    <h1>$4,578.58</h1>
-                                </div>
-                                <div class="pull-in">
-                                    <canvas id="dailySalesChart"></canvas>
+                                    <div class="card-title">Thống kê sản phẩm theo danh mục</div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card card-round">
                             <div class="card-body pb-0">
-                                <div class="h1 fw-bold float-end text-primary">+5%</div>
-                                <h2 class="mb-2">17</h2>
-                                <p class="text-muted">Thống kê user</p>
-                                <div class="pull-in sparkline-fix">
-                                    <div id="lineChart"></div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="pieChart"
+                                                    style="width: 50%; height: 50%"></canvas>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -312,66 +304,18 @@
                                     <div class="card-title">Người dùng mới</div>
                                 </div>
                                 <div class="card-list py-4">
-                                    <div class="item-list">
-                                        <div class="avatar">
-                                            <img src="/assets/img/jm_denis.jpg"
-                                                 alt="..."
-                                                 class="avatar-img rounded-circle" />
+                                        @foreach(var user in Model.ListAllUser)
+                                        {
+                                        <div class="item-list">
+                                            <div class="avatar">
+                                                <span class="avatar-title rounded-circle border border-white">@user.FullName.Substring(0,1)</span>
+                                            </div>
+                                            <div class="info-user ms-3">
+                                                <div class="username">@user.FullName - @user.CreateDate.Value.ToString("dd/MM/yyyy")</div>
+                                                <div class="status">@user.Email</div>
+                                            </div>
                                         </div>
-                                        <div class="info-user ms-3">
-                                            <div class="username">Jimmy Denis</div>
-                                            <div class="status">abc@gmail.com</div>
-                                        </div>
-                                    </div>
-                                    <div class="item-list">
-                                        <div class="avatar">
-                                            <span class="avatar-title rounded-circle border border-white">CF</span>
-                                        </div>
-                                        <div class="info-user ms-3">
-                                            <div class="username">Chandra Felix</div>
-                                            <div class="status">abc@gmail.com</div>
-                                        </div>
-                                    </div>
-                                    <div class="item-list">
-                                        <div class="avatar">
-                                            <img src="/assets/img/talha.jpg"
-                                                 alt="..."
-                                                 class="avatar-img rounded-circle" />
-                                        </div>
-                                        <div class="info-user ms-3">
-                                            <div class="username">Talha</div>
-                                            <div class="status">abc@gmail.com</div>
-                                        </div>
-                                    </div>
-                                    <div class="item-list">
-                                        <div class="avatar">
-                                            <img src="/assets/img/chadengle.jpg"
-                                                 alt="..."
-                                                 class="avatar-img rounded-circle" />
-                                        </div>
-                                        <div class="info-user ms-3">
-                                            <div class="username">Chad</div>
-                                            <div class="status">abc@gmail.com</div>
-                                        </div>
-                                    </div>
-                                    <div class="item-list">
-                                        <div class="avatar">
-                                            <span class="avatar-title rounded-circle border border-white bg-primary">H</span>
-                                        </div>
-                                        <div class="info-user ms-3">
-                                            <div class="username">Hizrian</div>
-                                            <div class="status">abc@gmail.com</div>
-                                        </div>
-                                    </div>
-                                    <div class="item-list">
-                                        <div class="avatar">
-                                            <span class="avatar-title rounded-circle border border-white bg-secondary">F</span>
-                                        </div>
-                                        <div class="info-user ms-3">
-                                            <div class="username">Farrah</div>
-                                            <div class="status">abc@gmail.com</div>
-                                        </div>
-                                    </div>
+                                        }
                                 </div>
                             </div>
                         </div>
@@ -396,98 +340,31 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <th scope="row">
-                                                    <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                        <i class="fa fa-check"></i>
-                                                    </button>
-                                                    Thanh toán from #10231
-                                                </th>
-                                                <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                                <td class="text-end">$250.00</td>
-                                                <td class="text-end">
-                                                    <span class="badge badge-success">Completed</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                        <i class="fa fa-check"></i>
-                                                    </button>
-                                                    Thanh toán from #10231
-                                                </th>
-                                                <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                                <td class="text-end">$250.00</td>
-                                                <td class="text-end">
-                                                    <span class="badge badge-success">Completed</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                        <i class="fa fa-check"></i>
-                                                    </button>
-                                                    Thanh toán from #10231
-                                                </th>
-                                                <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                                <td class="text-end">$250.00</td>
-                                                <td class="text-end">
-                                                    <span class="badge badge-success">Completed</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                        <i class="fa fa-check"></i>
-                                                    </button>
-                                                    Thanh toán from #10231
-                                                </th>
-                                                <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                                <td class="text-end">$250.00</td>
-                                                <td class="text-end">
-                                                    <span class="badge badge-success">Completed</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                        <i class="fa fa-check"></i>
-                                                    </button>
-                                                    Thanh toán from #10231
-                                                </th>
-                                                <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                                <td class="text-end">$250.00</td>
-                                                <td class="text-end">
-                                                    <span class="badge badge-success">Completed</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                        <i class="fa fa-check"></i>
-                                                    </button>
-                                                    Thanh toán from #10231
-                                                </th>
-                                                <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                                <td class="text-end">$250.00</td>
-                                                <td class="text-end">
-                                                    <span class="badge badge-success">Completed</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                        <i class="fa fa-check"></i>
-                                                    </button>
-                                                    Thanh toán from #10231
-                                                </th>
-                                                <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                                <td class="text-end">$250.00</td>
-                                                <td class="text-end">
-                                                    <span class="badge badge-success">Completed</span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
+                                                @foreach(var order in Model.ListAllOrder)
+                                                {
+                                                <tr>
+                                                    <th scope="row">
+                                                        <button class="btn btn-icon btn-round btn-success btn-sm me-2">
+                                                            <i class="fa fa-check"></i>
+                                                        </button>
+                                                        Thanh toán from #@order.User.FullName
+                                                    </th>
+                                                    <td class="text-end">@order.OrderDate.Value.ToString("MMM d, yyyy, h.mmtt")</td>
+                                                    <td class="text-end">$@order.TotalPrice</td>
+                                                    <td class="text-end">
+                                                            @if(order.Status == 1)
+                                                            {
+                                                                <span class="badge badge-success">Thành công</span>
+
+                                                            } else
+                                                            {
+                                                            <span class="badge badge-danger">Thất bại</span>
+
+                                                            }
+                                                        </td>
+                                                </tr>
+                                                }
+                                            </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -561,31 +438,115 @@
     <script src="/assets/js/kaiadmin.min.js"></script>
 
     <script>
-        $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
-          type: "line",
-          height: "70",
-          width: "100%",
-          lineWidth: "2",
-          lineColor: "#177dff",
-          fillColor: "rgba(23, 125, 255, 0.14)",
+        var arrMonth = [];
+        var myLineChart = new Chart(lineChart, {
+            type: "line",
+            data: {
+       
+            labels: [
+                        
+                @foreach (var month in Model.LineChartModels)
+                {
+            @Html.Raw("'" + month.Month.Replace("'", "\\'") + "', ")
+                }
+                ],
+                datasets: [
+                    {
+                        label: "Doanh thu",
+                        borderColor: "#1d7af3",
+                        pointBorderColor: "#FFF",
+                        pointBackgroundColor: "#1d7af3",
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 4,
+                        pointHoverBorderWidth: 1,
+                        pointRadius: 4,
+                        backgroundColor: "transparent",
+                        fill: true,
+                        borderWidth: 2,
+                        data: [
+                            @foreach (var data in Model.LineChartModels)
+                            {
+                               @(data.TotalRevenue.ToString() + " ,")
+                            }
+                        ],
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    position: "bottom",
+                    labels: {
+                        padding: 10,
+                        fontColor: "#1d7af3",
+                    },
+                },
+                tooltips: {
+                    bodySpacing: 4,
+                    mode: "nearest",
+                    intersect: 0,
+                    position: "nearest",
+                    xPadding: 10,
+                    yPadding: 10,
+                    caretPadding: 10,
+                },
+                layout: {
+                    padding: { left: 15, right: 15, top: 15, bottom: 15 },
+                },
+            },
         });
 
-        $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
-          type: "line",
-          height: "70",
-          width: "100%",
-          lineWidth: "2",
-          lineColor: "#f3545d",
-          fillColor: "rgba(243, 84, 93, .14)",
-        });
-
-        $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
-          type: "line",
-          height: "70",
-          width: "100%",
-          lineWidth: "2",
-          lineColor: "#ffa534",
-          fillColor: "rgba(255, 165, 52, .14)",
+        var myPieChart = new Chart(pieChart, {
+            type: "pie",
+            data: {
+                datasets: [
+                    {
+                        data: [
+                        @foreach(var data in Model.PieChartModels)
+                        {
+                            @(data.Amount.ToString() + ", ")
+                        }
+                        ],
+                        backgroundColor: ["#1d7af3", "#f3545d", "#fdaf4b", "#FFAAAA", "#AAFFAA", "#AAAAFF", "#FFFF55", "#FF55FF" ],
+                        borderWidth: 0,
+                    },
+                ],
+                labels: [
+                @foreach (var data in Model.PieChartModels)
+                {
+                    @Html.Raw("'" + data.CategoryName.Replace("'", "\\'") + "', ")
+                }
+                    
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    position: "bottom",
+                    labels: {
+                        fontColor: "rgb(154, 154, 154)",
+                        fontSize: 11,
+                        usePointStyle: true,
+                        padding: 20,
+                    },
+                },
+                pieceLabel: {
+                    render: "percentage",
+                    fontColor: "white",
+                    fontSize: 14,
+                },
+                tooltips: false,
+                layout: {
+                    padding: {
+                        left: 20,
+                        right: 20,
+                        top: 20,
+                        bottom: 20,
+                    },
+                },
+            },
         });
     </script>
 </body>

@@ -1,4 +1,5 @@
-﻿using BaByBoi.Domain.Models;
+﻿using BaByBoi.Domain.BusinessModel;
+using BaByBoi.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace BaByBoi.DataAccess.Service.Interface
         Task<Order> Insert(Order entity);
         Task<Order> update(Order entityUpdate);
         Task<bool> deleteById(string orderCode);
+        Task<List<LineChartModels>> GetAllOrderByMonth();
+        Task<List<Order>> GetAllOrder();
     }
 }

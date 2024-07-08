@@ -1,4 +1,5 @@
 ﻿using BaByBoi.DataAccess.Service.Interface;
+using BaByBoi.Domain.BusinessModel;
 using BaByBoi.Domain.Models;
 using BaByBoi.Domain.Repositories.Interface;
 using System;
@@ -123,6 +124,12 @@ namespace BaByBoi.DataAccess.Service
 
         public async Task<ProductSize> GetProductsSizesBySpecificSizeAsync(int productId, int sizeId)
         => await _unitOfWork.ProductRepository.GetProductsSizesBySpecificSizeAsync(productId, sizeId);
+
+        public async Task<List<PieChartModel>> GetProductsForStatistic()
+        {
+            return await _unitOfWork.ProductRepository.GetProductsForStatistic();
+        }
+
 
     }
 }

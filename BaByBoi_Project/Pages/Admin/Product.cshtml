@@ -330,33 +330,31 @@
                                    href="#"
                                    aria-expanded="false">
                                     <div class="avatar-sm">
-                                        <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/img%2Fprofile.jpg?alt=media&token=edbb29fa-eb1c-4111-ad8c-f1b049401b7b"
-                                             alt="..."
-                                             class="avatar-img rounded-circle" />
+                                        <div class="avatar">
+                                            <span class="avatar-title rounded-circle border border-white">@(Model.CurrentUser != null ? Model.CurrentUser.FullName.Substring(0, 1) : "A")</span>
+                                        </div>
                                     </div>
                                     <span class="profile-username">
                                         <span class="op-7">Xin chào,</span>
-                                        <span class="fw-bold">Admin</span>
+                                        <span class="fw-bold">@(Model.CurrentUser != null ? Model.CurrentUser.FullName : "Admin") </span>
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-user animated fadeIn">
                                     <div class="dropdown-user-scroll scrollbar-outer">
                                     <li>
                                         <div class="user-box">
-                                            <div class="avatar-lg">
-                                                <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/img%2Fprofile.jpg?alt=media&token=edbb29fa-eb1c-4111-ad8c-f1b049401b7b"
-                                                     alt="image profile"
-                                                     class="avatar-img rounded" />
+                                            <div class="avatar">
+                                                <span class="avatar-title rounded-circle border border-white">@(Model.CurrentUser != null ? Model.CurrentUser.FullName.Substring(0, 1) : "A")</span>
                                             </div>
                                             <div class="u-text">
-                                                <h4>Admin</h4>
-                                                <p class="text-muted">admin@example.com</p>
+                                                <h4>@(Model.CurrentUser != null ? Model.CurrentUser.Role.RoleName : "Admin")</h4>
+                                                <p class="text-muted">@(Model.CurrentUser != null ? Model.CurrentUser.Email : "abc@gmail.com")</p>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item text-danger" href="#">Logout</a>
+                                        <a class="dropdown-item text-danger" href="/LoginPage/Index">Logout</a>
                                     </li>
                     </div>
                     </ul>
