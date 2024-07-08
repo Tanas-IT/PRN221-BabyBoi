@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
+using BaByBoi.DataAccess.DTOs;
 using BaByBoi.DataAccess.Service.Interface;
 using BaByBoi.Domain.Models;
 using BaByBoi_Project.Common.Enum;
@@ -8,6 +9,7 @@ using BaByBoi_Project.Extensions;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 
 namespace BaByBoi_Project.Pages.RegisterPage
 {
@@ -38,6 +40,11 @@ namespace BaByBoi_Project.Pages.RegisterPage
         {
             User = new User();
             User.Gender = 1;
+            var verificationCodeJson = HttpContext.Session.GetObjectFromJson<VerificationCodeDTO>("VerificationCode");
+            if (verificationCodeJson != null)
+            {
+                CountdownEndTime = ((DateTimeOffset)verificationCodeJson.ExpirationTime).ToUnixTimeMilliseconds();
+            }
         }
 
         public async Task<IActionResult> OnPostSendVerificationCodeAsync()
@@ -57,8 +64,12 @@ namespace BaByBoi_Project.Pages.RegisterPage
             VerificationCode = random.Next(100000, 999999).ToString();
 
             // Store the verification code in session or another temporary storage
-            HttpContext.Session.SetString("VerificationCode", VerificationCode);
-
+            var verificationCodeDTO = new VerificationCodeDTO
+            {
+                Code = VerificationCode,
+                ExpirationTime = DateTime.Now.AddMinutes(5)
+            };
+            HttpContext.Session.SetObjectAsJson("VerificationCode", verificationCodeDTO);
             // Send the verification code via email
             await _emailService.SendEmailAsync(User.Email, "Mã Xác Nhận Của Bạn", $"Mã xác nhận của bạn là {VerificationCode}");
 
@@ -69,8 +80,13 @@ namespace BaByBoi_Project.Pages.RegisterPage
         {
             var isError = false;
 
-            var storedVerificationCode = HttpContext.Session.GetString("VerificationCode");
-            if (VerificationCode != storedVerificationCode)
+            var storedVerificationCode = HttpContext.Session.GetObjectFromJson<VerificationCodeDTO>("VerificationCode");
+            if (DateTime.Now > storedVerificationCode.ExpirationTime)
+            {
+                ModelState.AddModelError("VerificationCode", "Mã xác nhận đã hết hạn.");
+                isError = true;
+            }
+            else if (VerificationCode != storedVerificationCode.Code)
             {
                 ModelState.AddModelError("VerificationCode", "Mã xác nhận không đúng");
                 isError = true;
@@ -107,6 +123,7 @@ namespace BaByBoi_Project.Pages.RegisterPage
             {
                 var user = await _userService.GetUserByEmail(User.Email);
                 HttpContext.Session.SetObjectAsJson("User", user);
+                HttpContext.Session.Remove("VerificationCode");
                 return RedirectToPage("/CustomerViewPage/CusViewProduct");
             }
 
