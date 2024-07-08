@@ -17,6 +17,7 @@ namespace BaByBoi.DataAccess.Service.Interface
         Task CreateAsync(User user);
         Task<bool> DeleteUserAsync(int userId);
         Task<User> CheckLogin(string email, string password);
+        Task<User> ChangePasswordByEmail(string email, string newPassword);
         Task<User> GetUserByEmail(string email);
         Task<bool> AddAsync(User user);
 

@@ -8,7 +8,6 @@
 
 <head>
     <link rel="stylesheet" href="~/css/auth.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
 </head>
 
 <div class="container-form">
@@ -87,25 +86,23 @@
             <p class="or-text">Hoặc</p>
         </div>
         <div class="btnContainer">
-            <a href="/LoginPage/Index?handler=GoogleLogin" class="btn btn-authen btn-block py-2 btn-google">
+            <a href="/Guest/LoginPage/Index?handler=GoogleLogin" class="btn btn-authen btn-block py-2 btn-google">
                 <i class="fa-brands fa-google"></i>
                 Đăng nhập với Google
             </a>
         </div>
         <div class="sign-up">
-            <p>Đã có tài khoản? <a href="/LoginPage">Đăng nhập ngay</a></p>
+            <p>Đã có tài khoản? <a href="/Guest/LoginPage">Đăng nhập ngay</a></p>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
         function sendVerificationCode() {
             $.ajax({
                 type: "POST",
-                url: '@Url.Page("/RegisterPage/Index", "SendVerificationCode")',
+                url: '@Url.Page("/Guest/RegisterPage/Index", "SendVerificationCode")',
                 data: {
                     __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
                     Email: $('#email').val()

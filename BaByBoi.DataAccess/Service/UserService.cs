@@ -29,6 +29,9 @@ namespace BaByBoi.DataAccess.Service
             return await _unitOfWork.UserRepository.AddAsync(user);
         }
 
+        public async Task<User> ChangePasswordByEmail(string email, string newPassword)
+                => await _unitOfWork.UserRepository.ChangePasswordByEmail(email, Utils.PasswordHelper.ConvertToEncrypt(newPassword));
+
         public async Task<List<User>> GetAll()
         {
             var users = await _unitOfWork.UserRepository.GetAll();
@@ -73,5 +76,6 @@ namespace BaByBoi.DataAccess.Service
 
             return true;
         }
+
     }
 }

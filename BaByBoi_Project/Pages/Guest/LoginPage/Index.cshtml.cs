@@ -19,16 +19,17 @@ namespace BaByBoi_Project.Pages.LoginPage
         }
 
         [BindProperty]
-        public string Email { get; set; } = null!;
+        public string Email { get; set; }
 
         [BindProperty]
-        public string Password { get; set; } = null!;
-
+        public string Password { get; set; }
         [BindProperty]
+
         public string ErrorMessage { get; set; } = null!;
 
         public IActionResult OnGet()
         {
+            //User = new User();
             if (HttpContext.Session.GetObjectFromJson<User>("User") != null)
             {
                 return RedirectToPage("/CustomerViewPage/CusViewProduct");
@@ -37,16 +38,7 @@ namespace BaByBoi_Project.Pages.LoginPage
         }
         public async Task<IActionResult> OnPostLogin()
         {
-            if (Email == null)
-            {
-                ErrorMessage = "Email không được để trống.";
-                return Page();
-            }
-            if (Password == null)
-            {
-                ErrorMessage = "Mật khẩu không được để trống.";
-                return Page();
-            }
+
             var user = await _userService.CheckLogin(Email!, Password!);
             if (user != null)
             {
@@ -70,7 +62,7 @@ namespace BaByBoi_Project.Pages.LoginPage
 
         public IActionResult OnGetGoogleLogin(string returnUrl = null!)
         {
-            var redirectUrl = Url.Page("/LoginPage/Index", pageHandler: "GoogleCallback", values: new { returnUrl });
+            var redirectUrl = Url.Page("/Guest/LoginPage/Index", pageHandler: "GoogleCallback", values: new { returnUrl });
             var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
             return new ChallengeResult(GoogleDefaults.AuthenticationScheme, properties);
         }
@@ -81,7 +73,7 @@ namespace BaByBoi_Project.Pages.LoginPage
 
             if (!authenticateResult.Succeeded || authenticateResult.Principal == null)
             {
-                return RedirectToPage("./Login");
+                return RedirectToPage("/Guest/LoginPage");
             }
 
             var claims = authenticateResult.Principal.Claims;
