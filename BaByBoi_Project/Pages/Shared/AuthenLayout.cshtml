@@ -14,45 +14,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BaByBoi_Project.styles.css" asp-append-version="true" />
-    <style>
-        header {
-            margin-bottom: 100px;
-        }
-
-        .list-group {
-            max-width: 200px;
-            position: fixed;
-            left: 0;
-            top: 150px;
-            z-index: 1000;
-            margin-left: 100px;
-        }
-
-        .list-group-item {
-            cursor: pointer;
-        }
-
-            .list-group-item:hover {
-                font-weight: bold;
-                text-decoration: underline;
-            }
-
-        .category {
-            margin-top: 150px;
-            margin-left: 320px;
-            padding-left: 20px;
-        }
-
-        footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #f8f9fa;
-            padding: 10px 0;
-            text-align: center;
-            z-index: 10;
-        }
-    </style>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
 </head>
 <body>
     <header class="p-3 container-fluid text-white" style="background-color: #21409A">
@@ -62,7 +25,7 @@
                     <img src="~/image/babiboi.png" class="bi me-2" width="40" height="32" alt="BaByBoi">
                 </a>
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="#" class="nav-link px-2 text-white">Trang chủ</a></li>
+                    <li><a href="/" class="nav-link px-2 text-white">Trang chủ</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">Sản phẩm</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">Chính sách</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">Giới thiệu</a></li>
@@ -70,9 +33,15 @@
                 <form class="col-12 col-sm-10 col-lg-auto mb-3 mb-lg-0 me-lg-3">
                     <input type="search" name="searchValue" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
                 </form>
+                <div class="text-end m-3">
+                    <a href="/CustomerViewPage/ShoppingCart" class="btn btn-outline-light">
+                        <i class="fas fa-shopping-cart cart-icon"></i>Giỏ hàng
+                        <span id="bookingCount" class="badge-num">0</span>
+                    </a>
+                </div>
                 <div class="text-end">
-                    <a href="/LoginPage" class="btn btn-outline-light me-2">Đăng nhập</a>
-                    <a href="#" class="btn btn-warning">Đăng ký</a>
+                    <a href="/Guest/LoginPage" class="btn btn-outline-light me-2">Đăng nhập</a>
+                    <a href="/Guest/RegisterPage" class="btn btn-warning">Đăng ký</a>
                 </div>
             </div>
         </div>
@@ -94,5 +63,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://kit.fontawesome.com/d98e41de81.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -1,0 +1,60 @@
+﻿@page
+@model BaByBoi_Project.Pages.LoginPage.IndexModel
+@{
+    Layout = "AuthenLayout";
+    ViewData["Title"] = "Trang Đăng Nhập";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/auth.css">
+</head>
+
+<div class="container-form">
+    <div class="box">
+        <div class="header-form">
+            <div class="header-form-title">Đăng Nhập</div>
+            <p>Chúng tôi rất vui khi có bạn trở lại!</p>
+        </div>
+        <form asp-page-handler="Login" method="post">
+            <div class="input-box">
+                <input name="Email" type="text" class="input-field" id="email" autocomplete="off" value="@Model.Email" required>
+                <label for="email">Địa chỉ Email</label>
+            </div>
+
+            <div class="input-box">
+                <input name="Password" type="Password" class="input-field" id="password" value="@Model.Password" autocomplete="off" required>
+                <label for="password">Mật khẩu</label>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="alert alert-danger">@Model.ErrorMessage</div>
+            }
+
+            <div class="forgot">
+                <div class="section-box">
+                    <a href="/Guest/ForgotPassword" class="forgot-link">Quên mật khẩu?</a>
+                </div>
+            </div>
+
+            <div class="input-box">
+                <input type="submit" class="input-submit btn-submit" value="Đăng Nhập">
+            </div>
+        </form>
+
+        <div class="middle-text">
+            <hr>
+            <p class="or-text">Hoặc</p>
+        </div>
+        <div class="btnContainer">
+            <a href="/Guest/LoginPage/Index?handler=GoogleLogin" class="btn btn-authen btn-block py-2 btn-google">
+                <i class="fa-brands fa-google"></i>
+                Đăng nhập với Google
+            </a>
+        </div>
+        <div class="sign-up">
+            <p>Chưa có tài khoản? <a href="/Guest/RegisterPage">Đăng ký</a></p>
+        </div>
+    </div>
+</div>
+
