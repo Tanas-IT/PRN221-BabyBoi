@@ -86,7 +86,7 @@
         </div>
 
         <!-- Payment Method -->
-        <form asp-page-handler="PlaceOrder" method="post">
+        <form asp-page-handler="VnpayAction" method="post">
             @if (Model.paymentMethod != null)
             {
                 <div class="payment-method">
@@ -96,7 +96,7 @@
                     }
                     @foreach (var paymethod in Model.paymentMethod)
                     {
-                        if (paymethod.PaymentName.Equals(paymentDefault))
+                        if (paymethod.PaymentName!.Equals(paymentDefault))
                         {
                             <input type="radio" id="@paymethod.PaymentName" name="paymentID" value="@paymethod.PaymentId" checked = "checked" />
                             <label  for="@paymethod.PaymentName">@paymethod.PaymentName</label>
