@@ -1,4 +1,5 @@
-﻿using BaByBoi.Domain.Models;
+﻿using BaByBoi.Domain.BusinessModel;
+using BaByBoi.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace BaByBoi.DataAccess.Service.Interface
         Task<List<ProductSize>> getProductWithSize(string searchKey);
 
         Task<ProductSize> GetProductsSizesBySpecificSizeAsync(int productId, int sizeId);
+        Task<List<PieChartModel>> GetProductsForStatistic();
 
 
     }

@@ -1,5 +1,6 @@
 ﻿using BaByBoi.DataAccess.Common.Enum;
 using BaByBoi.DataAccess.Service.Interface;
+using BaByBoi.Domain.BusinessModel;
 using BaByBoi.Domain.Models;
 using BaByBoi.Domain.Repositories.Interface;
 using System;
@@ -54,5 +55,21 @@ namespace BaByBoi.DataAccess.Service
             }
             return null!;
         }
+
+        public async Task<List<LineChartModels>> GetAllOrderByMonth()
+        {
+            var result = await _unitOfWork.OrderRepository.GetAllOrderByMonth();
+            if(result != null)
+            {
+                return result;
+            }
+            return null;
+        }
+        public async Task<List<Order>> GetAllOrder()
+        {
+            var result = await _unitOfWork.OrderRepository.GetAllOrder();
+            return result.ToList();
+        }
+
     }
 }
