@@ -161,9 +161,10 @@
     color: #fff !important;
     margin-bottom: 0 !important
 }
+
 .btn-submit-none {
-    cursor: none;
-    opacity: 0.8;
+    cursor: not-allowed !important;
+    opacity: 0.8 !important; 
 }
 
 .section-box .forgot-link {

@@ -130,12 +130,14 @@
                     clearInterval(countdownInterval);
                     sendCodeBtn.prop('disabled', false);
                     sendCodeBtn.text('Gửi mã');
+                    sendCodeBtn.removeClass("btn-submit-none");
                     $('#countdownEndTime').val('');
                 } else {
                     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
                     sendCodeBtn.text(`Gửi lại sau ${minutes} phút ${seconds} giây`);
                     sendCodeBtn.prop('disabled', true);
+                    sendCodeBtn.addClass("btn-submit-none");
                 }
             }, 1000);
         }
