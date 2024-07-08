@@ -9,6 +9,6 @@ namespace BaByBoi.Domain.Repositories.Interface
 {
     public interface IVoucherRepository : IGenericRepository<Voucher>
     {
-
+        //Task<IEnumerable<Voucher>> GetAll();
     }
 }

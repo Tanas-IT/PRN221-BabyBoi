@@ -30,6 +30,7 @@ namespace BaByBoi.Domain.Repositories
             RoleRepository = new RoleRepository(_myDbContext);
             OrderRepository = new OrderRepository(_myDbContext);
             PaymentRepository = new PaymentRepository(_myDbContext);
+            VoucherRepository = new VoucherRepository(_myDbContext);
         }
 
         public async Task BeginTransactionAsync()

@@ -1,5 +1,98 @@
 ﻿@page
 @model BaByBoi_Project.Pages.VoucherPage.IndexModel
-@{
 
+@{
+    ViewData["Title"] = "Index";
 }
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        @if (Model.Voucher != null && Model.Voucher.Any())
+        {
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Voucher.First().VoucherCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Voucher.First().StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Voucher.First().EndDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Voucher.First().Type)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Voucher.First().Percent)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Voucher.First().Value)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Voucher.First().TriggerValue)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Voucher.First().Status)
+                </th>
+                <th></th>
+            </tr>
+        }
+    </thead>
+    <tbody>
+        @if (Model.Voucher != null)
+        {
+            @foreach (var item in Model.Voucher)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VoucherCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Percent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Value)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TriggerValue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.VoucherId">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.VoucherId">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.VoucherId">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<div>
+    Page @(Model.Voucher.PageIndex) of @(Model.Voucher.TotalPages)
+</div>
+<div>
+    @if (Model.Voucher.HasPreviousPage)
+    {
+        <a asp-page="./Index" asp-route-pageIndex="@(Model.Voucher.PageIndex - 1)">Previous</a>
+    }
+    @if (Model.Voucher.HasNextPage)
+    {
+        <a asp-page="./Index" asp-route-pageIndex="@(Model.Voucher.PageIndex + 1)">Next</a>
+    }
+</div>

@@ -1,0 +1,69 @@
+﻿@page
+@model BaByBoi_Project.Pages.VoucherPage.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Voucher</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Voucher.VoucherCode" class="control-label"></label>
+                <input asp-for="Voucher.VoucherCode" class="form-control" />
+                <span asp-validation-for="Voucher.VoucherCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Voucher.StartDate" class="control-label"></label>
+                <input asp-for="Voucher.StartDate" class="form-control" />
+                <span asp-validation-for="Voucher.StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Voucher.EndDate" class="control-label"></label>
+                <input asp-for="Voucher.EndDate" class="form-control" />
+                <span asp-validation-for="Voucher.EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Voucher.Type" class="control-label"></label>
+                <input asp-for="Voucher.Type" class="form-control" />
+                <span asp-validation-for="Voucher.Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Voucher.Percent" class="control-label"></label>
+                <input asp-for="Voucher.Percent" class="form-control" />
+                <span asp-validation-for="Voucher.Percent" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Voucher.Value" class="control-label"></label>
+                <input asp-for="Voucher.Value" class="form-control" />
+                <span asp-validation-for="Voucher.Value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Voucher.TriggerValue" class="control-label"></label>
+                <input asp-for="Voucher.TriggerValue" class="form-control" />
+                <span asp-validation-for="Voucher.TriggerValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Voucher.Status" class="control-label"></label>
+                <input asp-for="Voucher.Status" class="form-control" />
+                <span asp-validation-for="Voucher.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
