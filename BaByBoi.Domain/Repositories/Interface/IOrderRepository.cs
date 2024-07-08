@@ -1,4 +1,5 @@
-﻿using BaByBoi.Domain.Models;
+﻿using BaByBoi.Domain.BusinessModel;
+using BaByBoi.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace BaByBoi.Domain.Repositories.Interface
     {
         Task<Order> GetByOrderCode(string OrderCode);
         Task<List<Order>> GetAllOrderOfCustomer(int UserId);
+        Task<List<LineChartModels>> GetAllOrderByMonth();
+        Task<List<Order>> GetAllOrder();
 
     }
 }

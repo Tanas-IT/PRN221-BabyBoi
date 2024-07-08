@@ -1,0 +1,156 @@
+﻿@page
+@using BaByBoi_Project.Common.Enum
+@model BaByBoi_Project.Pages.RegisterPage.IndexModel
+@{
+    Layout = "AuthenLayout";
+    ViewData["Title"] = "Trang Đăng Ký";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/auth.css">
+</head>
+
+<div class="container-form">
+    <div class="box">
+        <div class="header-form">
+            <div class="header-form-title">Đăng Ký</div>
+            <p>Chúng tôi rất vui khi có bạn gia nhập!</p>
+        </div>
+        <form asp-page-handler="Register" method="post">
+            <div class="input-box">
+                <input name="FullName" type="text" class="input-field" id="fullName" autocomplete="off" value="@Model.User.FullName" required>
+                <label for="fullName">Họ và Tên</label>
+                <span asp-validation-for="User.FullName" class="text-danger"></span>
+            </div>
+            <div class="input-box">
+                <input name="Email" type="text" class="input-field" id="email" autocomplete="off" value="@Model.User.Email" required>
+                <label for="email">Địa chỉ Email</label>
+            </div>
+            <div class="error-message">
+                <span asp-validation-for="User.Email" class="text-danger"></span>
+            </div>
+
+            <div class="input-box verification-box">
+                <input name="VerificationCode" type="text" class="input-field" id="verificationCode" autocomplete="off" value="@Model.VerificationCode" required>
+                <label for="verificationCode">Mã xác nhận</label>
+                <button type="button" class="send-code-btn" onclick="sendVerificationCode()">Gửi mã</button>
+            </div>
+            <div class="error-message">
+                <span asp-validation-for="VerificationCode" class="text-danger"></span>
+            </div>
+
+            <div class="input-box">
+                <input name="Password" type="Password" class="input-field" id="password" value="@Model.User.Password" autocomplete="off" required>
+                <label for="password">Mật khẩu</label>
+            </div>
+            <div class="error-message">
+                <span asp-validation-for="User.Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group-inline">
+                <div class="form-group">
+                    <label for="Gender">Giới tính</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="Gender" value="@((int)UserGender.Male)" @(Model.User.Gender == (int)UserGender.Male ? "checked" : "")> Nam
+                        </label>
+                        <label>
+                            <input type="radio" name="Gender" value="@((int)UserGender.Female)" @(Model.User.Gender == (int)UserGender.Female ? "checked" : "")> Nữ
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="BirthDate">Ngày sinh</label>
+                    <input type="text" name="BirthDate" placeholder="dd/MM/yyyy" value="@(Model.User.BirthDate?.ToString("dd/MM/yyyy"))" class="form-control" id="birthDate" required>
+                </div>
+                <div class="error-message">
+                    <span asp-validation-for="User.BirthDate" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="alert alert-danger">@Model.ErrorMessage</div>
+            }
+
+            <div class="input-box">
+                <input type="submit" class="input-submit btn-submit" value="Đăng Ký">
+            </div>
+
+            <input type="hidden" id="countdownEndTime" name="CountdownEndTime" value="@Model.CountdownEndTime" />
+        </form>
+
+        <div class="middle-text">
+            <hr>
+            <p class="or-text">Hoặc</p>
+        </div>
+        <div class="btnContainer">
+            <a href="/Guest/LoginPage/Index?handler=GoogleLogin" class="btn btn-authen btn-block py-2 btn-google">
+                <i class="fa-brands fa-google"></i>
+                Đăng nhập với Google
+            </a>
+        </div>
+        <div class="sign-up">
+            <p>Đã có tài khoản? <a href="/Guest/LoginPage">Đăng nhập ngay</a></p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function sendVerificationCode() {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Page("/Guest/RegisterPage/Index", "SendVerificationCode")',
+                data: {
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                    Email: $('#email').val()
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Mã xác nhận đã được gửi!');
+                        var endTime = new Date().getTime() + (5 * 60 * 1000); // 5 minutes countdown
+                        $('#countdownEndTime').val(endTime);
+                        disableSendCodeButton(endTime);
+                    } else {
+                        alert(response.error || 'Có lỗi xảy ra khi gửi mã xác nhận!');
+                    }
+                }
+            });
+        }
+
+        function disableSendCodeButton(endTime) {
+            var sendCodeBtn = $('.send-code-btn');
+            var countdownInterval = setInterval(function () {
+                var now = new Date().getTime();
+                var distance = endTime - now;
+
+                if (distance < 0) {
+                    clearInterval(countdownInterval);
+                    sendCodeBtn.prop('disabled', false);
+                    sendCodeBtn.text('Gửi mã');
+                    sendCodeBtn.removeClass("btn-submit-none");
+                    $('#countdownEndTime').val('');
+                } else {
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    sendCodeBtn.text(`Gửi lại sau ${minutes} phút ${seconds} giây`);
+                    sendCodeBtn.prop('disabled', true);
+                    sendCodeBtn.addClass("btn-submit-none");
+                }
+            }, 1000);
+        }
+
+        $(document).ready(function () {
+            $('input[name="BirthDate"]').datepicker({
+                dateFormat: 'dd/mm/yy'
+            });
+
+            var countdownEndTime = $('#countdownEndTime').val();
+            if (countdownEndTime) {
+                disableSendCodeButton(parseInt(countdownEndTime));
+            }
+        });
+    </script>
+}

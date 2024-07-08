@@ -7,6 +7,7 @@ using BaByBoi.DataAccess.Service.Interface;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Configuration;
+using BaByBoi.DataAccess.DTOs;
 using BaByBoi.DataAccess.Service.VNpayService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
@@ -37,7 +39,6 @@ builder.Services.AddScoped(typeof(UserService));
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IVnpayService, VnpayService>();
 
 
 builder.Services.AddScoped<IOrderService, OrderSerivce>();
@@ -52,6 +53,10 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+// config send email
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
+builder.Services.AddSingleton<IEmailService, EmailService>();
 
 // config google
 builder.Services.AddAuthentication(options =>

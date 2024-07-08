@@ -11,15 +11,20 @@ using Microsoft.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
 using System.Net.Http;
 using System;
+using BaByBoi_Project.Extensions;
 
 namespace BaByBoi_Project.Pages.Admin
 {
     public class ProductModel : PageModel
     {
         private readonly IProductService _productService;
+        private readonly IUserService _userService;
 
-        public ProductModel(IProductService productService) {
+
+        public ProductModel(IProductService productService, IUserService userService = null)
+        {
             _productService = productService;
+            _userService = userService;
         }
 
         [BindProperty]
@@ -53,7 +58,9 @@ namespace BaByBoi_Project.Pages.Admin
 
         [BindProperty]
         public int ProductIdRemove { get; set; }
-       
+        [BindProperty]
+        public User CurrentUser { get; set; }
+
         private async Task LoadDataAsync(string? PageIndex, string PageSize)
         {
             var listProduct = await _productService.GetAllProduct();
@@ -102,6 +109,11 @@ namespace BaByBoi_Project.Pages.Admin
         public async Task OnGet(string PageIndex, string PageSize)
         {
             await LoadDataAsync(PageIndex, PageSize);
+            var tempUser = HttpContext.Session.GetObjectFromJson<User>("User");
+            if (tempUser != null)
+            {
+                CurrentUser = tempUser;
+            }
         }
 
         public async Task<IActionResult> OnPostSearchProduct()

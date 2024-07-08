@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 ﻿using BaByBoi.Domain.Common.Enum;
+using BaByBoi.Domain.BusinessModel;
 
 
 namespace BaByBoi.Domain.Repositories
@@ -263,6 +264,19 @@ namespace BaByBoi.Domain.Repositories
 
             return result;
         }
+        public async Task<List<PieChartModel>> GetProductsForStatistic()
+        {
+            var products = await _context.Products.ToListAsync(); // Lấy danh sách các sản phẩm
+            var categories = await _context.Categories.ToListAsync(); // Lấy danh sách các sản phẩm
+            var listProduct = (from c in categories
+                               select new PieChartModel()
+                               {
+                                   CategoryName = c.CategoryName,
+                                   Amount = products.Count(p => p.CategoryId == c.CategoryId)
+                               }).ToList();
+            return listProduct;
+        }
+
 
     }
 }

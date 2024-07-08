@@ -18,13 +18,19 @@ namespace BaByBoi.DataAccess.Service
             _unitOfWork = unitOfWork;
         }
 
-        public Task<User> CheckLogin(string email, string password)
-                => _unitOfWork.UserRepository.CheckLogin(email, password);
+        public async Task<User> CheckLogin(string email, string password)
+                => await _unitOfWork.UserRepository.CheckLogin(email, Utils.PasswordHelper.ConvertToEncrypt(password));
 
         public Task<User> GetUserByEmail(string email)
                 => _unitOfWork.UserRepository.GetUserByEmail(email);
-        public Task<bool> AddAsync(User user)
-                => _unitOfWork.UserRepository.AddAsync(user);
+        public async Task<bool> AddAsync(User user)
+        {
+            user.Password = Utils.PasswordHelper.ConvertToEncrypt(user.Password!);
+            return await _unitOfWork.UserRepository.AddAsync(user);
+        }
+
+        public async Task<User> ChangePasswordByEmail(string email, string newPassword)
+                => await _unitOfWork.UserRepository.ChangePasswordByEmail(email, Utils.PasswordHelper.ConvertToEncrypt(newPassword));
 
         public async Task<List<User>> GetAll()
         {
@@ -70,5 +76,6 @@ namespace BaByBoi.DataAccess.Service
 
             return true;
         }
+
     }
 }
