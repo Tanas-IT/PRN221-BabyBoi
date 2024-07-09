@@ -68,8 +68,8 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
             var product = OrderList.FirstOrDefault(x => x.ProductId == ProductId && x.SizeId == sizeId);
             if (product != null)
             {
-                product.Quantity = product.Quantity > Quantity ? product.Quantity : Quantity;
                 product.Price = Quantity * product.Price;
+                product.Quantity = product.Quantity > Quantity ? product.Quantity : Quantity;
                 SaveBookingListToSession();
                 SetSuccessMessage("Product booking updated successfully.");
             }
