@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@using BaByBoi.Domain.Models
+@using BaByBoi_Project.Extensions
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    User user = null!;
+    if (HttpContextAccessor.HttpContext != null)
+    {
+        user = HttpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("User");
+    }
+    var currentPath = HttpContextAccessor.HttpContext?.Request.Path;
+}
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -159,12 +171,12 @@
                                        aria-expanded="false">
                                         <div class="avatar-sm">
                                             <div class="avatar">
-                                                <span class="avatar-title rounded-circle border border-white">@(Model.CurrentUser != null ? Model.CurrentUser.FullName.Substring(0, 1) : "A")</span>
+                                                <span class="avatar-title rounded-circle border border-white">@(user != null ? user.FullName!.Substring(0, 1) : "A")</span>
                                             </div>
                                         </div>
                                         <span class="profile-username">
                                             <span class="op-7">Xin chào,</span>
-                                            <span class="fw-bold">@(Model.CurrentUser != null ? Model.CurrentUser.FullName : "Admin") </span>
+                                            <span class="fw-bold">@(user != null ? user.FullName : "Admin") </span>
                                         </span>
                                     </a>
                                     <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -172,11 +184,11 @@
                                         <li>
                                             <div class="user-box">
                                                 <div class="avatar">
-                                                    <span class="avatar-title rounded-circle border border-white">@(Model.CurrentUser != null ? Model.CurrentUser.FullName.Substring(0, 1) : "A")</span>
+                                                    <span class="avatar-title rounded-circle border border-white">@(user != null ? user.FullName!.Substring(0, 1) : "A")</span>
                                                 </div>
                                                 <div class="u-text">
-                                                    <h4>@(Model.CurrentUser != null ? Model.CurrentUser.Role.RoleName : "Admin")</h4>
-                                                    <p class="text-muted">@(Model.CurrentUser != null ? Model.CurrentUser.Email : "abc@gmail.com")</p>
+                                                    <h4>@(user != null ? user.FullName : "Admin")</h4>
+                                                    <p class="text-muted">@(user != null ? user.Email : "abc@gmail.com")</p>
                                                 </div>
                                             </div>
                                         </li>
