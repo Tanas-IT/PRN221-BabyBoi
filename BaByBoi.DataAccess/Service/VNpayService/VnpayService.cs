@@ -1,4 +1,5 @@
 ﻿using BaByBoi.DataAccess.Helper;
+using BaByBoi.DataAccess.Utils;
 using BaByBoi.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -32,7 +33,7 @@ namespace BaByBoi.DataAccess.Service.VNpayService
             vnpay.AddRequestData("vnp_Amount", (model.TotalPrice * 100).ToString());
             vnpay.AddRequestData("vnp_CreateDate", model.CreatedDate.ToString("yyyyMMddHHmmss"));
             vnpay.AddRequestData("vnp_CurrCode", _config["Vnpayment:CurrCode"]!);
-            vnpay.AddRequestData("vnp_IpAddr", Utils.GetIpAddress(context));
+            vnpay.AddRequestData("vnp_IpAddr", VnpayHelper.GetIpAddress(context));
             vnpay.AddRequestData("vnp_Locale", _config["Vnpayment:Locale"]!);
             vnpay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang:" + model.OrderCode);
             vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
