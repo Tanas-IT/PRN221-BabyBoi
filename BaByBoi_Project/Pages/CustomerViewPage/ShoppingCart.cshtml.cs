@@ -68,14 +68,14 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
             var product = OrderList.FirstOrDefault(x => x.ProductId == ProductId && x.SizeId == sizeId);
             if (product != null)
             {
-                product.Price = Quantity * product.Price;
+                //product.Price = Quantity * product.Price;
                 product.Quantity = product.Quantity > Quantity ? product.Quantity : Quantity;
                 SaveBookingListToSession();
-                SetSuccessMessage("Product booking updated successfully.");
+                SetSuccessMessage("Cập nhật giỏ hàng thành công");
             }
             else
             {
-                SetErrorMessage("Product is not found.");
+                SetErrorMessage("Không tìm thấy sản phẩm này.");
             }
             return this.Page();
         }
