@@ -88,6 +88,8 @@ namespace BaByBoi_Project.Pages.LoginPage
                 {
                     Email = email!,
                     FullName = fullName ?? string.Empty,
+                    Status = (int)StatusExist.Exist,
+                    RoleId = (int)UserRole.Customer,
                     CreateDate = DateTime.Now,
                 };
                 var result = await _userService.AddAsync(user);

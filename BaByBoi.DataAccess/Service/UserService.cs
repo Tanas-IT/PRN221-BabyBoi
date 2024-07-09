@@ -25,7 +25,10 @@ namespace BaByBoi.DataAccess.Service
                 => _unitOfWork.UserRepository.GetUserByEmail(email);
         public async Task<bool> AddAsync(User user)
         {
-            user.Password = Utils.PasswordHelper.ConvertToEncrypt(user.Password!);
+            if (user.Password != null)
+            {
+                user.Password = Utils.PasswordHelper.ConvertToEncrypt(user.Password!);
+            }
             return await _unitOfWork.UserRepository.AddAsync(user);
         }
 
