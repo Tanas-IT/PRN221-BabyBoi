@@ -39,7 +39,7 @@ builder.Services.AddScoped(typeof(UserService));
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
-
+builder.Services.AddScoped<IVnpayService, VnpayService>();
 
 builder.Services.AddScoped<IOrderService, OrderSerivce>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
