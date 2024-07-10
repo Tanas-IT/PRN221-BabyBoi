@@ -34,7 +34,7 @@ namespace BaByBoi.DataAccess.Service
         public async Task<Order> Insert(Order entity)
         {
             var result = false;
-            entity.OrderCode = Guid.NewGuid().ToString();
+            entity.OrderCode = entity.OrderCode;
             entity.OrderDate = DateTime.Now;
             entity.Status = (int)OrderStatus.WaitingAccept;
             entity.Payment = null;

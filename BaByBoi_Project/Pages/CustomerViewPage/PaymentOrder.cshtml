@@ -64,16 +64,16 @@
                         <p>Size: @item.ProductSize.Size.SizeName</p>
                     </div>
                     <div class="col-2">
-                        <p>@item.ProductSize.Price</p>
+                        <p>@( Math.Ceiling( (decimal)(item.ProductSize.Price - (item.ProductSize.Price * item.Product.Discount) / 100)!)) </p>
                     </div>
                     <div class="col-2">
                         <p>Quantity: @item.Quantity</p>
                     </div>
                     <div class="col-2">
-                        <p>@(item.Price!.Value.ToString("C"))</p>
                         @{
-                            totalprice += item.Price!.Value;
+                            totalprice += (double)(Math.Ceiling((double)(item.ProductSize.Price - (item.ProductSize.Price * item.Product.Discount) / 100)!) * item.Quantity)!;
                         }
+                        <p>@(totalprice.ToString("C"))</p>
                     </div>
                 </div>
                 <hr />
@@ -86,7 +86,7 @@
         </div>
 
         <!-- Payment Method -->
-        <form asp-page-handler="PlaceOrder" method="post">
+        <form asp-page-handler="VnpayAction" method="post">
             @if (Model.paymentMethod != null)
             {
                 <div class="payment-method">
@@ -96,7 +96,7 @@
                     }
                     @foreach (var paymethod in Model.paymentMethod)
                     {
-                        if (paymethod.PaymentName.Equals(paymentDefault))
+                        if (paymethod.PaymentName!.Equals(paymentDefault))
                         {
                             <input type="radio" id="@paymethod.PaymentName" name="paymentID" value="@paymethod.PaymentId" checked = "checked" />
                             <label  for="@paymethod.PaymentName">@paymethod.PaymentName</label>

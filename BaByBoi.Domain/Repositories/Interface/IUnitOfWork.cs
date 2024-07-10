@@ -9,6 +9,7 @@ namespace BaByBoi.Domain.Repositories.Interface
     public interface IUnitOfWork : IDisposable
     {
         IUserRepository UserRepository { get; }
+        IVoucherRepository VoucherRepository { get; }
         IProductRepository ProductRepository { get; }
         IRoleRepository RoleRepository { get; }
 
