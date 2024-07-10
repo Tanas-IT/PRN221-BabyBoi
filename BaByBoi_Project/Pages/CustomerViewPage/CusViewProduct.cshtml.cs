@@ -67,7 +67,7 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
                 ProductSize = productSize
                 
             };
-            if (!OrderList.Contains(orderDetail))
+            if (OrderList.Where(x => x.ProductId == orderDetail.ProductId && x.ProductSize.SizeId == orderDetail.SizeId).FirstOrDefault() == null)
             {
                 OrderList.Add(orderDetail);
                 HttpContext.Session.SetObjectAsJson("OrderList", OrderList);
