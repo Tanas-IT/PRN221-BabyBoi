@@ -15,22 +15,22 @@ namespace BusinessObject.Service
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<(List<Cagetory> Categories, int TotalCount)> GetPaginatedCategoriesAsync(string searchString, int pageNumber, int pageSize)
+        public async Task<(List<Category> Categories, int TotalCount)> GetPaginatedCategoriesAsync(string searchString, int pageNumber, int pageSize)
         {
             return await _categoryRepository.GetPaginatedCategoriesAsync(searchString, pageNumber, pageSize);
         }
 
-        public async Task<Cagetory> GetCategoryByIdAsync(int id)
+        public async Task<Category> GetCategoryByIdAsync(int id)
         {
             return await _categoryRepository.GetCategoryByIdAsync(id);
         }
 
-        public async Task AddCategoryAsync(Cagetory category)
+        public async Task AddCategoryAsync(Category category)
         {
             await _categoryRepository.AddCategoryAsync(category);
         }
 
-        public async Task UpdateCategoryAsync(Cagetory category)
+        public async Task UpdateCategoryAsync(Category category)
         {
             await _categoryRepository.UpdateCategoryAsync(category);
         }

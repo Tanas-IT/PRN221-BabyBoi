@@ -1,0 +1,192 @@
+﻿@page
+@using BaByBoi_Project.Common.Enum
+@model CusViewProductModel
+@{
+    Layout = "UsersLayout";
+    ViewData["Title"] = "Shopping Page";
+}
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/pagination.css" asp-append-version="true" />
+    <style>
+        .product-card {
+            position: relative;
+            border: 1px solid #ccc;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .product-image {
+            position: relative;
+        }
+
+        .discount
+        .discount-banner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
+        .discount-label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .price {
+            margin-top: 10px;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .status {
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            margin-top: 15px;
+        }
+
+    </style>
+</head>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+<div class="category">
+    <div class="list-group border rounded">
+        <a href="#" class="list-group-item">Sữa</a>
+        <a href="#" class="list-group-item">Sữa 1</a>
+        <a href="#" class="list-group-item">Sữa 2</a>
+        <a href="#" class="list-group-item">Sữa 3</a>
+        <a href="#" class="list-group-item">Sữa 4</a>
+        <a href="#" class="list-group-item">Sữa 5</a>
+        <a href="#" class="list-group-item">Sữa 6</a>
+        <a href="#" class="list-group-item">Sữa 7</a>
+        <a href="#" class="list-group-item">Sữa 8</a>
+        <a href="#" class="list-group-item">Sữa 9</a>
+        <a href="#" class="list-group-item">Sữa 10</a>
+        <a href="#" class="list-group-item">Sữa 11</a>
+        <a href="#" class="list-group-item">Sữa 12</a>
+    </div>
+</div>
+@if (Model.Products != null && Model.Products.Any())
+{
+    <div class="container">
+        <div class="row">
+            @foreach (var product in Model.Products)
+            {
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="product-card">
+                        @if (product.Product.Discount > 0)
+                        {
+                            <div class="discount-banner">
+                                <img src="~/path/to/discount-banner.png" alt="Discount Banner">
+                            </div>
+                        }
+                        <img src="~/assets/babiboi.jpg" alt="@product.Product.ProductName" />
+                        <h5>@product.Product.ProductName</h5>
+                        @if (product.Product.Discount.HasValue)
+                        {
+
+                            <p class="price" style="text-decoration: line-through">@product.Price</p>
+                            <p class="price" style="color: dodgerblue">
+                                @{
+                                    var priceAfterDiscount = Math.Ceiling((decimal)(product.Price - (product.Price * product.Product.Discount) / 100));
+                                }
+                                @priceAfterDiscount
+                            </p>
+                        }
+                        else
+                        {
+                            <p class="price" style="color: dodgerblue">
+                                @product.Price
+                            </p>
+                        }
+                        <div class="status">
+                            @if (product.Product.Status.HasValue)
+                            {
+                                var status = (ProductStatus)product.Product.Status.Value;
+                                if (status == ProductStatus.Active)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else if (status == ProductStatus.InActive)
+                                {
+                                    <span class="badge bg-danger">Inactive</span>
+                                }
+                            }
+                        </div>
+                        <form method="post" asp-page-handler="AddToCart" asp-route-productId="@product.Product.ProductId" asp-route-sizeId="@product.SizeId">
+                            <button type="submit" class="btn btn-primary">Thêm vào giỏ</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+
+@if (Model.Products != null && Model.Products.Any())
+{
+    var prevDisabled = !Model.Products.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Products.HasNextPage ? "disabled" : "";
+
+    var maxPagesToShow = 5;
+    var currentPage = Model.PageIndex;
+    var totalPages = Model.Products.TotalPages;
+
+    var startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
+    var endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+
+    if (endPage - startPage < maxPagesToShow - 1)
+    {
+        startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+    }
+
+    <nav aria-label="Page navigation" class="pagination-container">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @prevDisabled">
+                <a class="page-link" asp-page="./Index" asp-route-pageIndex="1" asp-route-searchValue="@(Model.SearchValue)" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item @prevDisabled">
+                <a class="page-link" asp-page="./Index" asp-route-pageIndex="@(Model.PageIndex - 1)" asp-route-searchValue="@(Model.SearchValue)" aria-label="Previous">
+                    <span aria-hidden="true">&lsaquo;</span>
+                </a>
+            </li>
+
+            @for (int i = startPage; i <= endPage; i++)
+            {
+                <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                    <a class="page-link" asp-page="./Index" asp-route-pageIndex="@i" asp-route-searchValue="@(Model.SearchValue)">@i</a>
+                </li>
+            }
+
+            <li class="page-item @nextDisabled">
+                <a class="page-link" asp-page="./Index" asp-route-pageIndex="@(Model.PageIndex + 1)" asp-route-searchValue="@(Model.SearchValue)" aria-label="Next">
+                    <span aria-hidden="true">&rsaquo;</span>
+                </a>
+            </li>
+            <li class="page-item @nextDisabled">
+                <a class="page-link" asp-page="./Index" asp-route-pageIndex="@(Model.Products.TotalPages)" asp-route-searchValue="@(Model.SearchValue)" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+}

@@ -7,15 +7,12 @@ namespace BaByBoi.Domain.Models
     {
         public User()
         {
-            Cagetories = new HashSet<Cagetory>();
             Orders = new HashSet<Order>();
-            Products = new HashSet<Product>();
         }
 
         public int UserId { get; set; }
-        public string? UserName { get; set; }
+        public string Email { get; set; } = null!;
         public string? Password { get; set; }
-        public string? Email { get; set; }
         public string? Phone { get; set; }
         public string? FullName { get; set; }
         public DateTime? CreateDate { get; set; }
@@ -26,8 +23,6 @@ namespace BaByBoi.Domain.Models
         public int? RoleId { get; set; }
 
         public virtual Role? Role { get; set; }
-        public virtual ICollection<Cagetory> Cagetories { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
-        public virtual ICollection<Product> Products { get; set; }
     }
 }

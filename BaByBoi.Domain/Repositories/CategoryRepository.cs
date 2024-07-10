@@ -16,44 +16,44 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public async Task<(List<Cagetory> Categories, int TotalCount)> GetPaginatedCategoriesAsync(string searchString, int pageNumber, int pageSize)
+        public async Task<(List<Category> Categories, int TotalCount)> GetPaginatedCategoriesAsync(string searchString, int pageNumber, int pageSize)
         {
-            var query = _context.Cagetories.AsQueryable();
+            var query = _context.Categories.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                query = query.Where(c => c.CagetoryName.Contains(searchString));
+                query = query.Where(c => c.CategoryName.Contains(searchString));
             }
 
             int totalCount = await query.CountAsync();
-            List<Cagetory> categories = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            List<Category> categories = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
             return (categories, totalCount);
         }
 
-        public async Task<Cagetory> GetCategoryByIdAsync(int id)
+        public async Task<Category> GetCategoryByIdAsync(int id)
         {
-            return await _context.Cagetories.FindAsync(id);
+            return await _context.Categories.FindAsync(id);
         }
 
-        public async Task AddCategoryAsync(Cagetory category)
+        public async Task AddCategoryAsync(Category category)
         {
-            await _context.Cagetories.AddAsync(category);
+            await _context.Categories.AddAsync(category);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateCategoryAsync(Cagetory category)
+        public async Task UpdateCategoryAsync(Category category)
         {
-            _context.Cagetories.Update(category);
+            _context.Categories.Update(category);
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteCategoryAsync(int id)
         {
-            var category = await _context.Cagetories.FindAsync(id);
+            var category = await _context.Categories.FindAsync(id);
             if (category != null)
             {
-                _context.Cagetories.Remove(category);
+                _context.Categories.Remove(category);
                 await _context.SaveChangesAsync();
             }
         }

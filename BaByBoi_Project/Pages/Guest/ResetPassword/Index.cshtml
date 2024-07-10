@@ -1,0 +1,44 @@
+﻿@page
+@model BaByBoi_Project.Pages.ResetPassword.IndexModel
+@{
+    Layout = "AuthenLayout";
+    ViewData["Title"] = "Đặt Lại Mật Khẩu";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/auth.css">
+</head>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="container-form">
+    <div class="box">
+        <div class="header-form">
+            <div class="header-form-title">Đặt Lại Mật Khẩu</div>
+        </div>
+        <form method="post">
+            <div class="input-box">
+                <input name="NewPassword" type="Password" class="input-field" id="newPassword" autocomplete="off" required>
+                <label for="newPassword">Mật khẩu mới</label>
+            </div>
+            <div class="error-message">
+                <span asp-validation-for="NewPassword" class="text-danger"></span>
+            </div>
+
+            <div class="input-box">
+                <input name="ConfirmPassword" type="Password" class="input-field" id="confirmPassword" autocomplete="off" required>
+                <label for="confirmPassword">Xác nhận mật khẩu</label>
+            </div>
+            <div class="error-message">
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <div class="input-box">
+                <input type="submit" class="input-submit btn-submit" value="Xác nhận">
+            </div>
+        </form>
+    </div>
+</div>

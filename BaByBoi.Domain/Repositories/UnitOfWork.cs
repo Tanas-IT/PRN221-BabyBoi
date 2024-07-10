@@ -14,11 +14,23 @@ namespace BaByBoi.Domain.Repositories
         private readonly BaByBoiContext _myDbContext;
         private IDbContextTransaction _transaction;
         public IUserRepository UserRepository { get; private set; }
+        public IVoucherRepository VoucherRepository { get; private set; }
+        public IProductRepository ProductRepository { get; private set; }
+        public IOrderRepository OrderRepository { get; private set; }
+        public IPaymentRepository PaymentRepository { get; private set; }
+        public IRoleRepository RoleRepository { get; private set; }
+
+
 
         public UnitOfWork(BaByBoiContext myDbContext)
         {
             _myDbContext = myDbContext;
             UserRepository = new UserRepository(_myDbContext);
+            ProductRepository = new ProductRepository(_myDbContext);
+            RoleRepository = new RoleRepository(_myDbContext);
+            OrderRepository = new OrderRepository(_myDbContext);
+            PaymentRepository = new PaymentRepository(_myDbContext);
+            VoucherRepository = new VoucherRepository(_myDbContext);
         }
 
         public async Task BeginTransactionAsync()

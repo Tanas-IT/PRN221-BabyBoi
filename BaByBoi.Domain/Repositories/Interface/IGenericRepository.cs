@@ -9,16 +9,18 @@ namespace BaByBoi.Domain.Repositories.Interface
 {
     public interface IGenericRepository<T> where T : class
     {
-        T GetById(int id);
-        T GetById(string id);
-        IEnumerable<T> GetAll();
-        IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
-        void Add(T entity);
-        void AddRange(IEnumerable<T> entities);
-        void Remove(T entity);
+        Task<T> GetById(int id);
+        Task<T> GetByOrderCode(string id);
+        Task<IEnumerable<T>> GetAll();
+        Task<IEnumerable<T>> Find(Expression<Func<T, bool>> predicate);
+        Task Add(T entity);
+        Task<bool> AddAsync(T entity);
+        Task AddRange(IEnumerable<T> entities);
+        Task Remove(T entity);
         Task<bool> RemovebyId(int id);
         Task<bool> RemovebyId(string id);
-        void RemoveRange(IEnumerable<T> entities);
-        void Update(T entity);
+        Task RemoveRange(IEnumerable<T> entities);
+        Task Update(T entity); 
+        Task<bool> UpdateAsync(T entity);
     }
 }
