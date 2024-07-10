@@ -63,6 +63,13 @@ namespace BaByBoi.Domain.Repositories
             return await _context.Users.Include(u => u.Role).ToListAsync();
         }
 
+        public override async Task<User> GetById(int id)
+        {
+            return await _context.Users
+                        .Include(u => u.Role)
+                        .FirstOrDefaultAsync(u => u.UserId == id);
+        }
+
         public async Task<bool> ExistsAsync(int id)
         {
             return await _context.Users.AnyAsync(e => e.UserId == id);

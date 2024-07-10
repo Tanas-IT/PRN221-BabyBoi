@@ -10,6 +10,7 @@ namespace BaByBoi.Domain.Repositories.Interface
     public interface IUserRepository : IGenericRepository<User>
     {
         User GetUserByFullName(string fullName);
+        Task<User> GetById(int id);
         Task<User> GetUserByEmail(string email);
         Task<User> CheckLogin(string email, string password);
         Task<User> ChangePasswordByEmail(string email, string newPassword);
