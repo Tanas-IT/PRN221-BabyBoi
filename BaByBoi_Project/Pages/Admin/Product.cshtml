@@ -575,7 +575,40 @@
                                                     <td>@product.ProductCode</td>
                                                     <td>@product.ProductName</td>
                                                     <td>@product.CreateDate?.ToString("dd-MM-yyyy")</td>
-                                                 
+                                                    <td class="image-row">
+                                                            @if (product.ProductImages.Count > 0)
+                                                            {
+                                                            <div class="product-image">
+                                                                <img src="@product.ProductImages.First().ImageUrl"
+                                                                     alt="@product.ProductImages.First().ImageName"
+                                                                     class="avatar-img rounded-circle" />
+                                                                <div class="overlay">
+                                                                    <span class="preview">Preview</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-popup">
+                                                                <div class="popup-content">
+                                                                    <img src="@product.ProductImages.First().ImageUrl" alt="@product.ProductImages.First().ImageName">
+                                                                </div>
+                                                            </div>
+                                                            }
+                                                            @if (product.ProductImages.Count == 0)
+                                                            {
+                                                            <div class="product-image">
+                                                                <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/product%2Fdefault-product-image.png?alt=media&token=76492637-3b09-4a43-8d7e-6426fe976faf"
+                                                                     alt="Default Product Image"
+                                                                     class="avatar-img rounded-circle" />
+                                                                <div class="overlay">
+                                                                    <span class="preview">Preview</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-popup">
+                                                                <div class="popup-content">
+                                                                    <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/product%2Fdefault-product-image.png?alt=media&token=76492637-3b09-4a43-8d7e-6426fe976faf" alt="Default Product Image">
+                                                                </div>
+                                                            </div>
+                                                            }
+                                                    </td>
                                                     <td>@product.Description</td>
                                                         @if(product.Status == 1)
                                                         {
