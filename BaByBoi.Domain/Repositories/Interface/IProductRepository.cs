@@ -28,7 +28,7 @@ namespace BaByBoi.Domain.Repositories.Interface
         public Task<List<ProductSize>> getProductSize(string searchValue);
 
         public Task<ProductSize> GetProductsSizesBySpecificSizeAsync(int productId, int sizeId);
-        public Task<List<PieChartModel>> GetProductsForStatistic();
+        public Task<List<BarChartModel>> GetProductsForStatistic();
 
 
     }
