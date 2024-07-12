@@ -31,7 +31,7 @@ namespace BaByBoi.DataAccess.Service.Interface
         Task<List<ProductSize>> getProductWithSize(string searchKey);
 
         Task<ProductSize> GetProductsSizesBySpecificSizeAsync(int productId, int sizeId);
-        Task<List<PieChartModel>> GetProductsForStatistic();
+        Task<List<BarChartModel>> GetProductsForStatistic();
 
 
     }

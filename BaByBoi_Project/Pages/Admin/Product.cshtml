@@ -347,14 +347,14 @@
                                                 <span class="avatar-title rounded-circle border border-white">@(Model.CurrentUser != null ? Model.CurrentUser.FullName.Substring(0, 1) : "A")</span>
                                             </div>
                                             <div class="u-text">
-                                                <h4>@(Model.CurrentUser != null ? Model.CurrentUser.Role.RoleName : "Admin")</h4>
+                                                <h4>@(Model.CurrentUser != null ? Model.CurrentUser.FullName : "Admin")</h4>
                                                 <p class="text-muted">@(Model.CurrentUser != null ? Model.CurrentUser.Email : "abc@gmail.com")</p>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item text-danger" href="/LoginPage/Index">Logout</a>
+                                        <a class="dropdown-item text-danger" href="/Guest/LoginPage/Index">Logout</a>
                                     </li>
                     </div>
                     </ul>
@@ -576,23 +576,23 @@
                                                     <td>@product.ProductName</td>
                                                     <td>@product.CreateDate?.ToString("dd-MM-yyyy")</td>
                                                     <td class="image-row">
-                                                             @if(product.ProductImages.Count > 0 )
-                                                                {
-                                                                <div class="product-image">
-                                                                    <img src="@product.ProductImages.First().ImageUrl"
+                                                            @if (product.ProductImages.Count > 0)
+                                                            {
+                                                            <div class="product-image">
+                                                                <img src="@product.ProductImages.First().ImageUrl"
                                                                      alt="@product.ProductImages.First().ImageName"
                                                                      class="avatar-img rounded-circle" />
-                                                                    <div class="overlay">
-                                                                        <span class="preview">Preview</span>
-                                                                    </div>
+                                                                <div class="overlay">
+                                                                    <span class="preview">Preview</span>
                                                                 </div>
-                                                                <div class="product-popup">
-                                                                    <div class="popup-content">
+                                                            </div>
+                                                            <div class="product-popup">
+                                                                <div class="popup-content">
                                                                     <img src="@product.ProductImages.First().ImageUrl" alt="@product.ProductImages.First().ImageName">
-                                                                    </div>
-                                                                    </div>
-                                                                }
-                                                            @if(product.ProductImages.Count == 0)
+                                                                </div>
+                                                            </div>
+                                                            }
+                                                            @if (product.ProductImages.Count == 0)
                                                             {
                                                             <div class="product-image">
                                                                 <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/product%2Fdefault-product-image.png?alt=media&token=76492637-3b09-4a43-8d7e-6426fe976faf"
@@ -608,7 +608,7 @@
                                                                 </div>
                                                             </div>
                                                             }
-                                                        </td>
+                                                    </td>
                                                     <td>@product.Description</td>
                                                         @if(product.Status == 1)
                                                         {
