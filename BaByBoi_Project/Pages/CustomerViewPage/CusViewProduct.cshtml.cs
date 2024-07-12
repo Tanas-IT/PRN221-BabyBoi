@@ -35,11 +35,11 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
 
         public async Task LoadDataAsync(string? searchValue)
         {
-            var products = await _productService.getProductWithSize(searchValue);
+            var products = await _productService.getProductWithSize(searchValue!);
             this.Products = PaginatedList<ProductSize>.Create(
                 products.AsQueryable(), PageIndex, PageSize);
 
-            SearchValue = searchValue;
+            SearchValue = searchValue!;
 
             if (TempData.ContainsKey("SuccessMessage"))
             {
@@ -52,7 +52,7 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
         }
 
 
-        public async Task<IActionResult> OnPostAddToCartAsync(int productId, int sizeId)
+        public async Task<IActionResult> OnGetAddToCartAsync(int productId, int sizeId)
         {
             List<OrderDetail> OrderList = HttpContext.Session.GetObjectFromJson<List<OrderDetail>>("OrderList") ?? new List<OrderDetail>();
             var product = await _productService.getProductById(productId);
@@ -67,6 +67,7 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
                 ProductSize = productSize
                 
             };
+
             if (OrderList.Where(x => x.ProductId == orderDetail.ProductId && x.ProductSize.SizeId == orderDetail.SizeId).FirstOrDefault() == null)
             {
                 OrderList.Add(orderDetail);

@@ -3,86 +3,129 @@
 @{
     ViewData["Title"] = "Shopping Cart";
     Layout = "UsersLayout";
+    var totalCart = new double();
 }
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
+!
 
-<h1 class="text-center">Your Shopping Cart</h1>
 
-<div class="table-responsive mx-auto" style="width: 75%;">
-    <form asp-page-handler="Purchase" method="post">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Select</th>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
 
-                @foreach (var item in Model.OrderList)
-                {
-                    <tr>
-                        <td>
-                            <input type="checkbox" name="SelectedProducts" value="@item.ProductId-@item.SizeId" />
-                        </td>
-                        <td>@item.Product.ProductName</td>
-                        <td>@item.Price</td>
-                        <td>
-                            <div class="input-group">
-                                @if (item.Quantity <= 1)
-                                {
-                                    <button type="submit" asp-page-handler="UpdateInCart" asp-route-ProductId="@item.ProductId" asp-route-Quantity="@(item.Quantity - 1)" asp-route-SizeID="@item.SizeId" class="btn btn-outline-secondary" disabled>-</button>
-                                }
-                                else
-                                {
-                                    <button type="submit" asp-page-handler="UpdateInCart" asp-route-ProductId="@item.ProductId" asp-route-Quantity="@(item.Quantity - 1)" asp-route-SizeID="@item.SizeId" class="btn btn-outline-secondary">-</button>
-                                }
-                                <input type="number" name="quantities" value="@item.Quantity" class="form-control text-center" min="1" max="@(item.ProductSize.Quantity)" />
-                                @if (item.ProductSize.Quantity > item.Quantity)
-                                {
-                                    <button type="submit" asp-page-handler="UpdateInCart" asp-route-ProductId="@item.ProductId" asp-route-Quantity="@(item.Quantity + 1)" asp-route-SizeID="@item.SizeId" class="btn btn-outline-secondary">+</button>
-                                }
-                                else
-                                {
-                                    <button type="submit" asp-page-handler="UpdateInCart" asp-route-ProductId="@item.ProductId" asp-route-Quantity="@(item.Quantity + 1)" asp-route-SizeID="@item.SizeId" class="btn btn-outline-secondary" disabled>+</button>
-                                }
-                            </div>
-                        </td>
-                        <td>@(item.Quantity * item.Price)</td>
-                        <td>
-                            <button type="submit" asp-page-handler="DeleteFormCart" asp-route-ProductId="@item.ProductId" asp-route-SizeID="@item.SizeId" class="btn btn-danger">Remove</button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <div class="text-right">
-            <button type="submit" class="btn btn-warning">Purchase</button>
+<div class="container-fluid py-5">
+    <form method="post">
+        <div class="container py-5">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Chọn</th>
+                            <th scope="col">Sản phẩm</th>
+                            <th scope="col">Tên</th>
+                            <th scope="col">Giá</th>
+                            <th scope="col">Số Lượng</th>
+                            <th scope="col">Tổng</th>
+                            <th scope="col">Quản lí</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderList)
+                        {
+                            <tr>
+                                <th>
+                                    <input class="mt-4" type="checkbox" name="SelectedProducts" value="@item.ProductId-@item.SizeId" />
+                                </th>
+                                <th scope="row">
+                                    <div class="d-flex align-items-center">
+                                        <img src="@item.Product.ProductImages.FirstOrDefault()!.ImageUrl" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                    </div>
+                                </th>
+                                <td>
+                                    <p class="mb-0 mt-4">@item.Product.ProductName</p>
+                                </td>
+                                <td>
+                                    @{
+                                        var priceAfterDiscount = Math.Ceiling((decimal)(item.Price - (item.Price * item.Product.Discount) / 100)!);
+                                    }
+
+                                    <p class="mb-0 mt-4">@priceAfterDiscount VND</p>
+                                </td>
+                                <td>
+                                    <div class="input-group quantity mt-4" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            @if (item.Quantity <= 1)
+                                            {
+                                                <button type="submit" asp-page-handler="UpdateInCart" asp-route-ProductId="@item.ProductId" asp-route-Quantity="@(item.Quantity - 1)" asp-route-SizeID="@item.SizeId" class="btn btn-sm btn-minus rounded-circle bg-light border" disabled>
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" asp-page-handler="UpdateInCart" asp-route-ProductId="@item.ProductId" asp-route-Quantity="@(item.Quantity - 1)" asp-route-SizeID="@item.SizeId" class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+                                            }
+                                        </div>
+                                        <input type="text" onkeypress="return /\d/.test(String.fromCharCode(((event||window.event).which||(event||window.event).which)));" onchange="this.form.submit()" name="quantities" value="@item.Quantity" class="form-control form-control-sm text-center border-0" min="1" max="@(item.ProductSize.Quantity)">
+                                        <div class="input-group-btn">
+                                            @if (item.ProductSize.Quantity > item.Quantity)
+                                            {
+                                                <button type="submit" asp-page-handler="UpdateInCart" asp-route-ProductId="@item.ProductId" asp-route-Quantity="@(item.Quantity + 1)" asp-route-SizeID="@item.SizeId" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" type="submit" asp-page-handler="UpdateInCart" asp-route-ProductId="@item.ProductId" asp-route-Quantity="@(item.Quantity + 1)" asp-route-SizeID="@item.SizeId" class="btn btn-sm btn-plus rounded-circle bg-light border" disabled>
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            }
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="mb-0 mt-4">@(item.Quantity * priceAfterDiscount)</p>
+                                    @{
+                                        totalCart += (double)(item.Quantity * priceAfterDiscount)!;
+                                    }
+                                </td>
+                                <td>
+                                    <button type="submit" asp-page-handler="DeleteFormCart" asp-route-ProductId="@item.ProductId" asp-route-SizeID="@item.SizeId" class="btn btn-md rounded-circle bg-light border mt-4">
+                                        <i class="fa fa-times text-danger"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-5">
+            </div>
+            <div class="row g-4 justify-content-end">
+                <div class="col-8"></div>
+                <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
+                    <div class="bg-light rounded">
+                        <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
+                            <h5 class="mb-0 ps-4 me-4">Total</h5>
+                            <p class="mb-0 pe-4">@totalCart</p>
+                        </div>
+                        <button asp-page-handler="Purchase" class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Proceed Checkout</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
 </div>
 
 
-@section Scripts {
-    <script>
-        document.querySelectorAll('button[name="updateQuantity"]').forEach(button => {
-            button.addEventListener('click', function (event) {
-                event.preventDefault();
-                const form = button.closest('form');
-                form.submit();
-            });
-        });
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="lib/lightbox/js/lightbox.min.js"></script>
+<script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-        document.querySelectorAll('button[name="removeItem"]').forEach(button => {
-            button.addEventListener('click', function (event) {
-                event.preventDefault();
-                const form = button.closest('form');
-                form.submit();
-            });
-        });
-    </script>
-}
+<!-- Template Javascript -->
+<script src="~/js/main.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="https://kit.fontawesome.com/d98e41de81.js" crossorigin="anonymous"></script>
+

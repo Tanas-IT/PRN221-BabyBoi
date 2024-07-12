@@ -197,13 +197,13 @@ namespace BaByBoi.Domain.Repositories
 
         public async Task<List<ProductSize>> getProductSize(string searchValue)
         {
-            var sizeID = await _context.Sizes.Where(x => x.SizeName!.Equals("Small")).Select(x => x.SizeId).FirstOrDefaultAsync();
             if (string.IsNullOrEmpty(searchValue))
             {
                 var productSizes = await _context.ProductSizes
             //.Where(ps => ps.SizeId == sizeID)
             .Include(x => x.Product)
             .Include(ps => ps.Size)
+            .Include(ps => ps.Product.ProductImages)
             .ToListAsync();
 
                 return productSizes.DistinctBy(ps => ps.ProductId).ToList();
@@ -214,6 +214,7 @@ namespace BaByBoi.Domain.Repositories
             .Where(ps =>  ps.Product.ProductName!.ToLower().Contains(searchValue.ToLower()))
             .Include(ps => ps.Product)
             .Include(ps => ps.Size)
+            .Include(ps => ps.Product.ProductImages)
             .ToListAsync();
 
                 return productSizes.DistinctBy(ps => ps.ProductId).ToList();
