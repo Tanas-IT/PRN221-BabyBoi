@@ -70,6 +70,23 @@ namespace BaByBoi.DataAccess.Service
             var result = await _unitOfWork.OrderRepository.GetAllOrder();
             return result.ToList();
         }
+        public async Task<List<OrderDetail>> GetOrderDetailById(int orderId)
+        {
+            var result = await _unitOfWork.OrderRepository.GetOrderDetailById(orderId);
+            return result.ToList();
+        }
+
+        public async Task<Order> GetOrderById(int orderId)
+        {
+            var result = await _unitOfWork.OrderRepository.GetOrderById(orderId);
+            return result;
+        }
+
+        public async Task<bool> AddFeedback(Order OrderFeedback)
+        {
+            var result = await _unitOfWork.OrderRepository.AddFeedback(OrderFeedback);
+            return result;
+        }
 
     }
 }
