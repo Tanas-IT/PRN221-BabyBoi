@@ -83,7 +83,7 @@ namespace BaByBoi.Domain.Repositories
 
         public Task<List<Category>> GetAllCagetory()
         {
-            return _context.Categories.ToListAsync();
+            return _context.Categories.Include(x => x.Products).ToListAsync();
         }
         public Task<List<Size>> GetAllSize()
         {
@@ -197,7 +197,6 @@ namespace BaByBoi.Domain.Repositories
 
         public async Task<List<ProductSize>> getProductSize(string searchValue)
         {
-            var sizeID = await _context.Sizes.Where(x => x.SizeName!.Equals("Small")).Select(x => x.SizeId).FirstOrDefaultAsync();
             if (string.IsNullOrEmpty(searchValue))
             {
                 var productSizes = await _context.ProductSizes
@@ -205,6 +204,7 @@ namespace BaByBoi.Domain.Repositories
             .Include(x => x.Product)
             .Include(x => x.Product.ProductImages)
             .Include(ps => ps.Size)
+            .Include(ps => ps.Product.ProductImages)
             .ToListAsync();
 
                 return productSizes.DistinctBy(ps => ps.ProductId).ToList();
@@ -215,6 +215,7 @@ namespace BaByBoi.Domain.Repositories
             .Where(ps =>  ps.Product.ProductName!.ToLower().Contains(searchValue.ToLower()))
             .Include(ps => ps.Product)
             .Include(ps => ps.Size)
+            .Include(ps => ps.Product.ProductImages)
             .ToListAsync();
 
                 return productSizes.DistinctBy(ps => ps.ProductId).ToList();
@@ -277,7 +278,6 @@ namespace BaByBoi.Domain.Repositories
                                }).ToList();
             return listProduct;
         }
-
 
     }
 }

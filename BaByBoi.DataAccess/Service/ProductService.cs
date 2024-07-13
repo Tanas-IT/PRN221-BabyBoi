@@ -36,6 +36,7 @@ namespace BaByBoi.DataAccess.Service
         {
             return await _unitOfWork.ProductRepository.GetAllCagetory();
         }
+
         public async Task<List<Size>> GetAllSize()
         {
             return await _unitOfWork.ProductRepository.GetAllSize();
