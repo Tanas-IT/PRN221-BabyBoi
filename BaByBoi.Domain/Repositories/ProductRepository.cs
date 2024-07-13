@@ -83,7 +83,7 @@ namespace BaByBoi.Domain.Repositories
 
         public Task<List<Category>> GetAllCagetory()
         {
-            return _context.Categories.ToListAsync();
+            return _context.Categories.Include(x => x.Products).ToListAsync();
         }
         public Task<List<Size>> GetAllSize()
         {
@@ -278,7 +278,6 @@ namespace BaByBoi.Domain.Repositories
                                }).ToList();
             return listProduct;
         }
-
 
     }
 }

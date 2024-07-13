@@ -4,43 +4,40 @@ using BaByBoi.Domain.PaginModel;
 using BaByBoi_Project.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.SignalR;
-using System.Collections.Generic;
+using System.Drawing.Printing;
 
 namespace BaByBoi_Project.Pages.CustomerViewPage
 {
-    public class CusViewProductModel : PageModel
+    public class ProductDetailModel : PageModel
     {
         private readonly IProductService _productService;
 
-        public CusViewProductModel(IProductService productService)
+        public ProductDetailModel(IProductService productService)
         {
             _productService = productService;
         }
-        public PaginatedList<ProductSize> Products { get; private set; }
-        public List<Category> Categories { get; private set; }
 
-        [BindProperty(SupportsGet = true)]
-        public int PageIndex { get; set; } = 1;
+        public Product Product { get; set; } = new Product();
+        
+        public User Customer { get; set; }
 
-        [BindProperty(SupportsGet = true)]
-        public int PageSize { get; set; } = 5;
-
-        [BindProperty(SupportsGet = true)]
-        public string SearchValue { get; set; }
-        public async Task OnGetAsync(string searchValue)
+        public List<Product> recomendProduct = new List<Product>();
+        public async Task OnGet(int productId, int categoryID)
         {
-            await LoadDataAsync(searchValue);
+            await LoadDataAsync(productId: productId, categoryID: categoryID);
         }
 
-        public async Task LoadDataAsync(string? searchValue)
+        public async Task LoadDataAsync(int productId, int categoryID)
         {
-            var products = await _productService.getProductWithSize(searchValue!);
-            Categories = await _productService.GetAllCagetory();
-            this.Products = PaginatedList<ProductSize>.Create(
-                products.AsQueryable(), PageIndex, PageSize);
-
-            SearchValue = searchValue!;
+            if (productId > 0)
+            {
+                Product = await _productService.GetProductByProductId(productId);
+            }
+            if (categoryID > 0)
+            {
+                var rcm = await _productService.GetAllProduct();
+                recomendProduct = rcm.ToList();
+            }
 
             if (TempData.ContainsKey("SuccessMessage"))
             {
@@ -51,9 +48,7 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
                 ViewData["ErrorMessage"] = errorMessage;
             }
         }
-
-
-        public async Task<IActionResult> OnGetAddToCartAsync(int productId, int sizeId)
+        public async Task<IActionResult> OnGetAddToCartAsync(int productId, int sizeId, int categoryId)
         {
             List<OrderDetail> OrderList = HttpContext.Session.GetObjectFromJson<List<OrderDetail>>("OrderList") ?? new List<OrderDetail>();
             var product = await _productService.getProductById(productId);
@@ -61,12 +56,12 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
             var orderDetail = new OrderDetail
             {
                 ProductId = productSize.ProductId,
-                Price = Math.Ceiling((double)(productSize.Price -  (productSize.Price * product.Discount)/100)!),
+                Price = Math.Ceiling((double)(productSize.Price - (productSize.Price * product.Discount) / 100)!),
                 Quantity = 1,
                 Product = product,
                 SizeId = productSize.SizeId,
                 ProductSize = productSize
-                
+
             };
 
             if (OrderList.Where(x => x.ProductId == orderDetail.ProductId && x.ProductSize.SizeId == orderDetail.SizeId).FirstOrDefault() == null)
@@ -74,14 +69,8 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
                 OrderList.Add(orderDetail);
                 HttpContext.Session.SetObjectAsJson("OrderList", OrderList);
             }
-            await LoadDataAsync(SearchValue);
+            await LoadDataAsync(productId:productId, categoryID: categoryId);
             return this.Page();
-        }
-
-        public async Task<IActionResult> OnGetViewDetail(int productId, int CategoryId)
-        {
-            var product = await _productService.GetProductByProductId(productId);
-            return RedirectToPage("ProductDetail", new { productId = product.ProductId, categoryID = CategoryId });
         }
     }
 }
