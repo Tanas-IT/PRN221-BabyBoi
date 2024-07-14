@@ -80,8 +80,8 @@
                     <div class="sidebar-content">
                         <ul class="nav nav-secondary">
                             <li class="nav-item active">
-                                <a data-bs-toggle="collapse"
-                                   href="Home"
+                                <a
+                                   href="/Admin/Home"
                                    class="collapsed"
                                    aria-expanded="false">
                                     <i class="fas fa-home"></i>
@@ -95,27 +95,21 @@
                                 <h4 class="text-section">Danh sách</h4>
                             </li>
                             <li class="nav-item">
-                                <a href="Product">
+                                <a href="/Admin/Product">
                                     <i class="fas fa-shopping-bag"></i>
                                     <p>Sản phẩm</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a data-bs-toggle="collapse" href="#sidebarLayouts">
+                            <a href="/Category">
                                     <i class="fas fa-folder"></i>
                                     <p>Danh mục</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a data-bs-toggle="collapse" href="#forms">
+                                <a href="/VoucherPage">
                                     <i class="fas fa-ticket-alt"></i>
                                     <p>Khuyến mãi</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a data-bs-toggle="collapse" href="#tables">
-                                    <i class="fas fa-shopping-cart"></i>
-                                    <p>Đơn hàng</p>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -188,7 +182,7 @@
                                         </li>
                                         <li>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item text-danger" href="/LoginPage/Index">Logout</a>
+                                        <a class="dropdown-item text-danger" href="/Guest/LoginPage/Index">Logout</a>
                                         </li>
                         </div>
                         </ul>
@@ -199,40 +193,17 @@
                 <!-- End Navbar -->
             </div>
 
-            <div>
+            <div style="margin-top: 100px">
                     @RenderBody()
             </div>
-
-            <footer class="footer">
-                <div class="container-fluid d-flex justify-content-between">
-                    <nav class="pull-left">
-                        <ul class="nav">
-                            <li class="nav-item">
-                                <a class="nav-link" href="http://www.themekita.com">
-                                    BabyBoi
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"> Help </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"> Licenses </a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <div class="copyright">
-                        2024, made with <i class="fa fa-heart heart text-danger"></i> by
-                        <a href="http://www.themekita.com">BabyBoi</a>
-                    </div>
-                    <div>
-                        Distributed by
-                        <a target="_blank" href="https://themewagon.com/">BabyBoi</a>.
-                    </div>
-                </div>
-            </footer>
         </div>
 
         </div>
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
         <!--   Core JS Files   -->
         <script src="/assets/js/core/jquery-3.7.1.min.js"></script>
         <script src="/assets/js/core/popper.min.js"></script>

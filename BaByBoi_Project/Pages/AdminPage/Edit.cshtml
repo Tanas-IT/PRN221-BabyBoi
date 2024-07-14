@@ -2,8 +2,8 @@
 @model BaByBoi_Project.Pages.AdminPage.EditModel
 
 @{
-    Layout = "Shared/AdminLayout";
-    ViewData["Title"] = "Edit";
+    Layout = "AdminLayout";
+
 }
 <div class="index-page">
     <h4>Cập nhật thông tin tài khoản</h4>
@@ -132,9 +132,6 @@
 
             return true;
         }
-    </script>
-    <script>
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
     </script>
     <style>
         .index-page {

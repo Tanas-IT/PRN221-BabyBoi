@@ -1,9 +1,19 @@
 ﻿@page
+@using BaByBoi.Domain.Models;
+@using BaByBoi_Project.Extensions
 @model BaByBoi_Project.Pages.Admin.ProductModel
+@inject IHttpContextAccessor HttpContextAccessor
+
 @{
     Layout = "";
     string message = ViewData["Message"] as string;
     string errorMessage = ViewData["ErrorMessage"] as string;
+    User user = null!;
+    if (HttpContextAccessor.HttpContext != null)
+    {
+        user = HttpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("User");
+    }
+    var currentPath = HttpContextAccessor.HttpContext?.Request.Path;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -267,25 +277,19 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#sidebarLayouts">
+                            <a href="/Category">
                                 <i class="fas fa-folder"></i>
                                 <p>Danh mục</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a  href="#forms">
+                            <a  href="/VoucherPage">
                                 <i class="fas fa-ticket-alt"></i>
                                 <p>Khuyến mãi</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a  href="#tables">
-                                <i class="fas fa-shopping-cart"></i>
-                                <p>Đơn hàng</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a  href="#maps">
+                            <a href="/AdminPage/Index">
                                 <i class="fas fa-users"></i>
                                 <p>Tài khoản</p>
                             </a>
@@ -331,12 +335,12 @@
                                    aria-expanded="false">
                                     <div class="avatar-sm">
                                         <div class="avatar">
-                                            <span class="avatar-title rounded-circle border border-white">@(Model.CurrentUser != null ? Model.CurrentUser.FullName.Substring(0, 1) : "A")</span>
+                                            <span class="avatar-title rounded-circle border border-white">@(user != null ? user.FullName!.Substring(0, 1) : "A")</span>
                                         </div>
                                     </div>
                                     <span class="profile-username">
                                         <span class="op-7">Xin chào,</span>
-                                        <span class="fw-bold">@(Model.CurrentUser != null ? Model.CurrentUser.FullName : "Admin") </span>
+                                        <span class="fw-bold">@(user != null ? user.FullName : "Admin") </span>
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -344,11 +348,11 @@
                                     <li>
                                         <div class="user-box">
                                             <div class="avatar">
-                                                <span class="avatar-title rounded-circle border border-white">@(Model.CurrentUser != null ? Model.CurrentUser.FullName.Substring(0, 1) : "A")</span>
+                                                <span class="avatar-title rounded-circle border border-white">@(user != null ? user.FullName!.Substring(0, 1) : "A")</span>
                                             </div>
                                             <div class="u-text">
-                                                <h4>@(Model.CurrentUser != null ? Model.CurrentUser.FullName : "Admin")</h4>
-                                                <p class="text-muted">@(Model.CurrentUser != null ? Model.CurrentUser.Email : "abc@gmail.com")</p>
+                                                <h4>@(user != null ? user.FullName : "Admin")</h4>
+                                                <p class="text-muted">@(user != null ? user.Email : "abc@gmail.com")</p>
                                             </div>
                                         </div>
                                     </li>

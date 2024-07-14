@@ -2,8 +2,9 @@
 @model BaByBoi_Project.Pages.AdminPage.CreateModel
 
 @{
-    Layout = "Shared/AdminLayout";
     ViewData["Title"] = "Create";
+    Layout = "AdminLayout";
+
 }
 <div class="createAccountPage">
     <h1>Thêm tài khoản</h1>
@@ -125,9 +126,6 @@
     </script>
     </div> *@
 
-    <script>
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    </script>
     <style>
         .createAccountPage {
             /*  align-items: center;
