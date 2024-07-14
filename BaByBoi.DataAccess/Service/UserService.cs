@@ -1,4 +1,5 @@
 ﻿using BaByBoi.DataAccess.Service.Interface;
+using BaByBoi.Domain.Common.Enum;
 using BaByBoi.Domain.Models;
 using BaByBoi.Domain.Repositories.Interface;
 using System;
@@ -73,12 +74,16 @@ namespace BaByBoi.DataAccess.Service
             }
 
             // Update user status to '2' or perform deletion logic
-            user.Status = 2; // Or set to 'Inactive', depending on your business logic
+            user.Status = (int)StatusExist.Deleted; // Or set to 'Inactive', depending on your business logic
             await _unitOfWork.UserRepository.UpdateAsync(user);
             await _unitOfWork.SaveChangesAsync(); // Save changes in the Unit of Work
 
             return true;
         }
 
+        public async Task<IEnumerable<User>> SearchUser(string searchValue)
+        {
+            return await _unitOfWork.UserRepository.SearchUser(searchValue);            
+        }
     }
 }
