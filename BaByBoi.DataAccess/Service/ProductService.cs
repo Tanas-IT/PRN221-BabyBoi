@@ -36,6 +36,7 @@ namespace BaByBoi.DataAccess.Service
         {
             return await _unitOfWork.ProductRepository.GetAllCagetory();
         }
+
         public async Task<List<Size>> GetAllSize()
         {
             return await _unitOfWork.ProductRepository.GetAllSize();
@@ -125,7 +126,7 @@ namespace BaByBoi.DataAccess.Service
         public async Task<ProductSize> GetProductsSizesBySpecificSizeAsync(int productId, int sizeId)
         => await _unitOfWork.ProductRepository.GetProductsSizesBySpecificSizeAsync(productId, sizeId);
 
-        public async Task<List<PieChartModel>> GetProductsForStatistic()
+        public async Task<List<BarChartModel>> GetProductsForStatistic()
         {
             return await _unitOfWork.ProductRepository.GetProductsForStatistic();
         }

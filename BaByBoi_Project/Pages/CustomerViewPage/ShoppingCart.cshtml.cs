@@ -18,8 +18,6 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
 
         [BindProperty]
         public List<string> SelectedProducts { get; set; }
-
-
         public List<OrderDetail> OrderList { get; set; } = new List<OrderDetail>();
         public User Customer { get; set; }
         private void getShoppingCartFromSession()
@@ -62,14 +60,14 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
         {
             HttpContext.Session.SetObjectAsJson("OrderList", OrderList);
         }
-        public IActionResult OnPostUpdateInCart(int ProductId, int Quantity, int sizeId)
+        public IActionResult OnPostUpdateInCart(int ProductId, string Quantity, int sizeId)
         {
             getShoppingCartFromSession();
             var product = OrderList.FirstOrDefault(x => x.ProductId == ProductId && x.SizeId == sizeId);
             if (product != null)
             {
                 //product.Price = Quantity * product.Price;
-                product.Quantity = product.Quantity > Quantity ? product.Quantity : Quantity;
+                product.Quantity = product.ProductSize.Quantity > int.Parse(Quantity) ? int.Parse(Quantity) : product.ProductSize.Quantity;
                 SaveBookingListToSession();
                 SetSuccessMessage("Cập nhật giỏ hàng thành công");
             }

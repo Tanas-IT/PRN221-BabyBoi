@@ -74,5 +74,39 @@ namespace BaByBoi.Domain.Repositories
                                 .ToListAsync();
             return result;
         }
+        public async Task<List<OrderDetail>> GetOrderDetailById(int orderId)
+        {
+            var result = await _context.OrderDetails
+                                    .Where(x => x.OrderId == orderId)
+                                    .Include(x => x.Product)
+                                    .Include(x => x.Product.ProductImages)
+                                    .Include(x => x.Product.ProductSizes)
+                                    .ThenInclude(x => x.Size)
+                                    .ToListAsync();
+            return result;
+        }
+
+        public async Task<Order> GetOrderById(int orderId)
+        {
+            var result = await _context.Orders
+                            .Include(x => x.Voucher)
+                            .Include(x => x.Payment)
+                            .Include(x => x.User)
+                            .FirstOrDefaultAsync(x => x.OrderId == orderId);
+            return result;
+        }
+
+        public async Task<bool> AddFeedback(Order OrderFeedback)
+        {
+            var GetOrderFeeback = await _context.Orders.FirstOrDefaultAsync(x => x.OrderId == OrderFeedback.OrderId);
+            if(GetOrderFeeback != null)
+            {
+                GetOrderFeeback.Rating = OrderFeedback.Rating;
+                GetOrderFeeback.Feedback = OrderFeedback.Feedback;
+                var result = await _context.SaveChangesAsync();
+                return result > 0;
+            }
+            return false;
+        }
     }
 }

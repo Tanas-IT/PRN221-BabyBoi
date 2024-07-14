@@ -171,14 +171,14 @@
                                                 <span class="avatar-title rounded-circle border border-white">@(Model.CurrentUser != null ? Model.CurrentUser.FullName.Substring(0, 1) : "A")</span>
                                             </div>
                                             <div class="u-text">
-                                                <h4>@(Model.CurrentUser != null ? Model.CurrentUser.Role.RoleName : "Admin")</h4>
+                                                <h4>@(Model.CurrentUser != null ? Model.CurrentUser.FullName : "Admin")</h4>
                                                 <p class="text-muted">@(Model.CurrentUser != null ? Model.CurrentUser.Email : "abc@gmail.com")</p>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item text-danger" href="/LoginPage/Index">Logout</a>
+                                        <a class="dropdown-item text-danger" href="/Guest/LoginPage/Index">Logout</a>
                                     </li>
                     </div>
                     </ul>

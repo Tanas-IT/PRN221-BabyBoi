@@ -173,14 +173,14 @@
                                                 <span class="avatar-title rounded-circle border border-white">@(Model.CurrentUser != null ? Model.CurrentUser.FullName.Substring(0, 1) : "A")</span>
                                             </div>
                                             <div class="u-text">
-                                                <h4>@(Model.CurrentUser != null ? Model.CurrentUser.Role.RoleName : "Admin")</h4>
+                                                <h4>@(Model.CurrentUser != null ? Model.CurrentUser.FullName : "Admin")</h4>
                                                 <p class="text-muted">@(Model.CurrentUser != null ? Model.CurrentUser.Email : "abc@gmail.com")</p>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item text-danger" href="/LoginPage/Index">Logout</a>
+                                        <a class="dropdown-item text-danger" href="/Guest/LoginPage/Index">Logout</a>
                                     </li>
                     </div>
                     </ul>
@@ -287,8 +287,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="chart-container">
-                                            <canvas id="pieChart"
-                                                    style="width: 50%; height: 50%"></canvas>
+                                            <canvas id="barChart"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -496,55 +495,40 @@
                 },
             },
         });
-
-        var myPieChart = new Chart(pieChart, {
-            type: "pie",
+        var myBarChart = new Chart(barChart, {
+            type: "bar",
             data: {
+                labels: [
+                    @foreach (var data in Model.BarChartModels)
+                    {
+                        @Html.Raw("'" + data.CategoryName.Replace("'", "\\'") + "', ")
+                    }
+                ],
                 datasets: [
                     {
+                        label: "Product",
+                        backgroundColor: "rgb(23, 125, 255)",
+                        borderColor: "rgb(23, 125, 255)",
                         data: [
-                        @foreach(var data in Model.PieChartModels)
-                        {
-                            @(data.Amount.ToString() + ", ")
-                        }
+                            @foreach (var data in Model.BarChartModels)
+                            {
+                                @Html.Raw("'" + data.Amount.ToString().Replace("'", "\\'") + "', ")
+                            }
                         ],
-                        backgroundColor: ["#1d7af3", "#f3545d", "#fdaf4b", "#FFAAAA", "#AAFFAA", "#AAAAFF", "#FFFF55", "#FF55FF" ],
-                        borderWidth: 0,
                     },
-                ],
-                labels: [
-                @foreach (var data in Model.PieChartModels)
-                {
-                    @Html.Raw("'" + data.CategoryName.Replace("'", "\\'") + "', ")
-                }
-                    
                 ],
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                legend: {
-                    position: "bottom",
-                    labels: {
-                        fontColor: "rgb(154, 154, 154)",
-                        fontSize: 11,
-                        usePointStyle: true,
-                        padding: 20,
-                    },
-                },
-                pieceLabel: {
-                    render: "percentage",
-                    fontColor: "white",
-                    fontSize: 14,
-                },
-                tooltips: false,
-                layout: {
-                    padding: {
-                        left: 20,
-                        right: 20,
-                        top: 20,
-                        bottom: 20,
-                    },
+                scales: {
+                    yAxes: [
+                        {
+                            ticks: {
+                                beginAtZero: true,
+                            },
+                        },
+                    ],
                 },
             },
         });

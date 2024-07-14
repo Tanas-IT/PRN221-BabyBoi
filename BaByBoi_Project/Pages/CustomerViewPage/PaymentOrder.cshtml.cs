@@ -87,8 +87,9 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
                 };
                 return Redirect(_vnpayService.CreatePaymentUrl(HttpContext, vnpayModel,paymentID, totalPrice));
             }
-            return RedirectToAction("PlaceOrder");
+            return RedirectToPage(new { handler = "PlaceOrder", paymentID, totalPrice, orderCode = order.OrderCode });
         }
+
         public async Task<IActionResult> OnGetPlaceOrder(int paymentID, double totalPrice, string orderCode)
         {
             getShoppingCartFromSession();
@@ -105,19 +106,20 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
 
             var payResponse = _vnpayService.PaymentExecute(Request.Query);
 
-            if (payResponse == null || payResponse.VnPayResponseCode != "00")
-            {
-                TempData["ErrorMessage"] = $"Lỗi thanh toán VN Pay: {payResponse!.VnPayResponseCode}";
-                return RedirectToPage("ShoppingCart");
-            }
-            if (HttpContext.Request.Query.ContainsKey("paymentID"))
-            {
-                paymentID = int.Parse(HttpContext.Request.Query["paymentID"]!);
-            }
-            if (HttpContext.Request.Query.ContainsKey("totalPrice"))
-            {
-                totalPrice = double.Parse(HttpContext.Request.Query["totalPrice"]!);
-            }
+            //if (payResponse == null || payResponse.VnPayResponseCode != "00")
+            //{
+            //    TempData["ErrorMessage"] = $"Lỗi thanh toán VN Pay: {payResponse!.VnPayResponseCode}";
+            //    return RedirectToPage("ShoppingCart");
+            //}
+            //if (HttpContext.Request.Query.ContainsKey("paymentID"))
+            //{
+            //    paymentID = int.Parse(HttpContext.Request.Query["paymentID"]!);
+            //}
+            //if (HttpContext.Request.Query.ContainsKey("totalPrice"))
+            //{
+            //    totalPrice = double.Parse(HttpContext.Request.Query["totalPrice"]!);
+            //}
+
             order.OrderCode = orderCode;
             order.PaymentId = paymentID;
             order.TotalProduct = orderDetailsPurchase.Count();

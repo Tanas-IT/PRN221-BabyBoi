@@ -22,7 +22,7 @@ namespace BaByBoi_Project.Pages.Admin
         [BindProperty]
         public List<LineChartModels> LineChartModels { get; set; }
         [BindProperty]
-        public List<PieChartModel> PieChartModels { get; set; }
+        public List<BarChartModel> BarChartModels { get; set; }
         [BindProperty]
         public int NumberOfUser { get; set; }
         [BindProperty]
@@ -38,7 +38,7 @@ namespace BaByBoi_Project.Pages.Admin
         public async Task OnGet()
         {
             LineChartModels = await _orderService.GetAllOrderByMonth();
-            PieChartModels = await _productService.GetProductsForStatistic();
+            BarChartModels = await _productService.GetProductsForStatistic();
             var temp = await _userService.GetAll();
             NumberOfUser = temp.Count;
             var tempRevenue = await _orderService.GetAllOrder();

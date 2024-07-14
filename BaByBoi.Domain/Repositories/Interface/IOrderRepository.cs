@@ -14,6 +14,9 @@ namespace BaByBoi.Domain.Repositories.Interface
         Task<List<Order>> GetAllOrderOfCustomer(int UserId);
         Task<List<LineChartModels>> GetAllOrderByMonth();
         Task<List<Order>> GetAllOrder();
+        Task<List<OrderDetail>> GetOrderDetailById(int orderId);
+        Task<Order> GetOrderById(int orderId);
+        Task<bool> AddFeedback(Order OrderFeedback);
 
     }
 }

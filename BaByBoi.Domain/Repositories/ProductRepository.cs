@@ -83,7 +83,7 @@ namespace BaByBoi.Domain.Repositories
 
         public Task<List<Category>> GetAllCagetory()
         {
-            return _context.Categories.ToListAsync();
+            return _context.Categories.Include(x => x.Products).ToListAsync();
         }
         public Task<List<Size>> GetAllSize()
         {
@@ -197,13 +197,14 @@ namespace BaByBoi.Domain.Repositories
 
         public async Task<List<ProductSize>> getProductSize(string searchValue)
         {
-            var sizeID = await _context.Sizes.Where(x => x.SizeName!.Equals("Small")).Select(x => x.SizeId).FirstOrDefaultAsync();
             if (string.IsNullOrEmpty(searchValue))
             {
                 var productSizes = await _context.ProductSizes
             //.Where(ps => ps.SizeId == sizeID)
             .Include(x => x.Product)
+            .Include(x => x.Product.ProductImages)
             .Include(ps => ps.Size)
+            .Include(ps => ps.Product.ProductImages)
             .ToListAsync();
 
                 return productSizes.DistinctBy(ps => ps.ProductId).ToList();
@@ -214,6 +215,7 @@ namespace BaByBoi.Domain.Repositories
             .Where(ps =>  ps.Product.ProductName!.ToLower().Contains(searchValue.ToLower()))
             .Include(ps => ps.Product)
             .Include(ps => ps.Size)
+            .Include(ps => ps.Product.ProductImages)
             .ToListAsync();
 
                 return productSizes.DistinctBy(ps => ps.ProductId).ToList();
@@ -264,19 +266,18 @@ namespace BaByBoi.Domain.Repositories
 
             return result;
         }
-        public async Task<List<PieChartModel>> GetProductsForStatistic()
+        public async Task<List<BarChartModel>> GetProductsForStatistic()
         {
             var products = await _context.Products.ToListAsync(); // Lấy danh sách các sản phẩm
             var categories = await _context.Categories.ToListAsync(); // Lấy danh sách các sản phẩm
             var listProduct = (from c in categories
-                               select new PieChartModel()
+                               select new BarChartModel()
                                {
                                    CategoryName = c.CategoryName,
                                    Amount = products.Count(p => p.CategoryId == c.CategoryId)
                                }).ToList();
             return listProduct;
         }
-
 
     }
 }
