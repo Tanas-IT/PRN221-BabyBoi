@@ -2,7 +2,8 @@
 @model BaByBoi_Project.Pages.AdminPage.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    Layout = "AdminLayout";
+
 }
 
 <h1>Edit</h1>
@@ -79,7 +80,3 @@
 <div>
     <a asp-page="./Index">Back to List</a>
 </div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
