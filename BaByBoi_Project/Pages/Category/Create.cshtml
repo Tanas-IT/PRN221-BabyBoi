@@ -1,0 +1,134 @@
+﻿@page
+@model CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<style>
+    /* General Styles */
+    h1, h4 {
+        color: #333;
+    }
+
+    hr {
+        border-top: 1px solid #ccc;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .form-control {
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .text-danger {
+        color: #dc3545;
+    }
+
+    /* Button Styles */
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 4px;
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: #fff;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 4px;
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+    /* Layout Styles */
+    .row {
+        margin-top: 20px;
+    }
+
+    .col-md-4 {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<h1>Create</h1>
+
+<h4>Category</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Category.CategoryCode" class="control-label"></label>
+                <input asp-for="Category.CategoryCode" class="form-control" />
+                <span asp-validation-for="Category.CategoryCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category.CategoryName" class="control-label"></label>
+                <input asp-for="Category.CategoryName" class="form-control" />
+                <span asp-validation-for="Category.CategoryName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category.CreateDate" class="control-label"></label>
+                <input asp-for="Category.CreateDate" class="form-control" />
+                <span asp-validation-for="Category.CreateDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category.UpdateDate" class="control-label"></label>
+                <input asp-for="Category.UpdateDate" class="form-control" />
+                <span asp-validation-for="Category.UpdateDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category.UpdateBy" class="control-label"></label>
+                <input asp-for="Category.UpdateBy" class="form-control" />
+                <span asp-validation-for="Category.UpdateBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category.CreateBy" class="control-label"></label>
+                <input asp-for="Category.CreateBy" class="form-control" />
+                <span asp-validation-for="Category.CreateBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category.Status" class="control-label"></label>
+                <input asp-for="Category.Status" class="form-control" />
+                <span asp-validation-for="Category.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

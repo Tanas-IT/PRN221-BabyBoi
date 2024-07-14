@@ -48,7 +48,7 @@ namespace BaByBoi_Project.Pages.Admin
         public Product UpdateProduct { get; set; }
 
         [BindProperty]
-        public List<Category> listCagetory { get; set; }
+        public List<BaByBoi.Domain.Models.Category> listCagetory { get; set; }
         [BindProperty]
         public List<Size> listSize { get; set; }
         [BindProperty]

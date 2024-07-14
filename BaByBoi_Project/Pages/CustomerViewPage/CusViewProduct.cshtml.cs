@@ -18,7 +18,7 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
             _productService = productService;
         }
         public PaginatedList<ProductSize> Products { get; private set; }
-        public List<Category> Categories { get; private set; }
+        public List<BaByBoi.Domain.Models.Category> Categories { get; private set; }
 
         [BindProperty(SupportsGet = true)]
         public int PageIndex { get; set; } = 1;
