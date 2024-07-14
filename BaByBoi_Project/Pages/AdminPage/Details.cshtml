@@ -1,22 +1,15 @@
-﻿@page
+﻿ @page
 @model BaByBoi_Project.Pages.AdminPage.DetailsModel
 
 @{
+    Layout = "Shared/AdminLayout";
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>User</h4>
+    <h4>Chi tiết tài khoản</h4>
     <hr />
     <dl class="row">
-        @* <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User.UserName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.UserName)
-        </dd> *@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.User.Password)
         </dt>

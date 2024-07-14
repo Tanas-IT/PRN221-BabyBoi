@@ -2,11 +2,9 @@
 @model BaByBoi_Project.Pages.AdminPage.EditModel
 
 @{
+    Layout = "Shared/AdminLayout";
     ViewData["Title"] = "Edit";
 }
-
-<h1>Edit</h1>
-
 <h4>User</h4>
 <hr />
 <div class="row">
@@ -14,11 +12,6 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="User.UserId" />
-           @*  <div class="form-group">
-                <label asp-for="User.UserName" class="control-label"></label>
-                <input asp-for="User.UserName" class="form-control" />
-                <span asp-validation-for="User.UserName" class="text-danger"></span>
-            </div> *@
             <div class="form-group">
                 <label asp-for="User.Password" class="control-label"></label>
                 <input asp-for="User.Password" class="form-control" />
@@ -80,6 +73,7 @@
     <a asp-page="./Index">Back to List</a>
 </div>
 
-@section Scripts {
+@* @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+ *@
