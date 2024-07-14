@@ -50,6 +50,7 @@ namespace BaByBoi_Project.Pages.AdminPage
 
             try
             {
+                User.UpdateDate = DateTime.Now;
                 await _userService.UpdateAsync(User);
             }
             catch (DbUpdateConcurrencyException)

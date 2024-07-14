@@ -2,84 +2,143 @@
 @model BaByBoi_Project.Pages.AdminPage.EditModel
 
 @{
+    Layout = "Shared/AdminLayout";
     ViewData["Title"] = "Edit";
 }
-
-<h1>Edit</h1>
-
-<h4>User</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="User.UserId" />
-           @*  <div class="form-group">
-                <label asp-for="User.UserName" class="control-label"></label>
-                <input asp-for="User.UserName" class="form-control" />
-                <span asp-validation-for="User.UserName" class="text-danger"></span>
-            </div> *@
-            <div class="form-group">
-                <label asp-for="User.Password" class="control-label"></label>
-                <input asp-for="User.Password" class="form-control" />
-                <span asp-validation-for="User.Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.Email" class="control-label"></label>
-                <input asp-for="User.Email" class="form-control" />
-                <span asp-validation-for="User.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.Phone" class="control-label"></label>
-                <input asp-for="User.Phone" class="form-control" />
-                <span asp-validation-for="User.Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.FullName" class="control-label"></label>
-                <input asp-for="User.FullName" class="form-control" />
-                <span asp-validation-for="User.FullName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.CreateDate" class="control-label"></label>
-                <input asp-for="User.CreateDate" class="form-control" />
-                <span asp-validation-for="User.CreateDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+<div class="index-page">
+    <h4>Cập nhật thông tin tài khoản</h4>
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post" onsubmit="return validateForm()">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="User.UserId" />
+                <div class="form-group">
+                    <label asp-for="User.Email" class="control-label"></label>
+                    <input asp-for="User.Email" class="form-control" readonly="readonly" />
+                    <span asp-validation-for="User.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="User.Password" class="control-label"></label>
+                    <input asp-for="User.Password" class="form-control" />
+                    <span asp-validation-for="User.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="User.Phone" class="control-label"></label>
+                    <input asp-for="User.Phone" class="form-control" />
+                    <span asp-validation-for="User.Phone" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="User.FullName" class="control-label"></label>
+                    <input asp-for="User.FullName" class="form-control" />
+                    <span asp-validation-for="User.FullName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="User.CreateDate" class="control-label"></label>
+                    <input asp-for="User.CreateDate" class="form-control" readonly="readonly" />
+                    <span asp-validation-for="User.CreateDate" class="text-danger"></span>
+                </div>
+                @* <div class="form-group">
                 <label asp-for="User.UpdateDate" class="control-label"></label>
                 <input asp-for="User.UpdateDate" class="form-control" />
                 <span asp-validation-for="User.UpdateDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.Status" class="control-label"></label>
-                <input asp-for="User.Status" class="form-control" />
-                <span asp-validation-for="User.Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.BirthDate" class="control-label"></label>
-                <input asp-for="User.BirthDate" class="form-control" />
-                <span asp-validation-for="User.BirthDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.Gender" class="control-label"></label>
-                <input asp-for="User.Gender" class="form-control" />
-                <span asp-validation-for="User.Gender" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.RoleId" class="control-label"></label>
-                <select asp-for="User.RoleId" class="form-control" asp-items="ViewBag.RoleId"></select>
-                <span asp-validation-for="User.RoleId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                </div> *@
+                <div class="form-group">
+                    <label asp-for="User.Status" class="control-label"></label>
+                   @*  <input asp-for="User.Status" class="form-control"  *@
+                    <select asp-for="User.Status" class="form-control" required>
+                        <option value="1">Exist</option>
+                        <option value="2">Deleted</option>
+                        <option value="3">Banned</option>
+                    </select>
+                    <span asp-validation-for="User.Status" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="User.BirthDate" class="control-label"></label>
+                    <input asp-for="User.BirthDate" class="form-control" />
+
+                    <span asp-validation-for="User.BirthDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="User.Gender" class="control-label"></label>
+                    <select asp-for="User.Gender" class="form-control" required>
+                        <option value="">Chọn giới tính</option>
+                        <option value="1">Nam</option>
+                        <option value="2">Nữ</option>
+                    </select>
+                    <span asp-validation-for="User.Gender" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="User.RoleId" class="control-label"></label>
+                    <select asp-for="User.RoleId" class="form-control" asp-items="ViewBag.RoleId"></select>
+                    <span asp-validation-for="User.RoleId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+    <div class="form-group">
+        <button id="btnBack" class="btn btn-secondary">Back</button>
+    </div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
+    <script>
+        document.getElementById('btnBack').addEventListener('click', function () {
+            window.location.href = '/AdminPage/Index'; // Điều chỉnh URL theo đúng routing của bạn
+        });
+        function validateForm() {
+            var email = document.getElementById('User_Email').value;
+            var phone = document.getElementById('User_Phone').value;
+            var birthDate = document.getElementById('User_BirthDate').value;
+            var gender = document.getElementById('User_Gender').value;
+            // Password validation
+            var password = document.getElementById('User_Password').value;
+            if (password.length < 5) {
+                alert('Mật khẩu phải có ít nhất 5 ký tự');
+                return false;
+            }
+            // // Email validation
+            // if (!emailRegex.test(email)) {
+            //     alert('Email không hợp lệ');
+            //     return false;
+            // }
+            // Full Name validation
+            var fullName = document.getElementById('User_FullName').value;
+            if (fullName.length < 2) {
+                alert('Tên phải có ít nhất 2 ký tự');
+                return false;
+            }
+            // Phone number validation
+            var phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test(phone)) {
+                alert('Số điện thoại phải có 10 chữ số');
+                return false;
+            }
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+            // Birthdate validation
+            var currentDate = new Date();
+            var selectedDate = new Date(birthDate);
+            var age = currentDate.getFullYear() - selectedDate.getFullYear();
+            if (age < 18 || age > 99) {
+                alert('Tuổi phải từ 18 đến 99');
+                return false;
+            }
+
+            // Gender validation
+            if (gender !== '1' && gender !== '2') {
+                alert('Chọn giới tính');
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+    <script>
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    </script>
+    <style>
+        .index-page {
+            padding-top: 100px; /* Điều chỉnh giá trị này để tạo khoảng trống */
+        }
+    </style>
+</div>

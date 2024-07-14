@@ -2,110 +2,125 @@
 @model BaByBoi_Project.Pages.AdminPage.IndexModel
 
 @{
+    Layout = "Shared/AdminLayout";
     ViewData["Title"] = "Index";
 }
+<div class="index-page">
+    <div class="card-header">
+        <div class="d-flex align-items-center">
+            <h4 class="card-title">Quản lý tài khoản</h4>
+            <div class="d-flex align-items-center" style="margin: 0 auto">
+                <form asp-page-handler="SearchAccount" method="post" style="margin: 0 auto; display: flex; align-self: baseline">
+                    <input class="form-control" style="
+                                                    height: 40px;
+                                                    border-radius: 10px;
+                                                    width: 330px;
+                                                    padding: 10px;" type="search" id="searchInput" asp-for="SearchValue" placeholder="Search" />
+                    <button style="border-radius: 8px; margin-left: 22px;" type="submit" class="btn btn-info">Search</button>
+                </form>
+                <form method="post" asp-page-handler="ResetAccount">
+                    <button style="border-radius: 8px; margin-left: 22px; color: white" type="submit" class="btn btn-warning">Reset Page</button>
+                </form>
+            </div>
+            @* <button class="btn btn-primary btn-round ms-auto"
+            data-bs-toggle="modal"
+            data-bs-target="#addRowModal">
+            <i class="fa fa-plus"></i>
+            Thêm tài khoản mới
+            </button> *@
+            <button id="btnAddAccount" class="btn btn-primary btn-round ms-auto">
+                <i class="fa fa-plus"></i>
+                Thêm tài khoản mới
+            </button>
 
-<h1>Index</h1>
-
-<p>
+            <script>
+                document.getElementById('btnAddAccount').addEventListener('click', function () {
+                    window.location.href = '/AdminPage/Create'; // Adjust the URL as per your routing setup
+                });
+            </script>
+        </div>
+    </div>
+    @* <p>
     <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            @* <th>
-                @Html.DisplayNameFor(model => model.User[0].UserName)
-            </th> *@
-            @* <th>
-                @Html.DisplayNameFor(model => model.User[0].Password)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.User[0].Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User[0].Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User[0].FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User[0].CreateDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User[0].UpdateDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User[0].Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User[0].BirthDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User[0].Gender)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User[0].Role.RoleName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.User)
-        {
+    </p> *@
+    <table class="table">
+        <thead>
             <tr>
-               @*  <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td> *@
-               @*  <td>
-                    @Html.DisplayFor(modelItem => item.Password)
-                </td> *@
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Phone)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FullName)
-                </td>
-                <td>
-                    @item.CreateDate?.ToString("yyyy-MM-dd")
-                </td>
-                <td>
-                    @item.UpdateDate?.ToString("yyyy-MM-dd")
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    @item.BirthDate?.ToString("yyyy-MM-dd")
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Gender)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Role.RoleName)
-                </td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.UserId">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.UserId">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.UserId">Delete</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.User[0].Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User[0].Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User[0].FullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User[0].Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User[0].BirthDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User[0].Gender)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User[0].Role.RoleName)
+                </th>
+                <th>Action</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.User)
+            {
+                <tr>
+                    <td>
+                        @(item.Email ?? "N/A")
+                    </td>
+                    <td>
+                        @(item.Phone ?? "N/A")
+                    </td>
+                    <td>
+                        @(item.FullName ?? "N/A")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @(item.BirthDate != null ? item.BirthDate.Value.ToString("yyyy-MM-dd") : "N/A")
+                    </td>
+                    <td>
+                        @(item.Gender == 1 ? "Nam" : (item.Gender == 2 ? "Nữ" : "N/A"))
+                    </td>
+                    <td>
+                        @(item.Role?.RoleName ?? "N/A")
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.UserId">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.UserId">Detail</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.UserId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-<div>
-    Page @(Model.User.PageIndex) of @(Model.User.TotalPages)
-</div>
-<div class="btn-group" role="group" aria-label="Pagination">
-    @if (Model.User.HasPreviousPage)
-    {
-        <a class="btn btn-default" asp-page="./Index" asp-route-pageIndex="@(Model.User.PageIndex - 1)">Previous</a>
-    }
-    @if (Model.User.HasNextPage)
-    {
-        <a class="btn btn-default" asp-page="./Index" asp-route-pageIndex="@(Model.User.PageIndex + 1)">Next</a>
-    }
+    <div>
+        Page @(Model.User.PageIndex) of @(Model.User.TotalPages)
+    </div>
+    <div class="btn-group" role="group" aria-label="Pagination">
+        @if (Model.User.HasPreviousPage)
+        {
+            <a class="btn btn-default" asp-page="./Index" asp-route-pageIndex="@(Model.User.PageIndex - 1)" asp-route-SearchValue="@Model.SearchValue">Previous</a>
+        }
+        @if (Model.User.HasNextPage)
+        {
+            <a class="btn btn-default" asp-page="./Index" asp-route-pageIndex="@(Model.User.PageIndex + 1)" asp-route-SearchValue="@Model.SearchValue">Next</a>
+        }
+    </div>
+    <style>
+        .index-page {
+            padding-top: 100px; /* Điều chỉnh giá trị này để tạo khoảng trống */
+        }
+    </style>
 </div>

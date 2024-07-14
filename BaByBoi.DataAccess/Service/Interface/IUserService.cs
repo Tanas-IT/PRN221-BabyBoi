@@ -10,6 +10,7 @@ namespace BaByBoi.DataAccess.Service.Interface
     public interface IUserService
     {
         public Task<List<User>> GetAll();
+        public Task<IEnumerable<User>> SearchUser(string searchValue);
         Task<User> GetByIdAsync(int id);
         Task UpdateAsync(User user);
         Task<bool> UserExistsAsync(int id);
