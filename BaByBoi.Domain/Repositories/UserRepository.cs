@@ -60,9 +60,13 @@ namespace BaByBoi.Domain.Repositories
 
         public override async Task<IEnumerable<User>> GetAll()
         {
-            return await _context.Users.Include(u => u.Role).ToListAsync();
+            return await _context.Users.Include(u => u.Role).Where(u => u.Status != (int)StatusExist.Deleted).ToListAsync();
         }
 
+        public async Task<IEnumerable<User>> SearchUser(string searchValue)
+        {
+            return await _context.Users.Include(u => u.Role).Where(u => u.Email.Contains(searchValue) && u.Status != (int)StatusExist.Deleted).OrderByDescending(u=> u.UpdateDate).ToListAsync();
+        }
         public override async Task<User> GetById(int id)
         {
             return await _context.Users

@@ -15,6 +15,7 @@ namespace BaByBoi.Domain.Repositories.Interface
         Task<User> CheckLogin(string email, string password);
         Task<User> ChangePasswordByEmail(string email, string newPassword);
         Task<IEnumerable<User>> GetAll();
+        Task<IEnumerable<User>> SearchUser(string searchValue);
         Task<bool> ExistsAsync(int id);
     }
 }
