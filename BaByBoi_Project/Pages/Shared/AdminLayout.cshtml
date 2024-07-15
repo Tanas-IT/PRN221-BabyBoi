@@ -1,12 +1,18 @@
 ﻿@using BaByBoi.Domain.Models
+@using BaByBoi_Project.Common.Enum
 @using BaByBoi_Project.Extensions
 @inject IHttpContextAccessor HttpContextAccessor
+
 
 @{
     User user = null!;
     if (HttpContextAccessor.HttpContext != null)
     {
         user = HttpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("User");
+        if (user?.RoleId != (int)UserRole.Admin)
+        {
+            HttpContextAccessor.HttpContext.Response.Redirect("/CustomerViewPage/CusViewProduct");
+        }
     }
     var currentPath = HttpContextAccessor.HttpContext?.Request.Path;
 }
