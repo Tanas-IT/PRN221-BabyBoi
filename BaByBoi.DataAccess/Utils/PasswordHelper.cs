@@ -21,6 +21,7 @@ namespace BaByBoi.DataAccess.Utils
 
                 var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
                 var encrypted = encryptor.TransformFinalBlock(Encoding.UTF8.GetBytes(password), 0, password.Length);
+                string test = Convert.ToBase64String(encrypted);
                 return Convert.ToBase64String(encrypted);
             }
         }

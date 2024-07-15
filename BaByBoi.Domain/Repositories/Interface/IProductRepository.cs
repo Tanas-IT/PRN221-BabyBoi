@@ -16,7 +16,7 @@ namespace BaByBoi.Domain.Repositories.Interface
         public Task<List<Category>> GetAllCagetory();
         public Task<List<Size>> GetAllSize();
         public Task<Product> AddProduct(Product product);
-        public Task<bool> AddImagesAndSize(Product product, List<ProductImage> productImagesLink, List<ProductSize> productSize);
+        public Task<bool> AddImagesAndSize(Product product, List<ProductImage> productImagesLink, List<ProductSize> productSize, List<ProductSize> oldProductSize);
 
         public Task<List<ProductImage>> GetImages();
         public Task<Product> GetProductByProductId(int productId);
@@ -29,6 +29,8 @@ namespace BaByBoi.Domain.Repositories.Interface
 
         public Task<ProductSize> GetProductsSizesBySpecificSizeAsync(int productId, int sizeId);
         public Task<List<BarChartModel>> GetProductsForStatistic();
+        Task<List<ProductSize>> GetProductSizeByProductId(int ProductId);
+
 
     }
 }
