@@ -1,5 +1,6 @@
 ﻿@page
 @using BaByBoi.Domain.Models;
+@using BaByBoi_Project.Common.Enum
 @using BaByBoi_Project.Extensions
 @model BaByBoi_Project.Pages.Admin.HomeModel
 @inject IHttpContextAccessor HttpContextAccessor
@@ -10,6 +11,10 @@
     if (HttpContextAccessor.HttpContext != null)
     {
         user = HttpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("User");
+        if (user?.RoleId != (int)UserRole.Admin)
+        {
+            HttpContextAccessor.HttpContext.Response.Redirect("/CustomerViewPage/CusViewProduct");
+        }
     }
     var currentPath = HttpContextAccessor.HttpContext?.Request.Path;
 }
