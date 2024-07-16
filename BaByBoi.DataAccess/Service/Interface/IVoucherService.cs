@@ -14,5 +14,6 @@ namespace BaByBoi.DataAccess.Service.Interface
         Task UpdateVoucher(Voucher voucher);
         Task DeleteVoucher(int id);
         Task CreateVoucher(Voucher voucher);
+        Task<Voucher> getVoucherByCode(string code);
     }
 }

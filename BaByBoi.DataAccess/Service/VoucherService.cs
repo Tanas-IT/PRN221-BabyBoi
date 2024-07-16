@@ -45,5 +45,10 @@ namespace BaByBoi.DataAccess.Service
             await _unitOfWork.VoucherRepository.Add(voucher);
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<Voucher> getVoucherByCode(string code)
+        {
+            return await _unitOfWork.VoucherRepository.GetByCode(code); 
+        }
     }
 }

@@ -11,11 +11,16 @@ namespace BaByBoi.Domain.Repositories
 {
     public class VoucherRepository : GenericRepository<Voucher>, IVoucherRepository
     {
-        public VoucherRepository(BaByBoiContext context) : base(context) { }
+        private readonly BaByBoiContext _context;
+        public VoucherRepository(BaByBoiContext context) : base(context)
+        {
+            _context = context;
+        }
 
-        //public override async Task<IEnumerable<Voucher>> GetAll()
-        //{
-        //    return await _context.Vouchers.ToListAsync() ?? new List<Voucher>();
-        //}
+        public async Task<Voucher> GetByCode(string code)
+        {
+            var voucher = await _context.Vouchers.Where(x => x.VoucherCode.Equals(code)).FirstOrDefaultAsync();
+            return voucher!;
+        }
     }
 }

@@ -44,6 +44,7 @@ namespace BaByBoi.Domain.Repositories
                 order = await _context.Orders
                     .Include(x => x.OrderDetails)
                     .ThenInclude(x => x.Product)
+                    .Include(x => x.User)
                     .Include(x => x.Payment)
                     .Include(x => x.Voucher)
                     .Where(x => x.OrderCode!.ToUpper().Equals(OrderCode.ToUpper())).FirstOrDefaultAsync();
@@ -74,7 +75,7 @@ namespace BaByBoi.Domain.Repositories
                                 .ToListAsync();
             return result;
         }
-        public async Task<List<OrderDetail>> GetOrderDetailById(int orderId)
+        public async Task<List<OrderDetail>> GetOrderDetailsById(int orderId)
         {
             var result = await _context.OrderDetails
                                     .Where(x => x.OrderId == orderId)
@@ -98,7 +99,7 @@ namespace BaByBoi.Domain.Repositories
 
         public async Task<bool> AddFeedback(Order OrderFeedback)
         {
-            var GetOrderFeeback = await _context.Orders.FirstOrDefaultAsync(x => x.OrderId == OrderFeedback.OrderId);
+            var GetOrderFeeback = await _context.Orders.FirstOrDefaultAsync(x => x.OrderCode == OrderFeedback.OrderCode);
             if(GetOrderFeeback != null)
             {
                 GetOrderFeeback.Rating = OrderFeedback.Rating;

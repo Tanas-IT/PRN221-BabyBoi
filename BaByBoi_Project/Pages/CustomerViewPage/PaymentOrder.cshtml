@@ -20,7 +20,7 @@
             padding: 20px;
             margin-bottom: 20px;
             border-radius: 5px;
-            border-radius:10px;
+            border-radius: 10px;
         }
 
         .total-price {
@@ -36,6 +36,7 @@
             font-size: 20px;
             padding: 10px;
         }
+
     </style>
 </head>
 <body>
@@ -51,7 +52,7 @@
         <div class="order-details">
             <h4>Order Details</h4>
             @{
-                var totalprice = new double();
+                var priceEachProduct = new double();
             }
             @foreach (var item in Model.orderDetailsPurchase)
             {
@@ -64,29 +65,53 @@
                         <p>Size: @item.ProductSize.Size.SizeName</p>
                     </div>
                     <div class="col-2">
-                        <p>@( Math.Ceiling( (decimal)(item.ProductSize.Price - (item.ProductSize.Price * item.Product.Discount) / 100)!)) </p>
+                        <p>@(Math.Ceiling((decimal)(item.ProductSize.Price - (item.ProductSize.Price * item.Product.Discount) / 100)!)) </p>
                     </div>
                     <div class="col-2">
                         <p>Quantity: @item.Quantity</p>
                     </div>
                     <div class="col-2">
                         @{
-                            totalprice += (double)(Math.Ceiling((double)(item.ProductSize.Price - (item.ProductSize.Price * item.Product.Discount) / 100)!) * item.Quantity)!;
+                            priceEachProduct = (double)(Math.Ceiling((double)(item.ProductSize.Price - (item.ProductSize.Price * item.Product.Discount) / 100)!) * item.Quantity)!;
                         }
-                        <p>@(totalprice.ToString("C"))</p>
+                        <p>@(priceEachProduct.ToString("C"))</p>
                     </div>
                 </div>
                 <hr />
             }
             <div class="row">
                 <div class="col-12 text-end">
-                    <p class="total-price">Total: @(totalprice.ToString("C"))</p>
+                    <p class="total-price">Total: @(Model.totalPay.ToString("C"))</p>
                 </div>
             </div>
         </div>
 
+        <!-- Voucher Input -->
+        <form method="post">
+            <div class="row">
+                <div class="col-9">
+                    <div class="form-group">
+                        <label for="voucherCode">Voucher Code</label>
+                        <input type="text" class="form-control" name="voucherCode" placeholder="Enter voucher code" />
+                    </div>
+                </div>
+                <div class="col-3" style="padding-bottom: 20px;">
+                    <button asp-page-handler="ApplyVoucher" type="submit" class="btn btn-primary" style="margin-top: 25px; ">Apply</button>
+                </div>
+            </div>
+        </form>
+        @if (Model.voucher != null)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <p>Voucher Applied: <strong>@Model.voucher.VoucherCode</strong></p>
+                </div>
+            </div>
+        }
+
         <!-- Payment Method -->
-        <form asp-page-handler="VnpayAction" method="post">
+        <form method="post">
+
             @if (Model.paymentMethod != null)
             {
                 <div class="payment-method">
@@ -98,8 +123,8 @@
                     {
                         if (paymethod.PaymentName!.Equals(paymentDefault))
                         {
-                            <input type="radio" id="@paymethod.PaymentName" name="paymentID" value="@paymethod.PaymentId" checked = "checked" />
-                            <label  for="@paymethod.PaymentName">@paymethod.PaymentName</label>
+                            <input type="radio" id="@paymethod.PaymentName" name="paymentID" value="@paymethod.PaymentId" checked="checked" />
+                            <label for="@paymethod.PaymentName">@paymethod.PaymentName</label>
                         }
                         else
                         {
@@ -113,13 +138,25 @@
             <!-- Submit Button -->
             <div class="row">
                 <div class="col-12">
-                    <input type="hidden" name="totalPrice" value="@totalprice" />
-                    <button type="submit" class="btn btn-submit">Place Order</button>
+                    <input type="hidden" name="totalPrice" value="@Model.totalPay" />
+                    @if (Model.voucher != null)
+                    {
+                        <input type="hidden" name="voucherId" value="@Model.voucher.VoucherId" />
+                    }
+                    <button asp-page-handler="VnpayAction" type="submit" class="btn btn-submit">Place Order</button>
                 </div>
             </div>
         </form>
+
     </div>
 
+    <script>
+        function placeOrder() {
+            var selectedPaymentID = document.querySelector('input[name="paymentID"]:checked').value;
+            document.getElementById("paymentID").value = selectedPaymentID;
+            document.getElementById("placeOrderForm").submit();
+        }
+    </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
