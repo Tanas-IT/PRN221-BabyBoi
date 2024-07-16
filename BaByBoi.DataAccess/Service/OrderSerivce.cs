@@ -38,7 +38,15 @@ namespace BaByBoi.DataAccess.Service
             entity.OrderDate = DateTime.Now;
             entity.Status = (int)OrderStatus.WaitingAccept;
             entity.Payment = null;
+            foreach (var item in entity.OrderDetails)
+            {
+                var productSize = await _unitOfWork.ProductRepository.GetProductsSizesBySpecificSizeAsync(item.ProductId, item.SizeId);
+                productSize.Quantity = productSize.Quantity - item.Quantity;
+                await _unitOfWork.ProductSizeRepository.Update(productSize!);
+            }
+
             result = await _unitOfWork.OrderRepository.AddAsync(entity);
+
             if (result)
             {
                 return entity;
@@ -72,7 +80,7 @@ namespace BaByBoi.DataAccess.Service
         }
         public async Task<List<OrderDetail>> GetOrderDetailById(int orderId)
         {
-            var result = await _unitOfWork.OrderRepository.GetOrderDetailById(orderId);
+            var result = await _unitOfWork.OrderRepository.GetOrderDetailsById(orderId);
             return result.ToList();
         }
 

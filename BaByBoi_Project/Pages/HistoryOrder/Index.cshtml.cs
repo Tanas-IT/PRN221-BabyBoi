@@ -88,9 +88,7 @@ namespace BaByBoi_Project.Pages.HistoryOrder
 
         public async Task OnGet(string PageIndex, string PageSize)
         {
-          
             await LoadDataAsync(PageIndex, PageSize);
-
         }
         
 

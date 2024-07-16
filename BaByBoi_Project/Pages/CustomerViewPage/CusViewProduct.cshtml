@@ -109,7 +109,6 @@
                                             <div class="rounded position-relative fruite-item">
 
                                                 <a href="/CustomerViewPage/CusViewProduct?handler=ViewDetail&productId=@product.Product.ProductId&CategoryId=@product.Product.CategoryId">
-
                                                     <div class="fruite-img">
                                                         @if (@product.Product.ProductImages.Count() > 0)
                                                         {
@@ -133,7 +132,7 @@
                                                     <p>@product.Product.Description</p>
                                                     <div class="d-flex justify-content-between flex-lg-wrap">
                                                         <p class="text-dark fs-5 fw-bold mb-0">@product.Price</p>
-                                                        <a href="/CustomerViewPage/CusViewProduct?handler=ViewDetail&productId=@product.Product.ProductId&sizeId=@product.SizeId" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ</a>
+                                                        <a href="/CustomerViewPage/CusViewProduct?handler=AddToCart&productId=@product.Product.ProductId&sizeId=@product.SizeId" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ</a>
                                                     </div>
                                                 </div>
                                             </div>

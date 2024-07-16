@@ -20,6 +20,7 @@ namespace BaByBoi.Domain.Repositories
         public IPaymentRepository PaymentRepository { get; private set; }
         public IRoleRepository RoleRepository { get; private set; }
 
+        public IProductSizeRepository ProductSizeRepository { get; private set; }
 
 
         public UnitOfWork(BaByBoiContext myDbContext)
@@ -31,6 +32,7 @@ namespace BaByBoi.Domain.Repositories
             OrderRepository = new OrderRepository(_myDbContext);
             PaymentRepository = new PaymentRepository(_myDbContext);
             VoucherRepository = new VoucherRepository(_myDbContext);
+            ProductSizeRepository = new ProductSizeRepository(_myDbContext);
         }
 
         public async Task BeginTransactionAsync()

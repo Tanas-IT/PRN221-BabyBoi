@@ -23,7 +23,7 @@ namespace BaByBoi.DataAccess.Service.VNpayService
             _config = configuration;
         }
 
-        public string CreatePaymentUrl(HttpContext context, VNPaymentRequestModel model, int paymentID, double totalPrice)
+        public string CreatePaymentUrl(HttpContext context, VNPaymentRequestModel model, int paymentID, double totalPrice, int voucherId)
         {
             var tick = DateTime.Now.Ticks.ToString();
             var vnpay = new VnPayLibrary();
@@ -37,7 +37,7 @@ namespace BaByBoi.DataAccess.Service.VNpayService
             vnpay.AddRequestData("vnp_Locale", _config["Vnpayment:Locale"]!);
             vnpay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang:" + model.OrderCode);
             vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
-            var returnUrl = $"{_config["Vnpayment:PaymentBackReturnUrl"]}?handler=PlaceOrder&paymentID={paymentID}&totalPrice={totalPrice}&orderCode={model.OrderCode}";
+            var returnUrl = $"{_config["Vnpayment:PaymentBackReturnUrl"]}?handler=PlaceOrder&paymentID={paymentID}&totalPrice={totalPrice}&orderCode={model.OrderCode}&voucherId={voucherId}";
             vnpay.AddRequestData("vnp_ReturnUrl", returnUrl);
 
             vnpay.AddRequestData("vnp_TxnRef", model.OrderCode); // Use OrderCode as the transaction reference

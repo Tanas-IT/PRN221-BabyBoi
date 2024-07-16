@@ -22,30 +22,29 @@ namespace BaByBoi_Project.Pages.HistoryOrder
         [BindProperty]
         public string FeedBackContent { get; set; }
 
-        private async Task LoadData(int OrderId)
+        private async Task LoadData(string orderCode)
         {
-            ListOrderDetail = await _orderService.GetOrderDetailById(OrderId);
-            Order = await _orderService.GetOrderById(OrderId);
+            Order = await _orderService.GetByOrderCode(orderCode);
+            ListOrderDetail = await _orderService.GetOrderDetailById(Order.OrderId);
         }
-        public async Task<IActionResult> OnGet(string orderId)
+        public async Task<IActionResult> OnGet(string orderCode)
         {
-                if(orderId == null)
+                if(orderCode == null)
                 {
                     return RedirectToPage("Index");
                 } else
                 {
-                    int orderIdInt = int.Parse(orderId);
-                    await LoadData(orderIdInt);
+                    //int orderIdInt = int.Parse(orderCode);
+                    await LoadData(orderCode);
                     return Page();
                 }
-               
         }
 
         public async Task<IActionResult> OnPostAddFeedback(IFormCollection form) 
         {
             Order OrderFeedback = new Order();
             string rating = form["rating"];
-            string orderId = form["OrderId"];
+            string orderCode = form["OrderCode"];
             if(rating != null)
             {
                 OrderFeedback.Rating = int.Parse(rating);
@@ -53,7 +52,7 @@ namespace BaByBoi_Project.Pages.HistoryOrder
             {
                 OrderFeedback.Rating = 0;
             }
-            OrderFeedback.OrderId =int.Parse(orderId);
+            OrderFeedback.OrderCode = orderCode;
             OrderFeedback.Feedback = FeedBackContent;
             var result = await _orderService.AddFeedback(OrderFeedback);
             if(result)
@@ -63,7 +62,7 @@ namespace BaByBoi_Project.Pages.HistoryOrder
             {
                 ViewData["FeedbackErrorMessage"] = "Add Feedback failed";
             }
-            await LoadData(OrderFeedback.OrderId);
+            await LoadData(OrderFeedback.OrderCode!);
             return Page();
             
         }

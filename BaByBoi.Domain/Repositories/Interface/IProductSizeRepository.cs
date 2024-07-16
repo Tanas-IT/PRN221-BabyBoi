@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 
 namespace BaByBoi.Domain.Repositories.Interface
 {
-    public interface IVoucherRepository : IGenericRepository<Voucher>
+    public interface IProductSizeRepository : IGenericRepository<ProductSize>
     {
-        Task<Voucher> GetByCode(string code);
-
     }
 }
