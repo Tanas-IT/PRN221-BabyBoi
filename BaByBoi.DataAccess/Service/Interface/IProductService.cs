@@ -15,7 +15,7 @@ namespace BaByBoi.DataAccess.Service.Interface
         public Task<List<Product>> GetAllProductsPagingAsync(int pageIndex, int pageSize);
         public Task<List<Category>> GetAllCagetory();
         public Task<List<Size>> GetAllSize();
-        public Task<bool> AddImagesAndSize(Product product, List<ProductImage> productImagesLink, List<ProductSize> productSize);
+        public Task<bool> AddImagesAndSize(Product product, List<ProductImage> productImagesLink, List<ProductSize> productSize, List<ProductSize> oldProductSize);
         public Task<Product> AddProduct(Product product);
         public Task<Product> UpdateProduct(Product product);
         public Task<Product> GetProductByProductId(int productId);
@@ -32,6 +32,8 @@ namespace BaByBoi.DataAccess.Service.Interface
 
         Task<ProductSize> GetProductsSizesBySpecificSizeAsync(int productId, int sizeId);
         Task<List<BarChartModel>> GetProductsForStatistic();
+        Task<List<ProductSize>> GetProductSizeByProductId(int ProductId);
+
 
 
     }

@@ -104,17 +104,34 @@ namespace BaByBoi.Domain.Repositories
             }
             return null;
         }
-        public async Task<bool> AddImagesAndSize(Product product, List<ProductImage> productImagesLink, List<ProductSize> productSize)
+
+      
+        public async Task<bool> AddImagesAndSize(Product product, List<ProductImage> productImagesLink, List<ProductSize> productSize, List<ProductSize> oldProductSize)
         {
             if(product != null)
             {
-                foreach(var productImage in productImagesLink)
+                foreach (var productImage in productImagesLink)
                 {
                     _context.ProductImages.Add(productImage);
                 }
+
                 foreach(var size in productSize)
                 {
-                    _context.ProductSizes.Add(size);
+                    bool flag = false;
+                    foreach(var oldSize in oldProductSize)
+                    {
+                        if(size.ProductId == oldSize.ProductId && size.SizeId == oldSize.SizeId)
+                        {
+                            flag = true;
+                            break;
+                        }
+
+                    }
+                    if(!flag)
+                    {
+                        _context.ProductSizes.Add(size);
+
+                    }
                 }
                 var result = await _context.SaveChangesAsync();
                 return true;
@@ -145,15 +162,15 @@ namespace BaByBoi.Domain.Repositories
         public async Task<bool> RemoveImagesAndSize(int productId)
         {
             var listProdutImages = await _context.ProductImages.Where(x => x.ProductId == productId).ToListAsync();
-            var listProductSizes = await _context.ProductSizes.Where(x => x.ProductId == productId).ToListAsync();
+            //var listProductSizes = await _context.ProductSizes.Where(x => x.ProductId == productId).ToListAsync();
             if(listProdutImages.Any())
             {
                 _context.ProductImages.RemoveRange(listProdutImages);
             }
-            if(listProductSizes.Any()) 
-            { 
-                _context.ProductSizes.RemoveRange( listProductSizes); 
-            }
+            //if(listProductSizes.Any()) 
+            //{ 
+            //    _context.ProductSizes.RemoveRange( listProductSizes); 
+            //}
             var result = await _context.SaveChangesAsync();
             return true;
         }
@@ -180,15 +197,10 @@ namespace BaByBoi.Domain.Repositories
 
         public async Task<bool> DeleteProduct(int productId)
         {
-            var deleteProductInOrderDetails = _context.OrderDetails.Where(x => x.ProductId == productId).ToList();
-            if(deleteProductInOrderDetails.Count > 0)
-            {
-                _context.OrderDetails.RemoveRange(deleteProductInOrderDetails);
-            }
             var deleteProduct = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
             if(deleteProduct != null)
             {
-                _context.Products.Remove(deleteProduct);
+                deleteProduct.Status = 0;
                 var result = await _context.SaveChangesAsync();
                 return result > 0;
             }
@@ -278,6 +290,12 @@ namespace BaByBoi.Domain.Repositories
                                }).ToList();
             return listProduct;
         }
+
+        public async Task<List<ProductSize>> GetProductSizeByProductId(int ProductId)
+        {
+            return await _context.ProductSizes.Where(x => x.ProductId == ProductId).ToListAsync();
+        }
+
 
     }
 }
