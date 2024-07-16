@@ -12,6 +12,7 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Net.Http;
 using System;
 using BaByBoi_Project.Extensions;
+using Microsoft.CodeAnalysis;
 
 namespace BaByBoi_Project.Pages.Admin
 {
@@ -48,7 +49,7 @@ namespace BaByBoi_Project.Pages.Admin
         public Product UpdateProduct { get; set; }
 
         [BindProperty]
-        public List<Category> listCagetory { get; set; }
+        public List<BaByBoi.Domain.Models.Category> listCagetory { get; set; }
         [BindProperty]
         public List<Size> listSize { get; set; }
         [BindProperty]
@@ -218,7 +219,8 @@ namespace BaByBoi_Project.Pages.Admin
                 };
                 ListDownloadURL.Add(productImage);
             }
-            var checkAdd = await _productService.AddImagesAndSize(newProduct, ListDownloadURL, ListProductSize);
+            var oldProductSize = await _productService.GetProductSizeByProductId(newProduct.ProductId);
+            var checkAdd = await _productService.AddImagesAndSize(newProduct, ListDownloadURL, ListProductSize, oldProductSize);
             if (checkAdd)
             {
                 ViewData["Message"] = "Add Product Success";
@@ -423,7 +425,8 @@ namespace BaByBoi_Project.Pages.Admin
             var checkRemoveOldImagesAndSize = await _productService.RemoveImagesAndSize(oldProduct.ProductId);
             if (checkRemoveOldImagesAndSize)
             {
-                var checkAdd = await _productService.AddImagesAndSize(oldProduct, ListDownloadURL, ListProductSize);
+                var getOldProductSize = await _productService.GetProductSizeByProductId(oldProduct.ProductId);
+                var checkAdd = await _productService.AddImagesAndSize(oldProduct, ListDownloadURL, ListProductSize, getOldProductSize);
                 if(checkAdd)
                 {
                     ViewData["Message"] = "Update Product Success";

@@ -36,14 +36,18 @@ namespace BaByBoi.DataAccess.Service
         {
             return await _unitOfWork.ProductRepository.GetAllCagetory();
         }
+        public async Task<List<ProductSize>> GetProductSizeByProductId(int ProductId)
+        {
+            return await _unitOfWork.ProductRepository.GetProductSizeByProductId(ProductId);
+        }
 
         public async Task<List<Size>> GetAllSize()
         {
             return await _unitOfWork.ProductRepository.GetAllSize();
         }
-        public async Task<bool> AddImagesAndSize(Product product, List<ProductImage> productImagesLink, List<ProductSize> productSize)
+        public async Task<bool> AddImagesAndSize(Product product, List<ProductImage> productImagesLink, List<ProductSize> productSize, List<ProductSize> oldProductSize)
         {
-            return await _unitOfWork.ProductRepository.AddImagesAndSize(product, productImagesLink, productSize);
+            return await _unitOfWork.ProductRepository.AddImagesAndSize(product, productImagesLink, productSize, oldProductSize);
         }
         public async Task<Product> AddProduct(Product product)
         {

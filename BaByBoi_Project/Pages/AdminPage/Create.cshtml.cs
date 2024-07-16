@@ -36,6 +36,13 @@ namespace BaByBoi_Project.Pages.AdminPage
                 ViewData["RoleId"] = new SelectList(await _userService.GetAllRoles(), "RoleId", "RoleName");
                 return Page();
             }
+            // Check if email already exists
+            var existingUser = await _userService.GetUserByEmail(User.Email);
+            if (existingUser != null)
+            {
+                ModelState.AddModelError("User.Email", "Email đã được đăng kí.");
+                return Page();
+            }
             User.CreateDate = DateTime.Now;
             User.UpdateDate = DateTime.Now;
             User.Status = 1;

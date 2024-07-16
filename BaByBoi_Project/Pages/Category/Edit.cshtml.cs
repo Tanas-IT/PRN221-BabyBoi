@@ -7,40 +7,39 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BaByBoi.Domain.Models;
-using BaByBoi.DataAccess.Service.Interface;
 
-namespace BaByBoi_Project.Pages.AdminPage
+namespace BaByBoi_Project.Pages.Category
 {
     public class EditModel : PageModel
     {
-        private readonly IUserService _userService;
+        private readonly BaByBoiContext _context;
 
-        public EditModel(IUserService userService)
+        public EditModel(BaByBoiContext context)
         {
-            _userService = userService;
+            _context = context;
         }
 
-
         [BindProperty]
-        public User User { get; set; } = default!;
+        public BaByBoi.Domain.Models.Category Category { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var user = await _userService.GetByIdAsync(id.Value);
-            if (user == null)
+            var category = await _context.Categories.FirstOrDefaultAsync(m => m.CategoryId == id);
+            if (category == null)
             {
                 return NotFound();
             }
-            User = user;
-                ViewData["RoleId"] = new SelectList(await _userService.GetAllRoles(), "RoleId", "RoleName");
+            Category = category;
             return Page();
         }
 
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -48,14 +47,15 @@ namespace BaByBoi_Project.Pages.AdminPage
                 return Page();
             }
 
+            _context.Attach(Category).State = EntityState.Modified;
+
             try
             {
-                User.UpdateDate = DateTime.Now;
-                await _userService.UpdateAsync(User);
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await _userService.UserExistsAsync(User.UserId))
+                if (!CategoryExists(Category.CategoryId))
                 {
                     return NotFound();
                 }
@@ -65,7 +65,12 @@ namespace BaByBoi_Project.Pages.AdminPage
                 }
             }
 
-            return RedirectToPage("/AdminPage/Index");
+            return RedirectToPage("./Index");
+        }
+
+        private bool CategoryExists(int id)
+        {
+            return (_context.Categories?.Any(e => e.CategoryId == id)).GetValueOrDefault();
         }
     }
 }
