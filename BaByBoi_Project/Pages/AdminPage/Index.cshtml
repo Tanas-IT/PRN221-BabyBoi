@@ -104,20 +104,6 @@
             }
         </tbody>
     </table>
-
-    <div>
-        Page @(Model.User.PageIndex) of @(Model.User.TotalPages)
-    </div>
-    <div class="btn-group" role="group" aria-label="Pagination">
-    @if (Model.User.HasPreviousPage)
-    {
-    <a class="btn btn-default" asp-page="./Index" asp-route-pageIndex="@(Model.User.PageIndex - 1)" asp-route-SearchValue="@Model.SearchValue">Previous</a>
-    }
-    @if (Model.User.HasNextPage)
-    {
-    <a class="btn btn-default" asp-page="./Index" asp-route-pageIndex="@(Model.User.PageIndex + 1)" asp-route-SearchValue="@Model.SearchValue">Next</a>
-    }
-    </div> *@
     <nav aria-label="..." style="display: flex; justify-content: center">
         <ul class="pagination">
             @if (Model.User.PageIndex > 1)
