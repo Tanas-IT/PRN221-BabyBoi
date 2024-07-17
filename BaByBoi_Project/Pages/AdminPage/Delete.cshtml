@@ -11,40 +11,40 @@
     <div>
         <dl class="row">
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.User.Password)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.User.Password)
-            </dd>
-            <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.User.Email)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.User.Email)
+                @(Model.User.Email ?? "N/A")
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.User.Password)
+            </dt>
+            <dd class="col-sm-10">
+                @(Model.User.Password ?? "N/A")
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.User.Phone)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.User.Phone)
+                @(Model.User.Phone ?? "N/A")
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.User.FullName)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.User.FullName)
+                @(Model.User.FullName ?? "N/A")
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.User.CreateDate)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.User.CreateDate)
+                @(Model.User.CreateDate != null ? Model.User.CreateDate.Value.ToString("yyyy-MM-dd") : "N/A")
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.User.UpdateDate)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.User.UpdateDate)
+                @(Model.User.UpdateDate != null ? Model.User.UpdateDate.Value.ToString("yyyy-MM-dd") : "N/A")
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.User.Status)
@@ -56,13 +56,13 @@
                 @Html.DisplayNameFor(model => model.User.BirthDate)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.User.BirthDate)
+                @(Model.User.BirthDate != null ? Model.User.BirthDate.Value.ToString("yyyy-MM-dd") : "N/A")
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.User.Gender)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.User.Gender)
+                @(Model.User.Gender == 1 ? "Nam" : (Model.User.Gender == 2 ? "Nữ" : "N/A"))
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.User.Role)
@@ -74,10 +74,10 @@
 
         <form method="post">
             <input type="hidden" asp-for="User.UserId" />
-            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirmDelete()"/> |
-            <button id="btnBack" class="btn btn-secondary">Back</button>
+            <input type="submit" value="Xóa người dùng" class="btn btn-danger" onclick="return confirmDelete()" />
         </form>
     </div>
+    <button id="btnBack" class="btn btn-secondary">Quay lại</button>
     <script>
         document.getElementById('btnBack').addEventListener('click', function () {
             window.location.href = '/AdminPage/Index'; // Điều chỉnh URL theo đúng routing của bạn

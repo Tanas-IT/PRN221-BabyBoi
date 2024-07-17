@@ -5,6 +5,7 @@
     Layout = "UsersLayout";
     string message = ViewData["FeedbackMessage"] as string;
     string errorMessage = ViewData["FeedbackErrorMessage"] as string;
+    Layout = "UsersLayout";
 }
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -73,10 +74,11 @@
                     <div class="col-sm-6">
                         <div>
                             <span class="text-sm text-grey-m2 align-middle">To:</span>
-                            <span class="text-600 text-110 text-blue align-middle">@Model.Order.User.FullName</span>
+                            <span class="text-600 text-110 text-blue align-middle">@Model.Order.User!.FullName</span>
                         </div>
                         <div class="text-grey-m2">
                             <div class="my-1">
+                                Address: @Model.Order.Address
                                 Address: @Model.Order.Address
                             </div>
                             <div class="my-1"><i class="fa fa-envelope fa-flip-horizontal text-secondary"></i> <b class="text-600">Email: @Model.Order.User.Email</b></div>
@@ -140,10 +142,13 @@
 
                             <tbody class="text-95 text-secondary-d3">
                                 @foreach (var orderDetail in Model.ListOrderDetail)
+                                @foreach (var orderDetail in Model.ListOrderDetail)
                                 {
                                     <tr>
                                         <td>@orderDetail.ProductId</td>
                                         <td class="image-row">
+                                            @if (orderDetail.Product.ProductImages.Count > 0)
+                                            {
                                             @if (orderDetail.Product.ProductImages.Count > 0)
                                             {
                                                 <div class="product-image">
@@ -162,6 +167,9 @@
                                             }
                                             @if (orderDetail.Product.ProductImages.Count == 0)
                                             {
+                                            }
+                                            @if (orderDetail.Product.ProductImages.Count == 0)
+                                            {
                                                 <div class="product-image">
                                                     <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/product%2Fdefault-product-image.png?alt=media&token=76492637-3b09-4a43-8d7e-6426fe976faf"
                                                          alt="Default Product Image"
@@ -175,6 +183,7 @@
                                                         <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/product%2Fdefault-product-image.png?alt=media&token=76492637-3b09-4a43-8d7e-6426fe976faf" alt="Default Product Image">
                                                     </div>
                                                 </div>
+                                            }
                                             }
                                         </td>
                                         <td>@orderDetail.Product.ProductName</td>
@@ -200,15 +209,19 @@
                                 </div>
                             </div>
 
-                            <div class="row my-2">
-                                <div class="col-7 text-right">
-                                    Khuyến mãi (@Model.Order.Voucher.Percent %)
-                                </div>
-                                <div class="col-5">
-                                    <span class="text-110 text-secondary-d1">$ @((Model.Order.TotalPrice * Model.Order.Voucher.Percent) / 100)</span>
-                                </div>
-                            </div>
-
+                            @{
+                                if (Model.Order.Voucher != null)
+                                {
+                                    <div class="row my-2">
+                                        <div class="col-7 text-right">
+                                            <p> Khuyến mãi( @Model.Order.Voucher!.Percent %)</p>
+                                        </div>
+                                        <div class="col-5">
+                                            <span class="text-110 text-secondary-d1">$ @((Model.Order.TotalPrice * Model.Order.Voucher.Percent) / 100)</span>
+                                        </div>
+                                    </div>
+                                }
+                            }
                             <div class="row my-2 align-items-center bgc-primary-l3 p-2">
                                 <div class="col-7 text-right">
                                     Tổng tiền
@@ -223,12 +236,16 @@
                     <hr />
 
                     @if (Model.Order.Feedback != null || Model.Order.Rating > 0)
+                    @if (Model.Order.Feedback != null || Model.Order.Rating > 0)
                     {
                         <div>
                             <h2 style="color: red; text-align: center">Phản hồi</h2>
                             <h4>
                                 Rating: @Model.Order.Rating
+                            <h4>
+                                Rating: @Model.Order.Rating
                                 <span style="color:#FFD600">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                 </span>
                             </h4>
@@ -236,6 +253,7 @@
                         </div>
                     }
                     else
+                    {
                     {
                         <div>
                             <span class="text-secondary-d1 text-105">Cảm ơn bạn đã mua hàng ở BabyBoi</span>
@@ -271,7 +289,7 @@
                                                     <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
                                                     <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
                                                 </div>
-                                                <input type="hidden" name="OrderId" value="@Model.Order.OrderId" />
+                                                <input type="hidden" name="OrderCode" value="@Model.Order.OrderCode" />
                                                 <textarea style="width: 100%; height: 200px" asp-for="FeedBackContent" placeholder="Điền phản hồi của bạn"></textarea>
                                             </div>
                                             <div class="modal-footer border-0">
@@ -291,6 +309,7 @@
                                 </div>
                             </div>
                         </div>
+                    }
                     }
                 </div>
             </div>

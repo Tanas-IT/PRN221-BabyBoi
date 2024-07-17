@@ -59,7 +59,7 @@
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/assets/css/plugins.min.css" />
     <link rel="stylesheet" href="/assets/css/kaiadmin.min.css" />
-    <link rel="stylesheet" href="/css//upload_image.css" />
+    <link rel="stylesheet" href="/css/upload_image.css" />
 </head>
 <body>
     <style>
@@ -509,14 +509,15 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label for="addProductDescription">Trạng thái</label>
-                                                                <br />
-                                                                <label for="activeProduct">Active</label>
+                                                                <br/>
+                                                                <label for="activeProduct">Khả dụng</label>
                                                                 <input id="activeProduct"
                                                                        type="radio"
                                                                        value="1"
                                                                        style="margin: 15px;"
-                                                                       name="productStatus" />
-                                                                <label for="bannedProduct">Banned</label>
+                                                                           name="productStatus"
+                                                                       />
+                                                                <label for="bannedProduct">Hết hàng</label>
                                                                 <input id="bannedProduct"
                                                                        type="radio"
                                                                        style="margin: 15px;"
@@ -561,7 +562,7 @@
                                                                     </div>
                                                                     <div class="d-flex align-items-center mx-3 my-2">
                                                                         <label for="price-@size.SizeId">Giá</label>
-                                                                        <input style="margin-left: 50px;" id="price-@size.SizeId" type="number" name="productPrice" />
+                                                                        <input placeholder="VND" min="10000" style="margin-left: 50px;" id="price-@size.SizeId" type="number" name="productPrice" />
                                                                     </div>
                                                                     }
                                                             </div>
@@ -597,16 +598,16 @@
                                            class="display table table-striped table-hover">
                                         <thead>
                                             <tr>
-                                                <th>ProductID</th>
-                                                <th>ProductCode</th>
-                                                <th>ProductName</th>
-                                                <th>CreateDate</th>
-                                                <th>Image</th>
-                                                <th>Description</th>
-                                                <th>Status</th>
-                                                <th>Category</th>
-                                                <th>Discount</th>
-                                                <th style="width: 10%">Action</th>
+                                                <th>STT</th>
+                                                <th>Mã sản phẩm</th>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Ngày tạo</th>
+                                                <th>Hình ảnh</th>
+                                                <th>Mô tả</th>
+                                                <th>Trạng thái</th>
+                                                <th>Danh mục</th>
+                                                <th>Khuyến mãi</th>
+                                                <th style="width: 10%">Sửa & xóa</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -662,10 +663,9 @@
                                                                 background-color: #31ce36;
                                                                 font-weight: bold;
                                                                 text-align: center;
-                                                                color: white;">Active</span>
-                                                        </td>
-                                                        }
-                                                        else
+                                                                color: white;">Khả dụng</span>
+                                                            </td>
+                                                        } else
                                                         {
                                                         <td>
                                                             <span style="display: block;
@@ -675,13 +675,14 @@
                                                                 background-color: red;
                                                                 font-weight: bold;
                                                                 text-align: center;
-                                                                color: white;">Banned</span>
+                                                                color: white;">Hết hàng</span>
                                                         </td>
                                                         }
                                                     <td>@product.Category.CategoryName</td>
                                                     <td>@product.Discount</td>
                                                     <td>
                                                         <div class="form-button-action">
+                                                   
                                                             <button type="button"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#updateModal_@product.ProductId"
@@ -749,14 +750,14 @@
                                                                                         <div>
                                                                                             <label for="addProductDescription">Trạng thái</label>
                                                                                             <br />
-                                                                                            <label for="activeProduct">Active</label>
+                                                                                            <label for="activeProduct">Khả dụng</label>
                                                                                             <input id="activeProduct"
                                                                                                    type="radio"
                                                                                                    value="1"
                                                                                                    checked="@(product.Status == 1 ? true : false)"
                                                                                                    style="margin: 15px;"
                                                                                                    name="productStatus" />
-                                                                                            <label for="bannedProduct">Banned</label>
+                                                                                            <label for="bannedProduct">Hết hàng</label>
                                                                                             <input id="bannedProduct"
                                                                                                    type="radio"
                                                                                                    style="margin: 15px;"
@@ -807,36 +808,36 @@
                                                                                                                        name="SelectedUpdateSize" />
 
 
-                                                                                                            </div>
-                                                                                                            <div class="d-flex align-items-center mx-3 my-2">
-                                                                                                                <label for="quantity-@productSize.SizeId">Số lượng</label>
-                                                                                                                <input style="margin-left: 10px;" value="@productSize.Quantity" id="quantity-@productSize.SizeId" type="number" name="productUpdateAmount" />
-                                                                                                            </div>
-                                                                                                            <div class="d-flex align-items-center mx-3 my-2">
-                                                                                                                <label for="price-@productSize.SizeId">Giá</label>
-                                                                                                                <input style="margin-left: 50px;" value="@productSize.Price" id="price-@productSize.SizeId" type="number" name="productUpdatePrice" />
-                                                                                                            </div>
+                                                                                                                    </div>
+                                                                                                                    <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                                        <label for="quantity-@productSize.SizeId">Số lượng</label>
+                                                                                                                        <input style="margin-left: 10px;" value="@productSize.Quantity" id="quantity-@productSize.SizeId" type="number" name="productUpdateAmount" />
+                                                                                                                    </div>
+                                                                                                                    <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                                        <label for="price-@productSize.SizeId">Giá</label>
+                                                                                                                        <input min="10000" placeholder="VND" style="margin-left: 50px;" value="@productSize.Price" id="price-@productSize.SizeId" type="number" name="productUpdatePrice" />
+                                                                                                                </div>
                                                                                                                 flag = false;
                                                                                                             }
                                                                                                         }
                                                                                                         @if (flag)
                                                                                                         {
-                                                                                                        <div class="d-flex align-items-center mx-3">
-                                                                                                            <label for="@size.SizeId">@size.SizeName</label>
-                                                                                                            <input id="@size.SizeId"
-                                                                                                                   type="checkbox"
-                                                                                                                   value="@size.SizeId"
-                                                                                                                   style="margin: 15px;"
-                                                                                                                   name="SelectedUpdateSize" />
-                                                                                                        </div>
-                                                                                                        <div class="d-flex align-items-center mx-3 my-2">
-                                                                                                            <label for="quantity-@size.SizeId">Số lượng</label>
-                                                                                                            <input style="margin-left: 10px;" id="quantity-@size.SizeId" type="number" name="productUpdateAmount" />
-                                                                                                        </div>
-                                                                                                        <div class="d-flex align-items-center mx-3 my-2">
-                                                                                                            <label for="price-@size.SizeId">Giá</label>
-                                                                                                            <input style="margin-left: 50px;" id="price-@size.SizeId" type="number" name="productUpdatePrice" />
-                                                                                                        </div>
+                                                                                                            <div class="d-flex align-items-center mx-3">
+                                                                                                                <label for="@size.SizeId">@size.SizeName</label>
+                                                                                                                <input id="@size.SizeId"
+                                                                                                                       type="checkbox"
+                                                                                                                       value="@size.SizeId"
+                                                                                                                       style="margin: 15px;"
+                                                                                                                       name="SelectedUpdateSize" />
+                                                                                                            </div>
+                                                                                                            <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                                <label for="quantity-@size.SizeId">Số lượng</label>
+                                                                                                                <input style="margin-left: 10px;" id="quantity-@size.SizeId" type="number" name="productUpdateAmount" />
+                                                                                                            </div>
+                                                                                                            <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                                <label for="price-@size.SizeId">Giá</label>
+                                                                                                                <input placeholder="VND" style="margin-left: 50px;" id="price-@size.SizeId" min="10000" type="number" name="productUpdatePrice" />
+                                                                                                            </div>
                                                                                                         }
                                                                                                     }
                                                                                                 }
@@ -858,7 +859,7 @@
                                                                                                     </div>
                                                                                                     <div class="d-flex align-items-center mx-3 my-2">
                                                                                                         <label for="price-@size.SizeId">Giá</label>
-                                                                                                        <input style="margin-left: 50px;" id="price-@size.SizeId" type="number" name="productUpdatePrice" />
+                                                                                                        <input placeholder="VND" min="10000" style="margin-left: 50px;" id="price-@size.SizeId" type="number" name="productUpdatePrice" />
                                                                                                     </div>
                                                                                                     }
                                                                                                 }
@@ -910,6 +911,7 @@
                                                                     </form>
                                                                 </div>
                                                             </div>
+                                                            @if(product.Status == 1) {
                                                             <button type="button"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#removeModal_@product.ProductId"
@@ -958,6 +960,7 @@
                                                                     </form>
                                                                 </div>
                                                             </div>
+                                                            }
                                                         </div>
                                                     </td>
                                                 </tr>
