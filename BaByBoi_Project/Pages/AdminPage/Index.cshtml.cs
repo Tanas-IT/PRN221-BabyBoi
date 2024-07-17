@@ -3,7 +3,6 @@ using BaByBoi.Domain.Models;
 using BaByBoi.Domain.PaginModel;
 using BaByBoi.DataAccess.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
-using System.Drawing.Printing;
 
 namespace BaByBoi_Project.Pages.AdminPage
 {
