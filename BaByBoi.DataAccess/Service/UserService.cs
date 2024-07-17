@@ -73,9 +73,11 @@ namespace BaByBoi.DataAccess.Service
                 return false;
             }
 
-            // Update user status to '2' or perform deletion logic
-            user.Status = (int)StatusExist.Deleted; // Or set to 'Inactive', depending on your business logic
-            await _unitOfWork.UserRepository.UpdateAsync(user);
+            //// Update user status to '2' or perform deletion logic
+            //user.Status = (int)StatusExist.Deleted; // Or set to 'Inactive', depending on your business logic
+            //await _unitOfWork.UserRepository.UpdateAsync(user);
+
+            await _unitOfWork.UserRepository.Remove(user);
             await _unitOfWork.SaveChangesAsync(); // Save changes in the Unit of Work
 
             return true;
