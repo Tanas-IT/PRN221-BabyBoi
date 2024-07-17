@@ -66,7 +66,6 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
                 Product = product,
                 SizeId = productSize.SizeId,
                 ProductSize = productSize
-                
             };
 
             if (OrderList.Where(x => x.ProductId == orderDetail.ProductId && x.ProductSize.SizeId == orderDetail.SizeId).FirstOrDefault() == null)

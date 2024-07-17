@@ -132,6 +132,7 @@ hr {
 .align-bottom {
     vertical-align: bottom !important;
 }
+
 .rate {
     border-bottom-right-radius: 12px;
     border-bottom-left-radius: 12px
@@ -143,36 +144,38 @@ hr {
     justify-content: center
 }
 
-.rating > input {
+    .rating > input {
         display: none
- }
-.rating > label {
+    }
+
+    .rating > label {
         position: relative;
         width: 1em;
         font-size: 30px;
         font-weight: 300;
         color: #FFD600;
         cursor: pointer
-}
+    }
 
-.rating > label::before {
-    content: "\2605";
-    position: absolute;
-    opacity: 0
-}
+        .rating > label::before {
+            content: "\2605";
+            position: absolute;
+            opacity: 0
+        }
 
-.rating > label:hover:before,
-.rating > label:hover ~ label:before {
+        .rating > label:hover:before,
+        .rating > label:hover ~ label:before {
             opacity: 1 !important
-}
+        }
 
-.rating > input:checked ~ label:before {
+    .rating > input:checked ~ label:before {
         opacity: 1
-}
+    }
 
-.rating:hover > input:checked ~ label:before {
+    .rating:hover > input:checked ~ label:before {
         opacity: 0.4
-}
+    }
+
 .product-image {
     width: 75px;
     height: 75px;
@@ -244,3 +247,7 @@ hr {
             height: 550px;
             object-fit: contain;
         }
+
+element.style {
+    margin-top: 200px;
+}

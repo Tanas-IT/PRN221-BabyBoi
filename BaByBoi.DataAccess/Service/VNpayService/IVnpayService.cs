@@ -10,7 +10,7 @@ namespace BaByBoi.DataAccess.Service.VNpayService
 {
     public interface IVnpayService
     {
-        string CreatePaymentUrl(HttpContext context, VNPaymentRequestModel model, int paymentID, double totalPrice);
+        string CreatePaymentUrl(HttpContext context, VNPaymentRequestModel model, int paymentID, double totalPrice, int voucherId);
         VnPaymentResponseModel PaymentExecute(IQueryCollection collections);
     }
 }

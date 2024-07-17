@@ -46,28 +46,48 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
             getShoppingCartFromSession();
             LoadMessagesFromTempData();
         }
-        public async void OnPostDeleteInCart(int ProductId)
+        public IActionResult OnPostDeleteInCart(int ProductId, int SizeId)
         {
             getShoppingCartFromSession();
-            var product = OrderList.FirstOrDefault(x => x.ProductId == ProductId);
+            var product = OrderList.FirstOrDefault(x => x.ProductId == ProductId && x.SizeId == SizeId);
             if (product != null)
             {
                 OrderList.Remove(product);
             }
+            SaveBookingListToSession();
             SetSuccessMessage("Room deleted successfully.");
+            return this.Page();
         }
         private void SaveBookingListToSession()
         {
             HttpContext.Session.SetObjectAsJson("OrderList", OrderList);
         }
-        public IActionResult OnPostUpdateInCart(int ProductId, string Quantity, int sizeId)
+        public IActionResult OnPostUpdateInCart(int ProductId, string Quantity, int SizeId)
         {
             getShoppingCartFromSession();
-            var product = OrderList.FirstOrDefault(x => x.ProductId == ProductId && x.SizeId == sizeId);
+            var product = OrderList.FirstOrDefault(x => x.ProductId == ProductId && x.SizeId == SizeId);
             if (product != null)
             {
                 //product.Price = Quantity * product.Price;
                 product.Quantity = product.ProductSize.Quantity > int.Parse(Quantity) ? int.Parse(Quantity) : product.ProductSize.Quantity;
+                SaveBookingListToSession();
+                SetSuccessMessage("Cập nhật giỏ hàng thành công");
+            }
+            else
+            {
+                SetErrorMessage("Không tìm thấy sản phẩm này.");
+            }
+            return this.Page();
+        }
+
+        public IActionResult UpdateTextQuantity(int ProductId, string quantities, int SizeId)
+        {
+            getShoppingCartFromSession();
+            var product = OrderList.FirstOrDefault(x => x.ProductId == ProductId && x.SizeId == SizeId);
+            if (product != null)
+            {
+                //product.Price = Quantity * product.Price;
+                product.Quantity = product.ProductSize.Quantity > int.Parse(quantities) ? int.Parse(quantities) : product.ProductSize.Quantity;
                 SaveBookingListToSession();
                 SetSuccessMessage("Cập nhật giỏ hàng thành công");
             }

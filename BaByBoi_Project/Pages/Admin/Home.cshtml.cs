@@ -35,6 +35,7 @@ namespace BaByBoi_Project.Pages.Admin
         public int NumberOfOrder { get; set; }
         [BindProperty]
         public User CurrentUser { get; set; }
+
         public async Task OnGet()
         {
             LineChartModels = await _orderService.GetAllOrderByMonth();

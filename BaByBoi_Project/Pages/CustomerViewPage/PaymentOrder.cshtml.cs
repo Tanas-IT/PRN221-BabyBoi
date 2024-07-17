@@ -15,22 +15,27 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
         private readonly IOrderService _orderService;
         private readonly IPaymentService _paymentService;
         private readonly IVnpayService _vnpayService;
+        private readonly IVoucherService _voucherService;
 
-        public PaymentOrderModel(IProductService productService, IOrderService orderService, IPaymentService paymentService, IVnpayService vnpayService)
+        public PaymentOrderModel(IProductService productService, IOrderService orderService, IPaymentService paymentService, IVnpayService vnpayService, IVoucherService voucherService)
         {
             _productService = productService;
             _orderService = orderService;
             _paymentService = paymentService;
             _vnpayService = vnpayService;
+            _voucherService = voucherService;
         }
-
         public List<Payment> paymentMethod { get; set; }
         public List<OrderDetail> orderDetailsPurchase { get; set; }
-        public Order order { get; set; } = new Order{
-            OrderCode = Guid.NewGuid().ToString()          
+        public Order order { get; set; } = new Order
+        {
+            OrderCode = Guid.NewGuid().ToString()
         };
-        public User Customer { get; set; }
 
+        public double totalPay { get; set; }
+
+        public User Customer { get; set; }
+        public Voucher voucher { get; set; }
         private void getShoppingCartFromSession()
         {
             orderDetailsPurchase = HttpContext.Session.GetObjectFromJson<List<OrderDetail>>("ListPurchase") ?? new List<OrderDetail>();
@@ -53,6 +58,7 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
         {
             Customer = HttpContext.Session.GetObjectFromJson<User>("Customer");
         }
+
         private void LoadMessagesFromTempData()
         {
             if (TempData.ContainsKey("SuccessMessage"))
@@ -64,18 +70,39 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
                 ViewData["ErrorMessage"] = errorMessage;
             }
         }
+
         public async Task OnGet()
         {
             LoadMessagesFromTempData();
             getShoppingCartFromSession();
             getCustomerFromSession();
+            foreach (var item in orderDetailsPurchase)
+            {
+                totalPay += (double)(Math.Ceiling((double)(item.ProductSize.Price - (item.ProductSize.Price * item.Product.Discount) / 100)!) * item.Quantity)!;
+            }
             await getPaymnetMethod();
+
+            // Lấy mã voucher từ session
+            var appliedVoucherCode = HttpContext.Session.GetString("AppliedVoucher");
+            if (!string.IsNullOrEmpty(appliedVoucherCode))
+            {
+                voucher = await _voucherService.getVoucherByCode(appliedVoucherCode);
+                if (voucher != null && DateTime.Now >= voucher.StartDate && DateTime.Now <= voucher.EndDate && voucher.Status == (int)StatusExist.Exist)
+                {
+                    var discount = totalPay * voucher.Percent!.Value/100;
+                    if (discount > voucher.TriggerValue)
+                    {
+                        discount = voucher.TriggerValue.Value;
+                    }
+                    totalPay = totalPay - discount;
+                }
+            }
         }
 
-        public async Task<IActionResult> OnPostVnpayAction(int paymentID, double totalPrice)
+        public async Task<IActionResult> OnPostVnpayAction(int paymentId, double totalPrice, int voucherId)
         {
             getShoppingCartFromSession();
-            var paymentMethod = await _paymentService.getPayment(paymentID);
+            var paymentMethod = await _paymentService.getPayment(paymentId);
             if (paymentMethod.PaymentName!.ToLower().Equals(PayMethod.VNPay.ToLower()))
             {
                 var vnpayModel = new VNPaymentRequestModel
@@ -85,12 +112,43 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
                     Descriptuon = $"Thanh toán đơn hàng tại BabiBoi Store lúc {DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}",
                     OrderCode = order.OrderCode!,
                 };
-                return Redirect(_vnpayService.CreatePaymentUrl(HttpContext, vnpayModel,paymentID, totalPrice));
+                return Redirect(_vnpayService.CreatePaymentUrl(HttpContext, vnpayModel, paymentId, totalPrice,voucherId));
             }
-            return RedirectToPage(new { handler = "PlaceOrder", paymentID, totalPrice, orderCode = order.OrderCode });
+            return RedirectToPage(new { handler = "PlaceOrder", paymentId, totalPrice, orderCode = order.OrderCode , voucherId = voucherId});
         }
 
-        public async Task<IActionResult> OnGetPlaceOrder(int paymentID, double totalPrice, string orderCode)
+        public async Task<IActionResult> OnPostApplyVoucher(string voucherCode)
+        {
+            LoadMessagesFromTempData();
+            getShoppingCartFromSession();
+            getCustomerFromSession();
+            await getPaymnetMethod();
+            voucher = await _voucherService.getVoucherByCode(voucherCode);
+            foreach (var item in orderDetailsPurchase)
+            {
+                totalPay += (double)(Math.Ceiling((double)(item.ProductSize.Price - (item.ProductSize.Price * item.Product.Discount) / 100)!) * item.Quantity)!;
+            }
+
+            if (voucher == null || DateTime.Now < voucher.StartDate || DateTime.Now > voucher.EndDate || voucher.Status != (int)StatusExist.Exist)
+            {
+                ViewData["ErrorMessage"] = "Voucher đã hết hạn";
+            }
+            else
+            {
+                var discount = totalPay * (voucher.Percent!.Value)/100;
+                if (discount > voucher.TriggerValue)
+                {
+                    discount = voucher.TriggerValue.Value;
+                }
+                totalPay = totalPay - discount;
+
+                // Lưu voucher vào session
+                HttpContext.Session.SetString("AppliedVoucher", voucherCode);
+            }
+            return this.Page();
+        }
+
+        public async Task<IActionResult> OnGetPlaceOrder(int paymentID, double totalPrice, string orderCode, int voucherId)
         {
             getShoppingCartFromSession();
             if (orderDetailsPurchase == null || orderDetailsPurchase.Count() == 0)
@@ -99,34 +157,20 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
 
             }
             getCustomerFromSession();
-            if (Customer != null)
+            if (Customer == null)
             {
-                return RedirectToPage("Login");
+                return RedirectToPage("/Guest/LoginPage/Index");
             }
 
             var payResponse = _vnpayService.PaymentExecute(Request.Query);
-
-            //if (payResponse == null || payResponse.VnPayResponseCode != "00")
-            //{
-            //    TempData["ErrorMessage"] = $"Lỗi thanh toán VN Pay: {payResponse!.VnPayResponseCode}";
-            //    return RedirectToPage("ShoppingCart");
-            //}
-            //if (HttpContext.Request.Query.ContainsKey("paymentID"))
-            //{
-            //    paymentID = int.Parse(HttpContext.Request.Query["paymentID"]!);
-            //}
-            //if (HttpContext.Request.Query.ContainsKey("totalPrice"))
-            //{
-            //    totalPrice = double.Parse(HttpContext.Request.Query["totalPrice"]!);
-            //}
 
             order.OrderCode = orderCode;
             order.PaymentId = paymentID;
             order.TotalProduct = orderDetailsPurchase.Count();
             order.OrderDetails = orderDetailsPurchase;
             order.TotalPrice = totalPrice;
+            order.VoucherId = voucherId;
 
-            
             orderDetailsPurchase.ForEach(od =>
             {
                 od.Order = null!;
@@ -134,12 +178,12 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
                 od.ProductSize = null!;
             });
 
-           
             var result = await _orderService.Insert(order);
+
             if (result != null)
             {
                 TempData["SuccessMessage"] = "Đã đặt hàng thành công";
-                return RedirectToPage("OrderHistory");
+                return RedirectToPage("/HistoryOrder/Detail", new { orderCode = order.OrderCode });
             }
             return this.Page();
         }
