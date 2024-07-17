@@ -15,11 +15,11 @@
                                                     height: 40px;
                                                     border-radius: 10px;
                                                     width: 330px;
-                                                    padding: 10px;" type="search" id="searchInput" asp-for="SearchValue" placeholder="Search" />
-                    <button style="border-radius: 8px; margin-left: 22px;" type="submit" class="btn btn-info">Search</button>
+                                                    padding: 10px;" type="search" id="searchInput" asp-for="SearchValue" placeholder="Tìm kiếm" />
+                    <button style="border-radius: 8px; margin-left: 22px;" type="submit" class="btn btn-info">Tìm kiếm</button>
                 </form>
                 <form method="post" asp-page-handler="ResetAccount">
-                    <button style="border-radius: 8px; margin-left: 22px; color: white" type="submit" class="btn btn-warning">Reset Page</button>
+                    <button style="border-radius: 8px; margin-left: 22px; color: white" type="submit" class="btn btn-warning">Làm mới trang</button>
                 </form>
             </div>
             @* <button class="btn btn-primary btn-round ms-auto"
@@ -96,9 +96,9 @@
                         @(item.Role?.RoleName ?? "N/A")
                     </td>
                     <td>
-                        <a asp-page="./Edit" asp-route-id="@item.UserId">Edit</a> |
-                        <a asp-page="./Details" asp-route-id="@item.UserId">Detail</a> |
-                        <a asp-page="./Delete" asp-route-id="@item.UserId">Delete</a>
+                        <a asp-page="./Edit" asp-route-id="@item.UserId">Chỉnh sửa</a> |
+                        <a asp-page="./Details" asp-route-id="@item.UserId">Chi tiết</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.UserId">Xóa</a>
                     </td>
                 </tr>
             }
