@@ -1,4 +1,5 @@
 ﻿@page
+@using BaByBoi.DataAccess.Service.Interface
 @using BaByBoi.Domain.Models;
 @using BaByBoi_Project.Common.Enum
 @using BaByBoi_Project.Extensions
@@ -8,9 +9,13 @@
 @{
     Layout = "";
     User user = null!;
+    int newOrder = 0;
     if (HttpContextAccessor.HttpContext != null)
     {
         user = HttpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("User");
+        var _orderService = (IOrderService)HttpContextAccessor.HttpContext.RequestServices.GetService(typeof(IOrderService))!;
+
+        newOrder = await _orderService.GetNewOrderCountAsync();
         if (user?.RoleId != (int)UserRole.Admin)
         {
             HttpContextAccessor.HttpContext.Response.Redirect("/CustomerViewPage/CusViewProduct");
@@ -33,19 +38,19 @@
     <script src="/assets/js/plugin/webfont/webfont.min.js"></script>
     <script>
         WebFont.load({
-          google: { families: ["Public Sans:300,400,500,600,700"] },
-          custom: {
-            families: [
-              "Font Awesome 5 Solid",
-              "Font Awesome 5 Regular",
-              "Font Awesome 5 Brands",
-              "simple-line-icons",
-            ],
-            urls: ["/assets/css/fonts.min.css"],
-          },
-          active: function () {
-            sessionStorage.fonts = true;
-          },
+            google: { families: ["Public Sans:300,400,500,600,700"] },
+            custom: {
+                families: [
+                    "Font Awesome 5 Solid",
+                    "Font Awesome 5 Regular",
+                    "Font Awesome 5 Brands",
+                    "simple-line-icons",
+                ],
+                urls: ["/assets/css/fonts.min.css"],
+            },
+            active: function () {
+                sessionStorage.fonts = true;
+            },
         });
     </script>
 
@@ -53,6 +58,16 @@
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/assets/css/plugins.min.css" />
     <link rel="stylesheet" href="/assets/css/kaiadmin.min.css" />
+    <style>
+        .badge-num {
+            top: 2px !important;
+            background-color: #ffb524;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body>
     <div class="wrapper">
@@ -100,6 +115,20 @@
                             </span>
                             <h4 class="text-section">Danh sách</h4>
                         </li>
+                        <li class="nav-item @(currentPath == "/AdminPage/NewOrder" ? "active" : "")">
+                            <a href="/AdminPage/NewOrder">
+                                <i class="fas fa-shopping-cart position-relative">
+                                    <span class="badge badge-pill badge-num position-absolute translate-middle">@newOrder</span>
+                                </i>
+                                <p class="mb-0 ms-2">Đơn hàng mới</p>
+                            </a>
+                        </li>
+                        <li class="nav-item @(currentPath == "/AdminPage/OrderManagement" ? "active" : "")">
+                            <a href="/AdminPage/OrderManagement">
+                                <i class="fas fa-shopping-cart"></i>
+                                <p class="mb-0 ms-2">Đơn hàng</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="Product">
                                 <i class="fas fa-shopping-bag"></i>
@@ -107,19 +136,19 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a  href="/Category">
+                            <a href="/Category">
                                 <i class="fas fa-folder"></i>
                                 <p>Danh mục</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a  href="/VoucherPage">
+                            <a href="/VoucherPage">
                                 <i class="fas fa-ticket-alt"></i>
                                 <p>Khuyến mãi</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a  href="/AdminPage">
+                            <a href="/AdminPage">
                                 <i class="fas fa-users"></i>
                                 <p>Tài khoản</p>
                             </a>
@@ -189,7 +218,9 @@
                                     </li>
                                     <li>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item text-danger" href="/Guest/LoginPage/Index">Logout</a>
+                                        <form method="post" asp-page="/Guest/LoginPage/Index" asp-page-handler="Logout" asp-route-returnUrl="/">
+                                            <button type="submit" class="dropdown-item text-danger">Đăng xuất</button>
+                                        </form>
                                     </li>
                     </div>
                     </ul>
@@ -312,7 +343,7 @@
                                     <div class="card-title">Người dùng mới</div>
                                 </div>
                                 <div class="card-list py-4">
-                                        @foreach(var userComponent in Model.ListAllUser)
+                                        @foreach (var userComponent in Model.ListAllUser)
                                         {
                                         <div class="item-list">
                                             <div class="avatar">
@@ -348,7 +379,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                                @foreach(var order in Model.ListAllOrder)
+                                                @foreach (var order in Model.ListAllOrder)
                                                 {
                                                 <tr>
                                                     <th scope="row">
@@ -360,19 +391,20 @@
                                                     <td class="text-end">@order.OrderDate.Value.ToString("MMM d, yyyy, h.mmtt")</td>
                                                     <td class="text-end">$@order.TotalPrice</td>
                                                     <td class="text-end">
-                                                            @if(order.Status == 1)
+                                                            @if (order.Status == 1)
                                                             {
-                                                                <span class="badge badge-success">Thành công</span>
+                                                            <span class="badge badge-success">Thành công</span>
 
-                                                            } else
+                                                            }
+                                                            else
                                                             {
                                                             <span class="badge badge-danger">Thất bại</span>
 
                                                             }
-                                                        </td>
+                                                    </td>
                                                 </tr>
                                                 }
-                                            </tbody>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -410,7 +442,7 @@
             </div>
         </footer>
     </div>
-    
+
     </div>
     <!--   Core JS Files   -->
     <script src="/assets/js/core/jquery-3.7.1.min.js"></script>
@@ -450,14 +482,14 @@
         var myLineChart = new Chart(lineChart, {
             type: "line",
             data: {
-       
-            labels: [
-                        
-                @foreach (var month in Model.LineChartModels)
-                {
+
+                labels: [
+
+        @foreach (var month in Model.LineChartModels)
+        {
             @Html.Raw("'" + month.Month.Replace("'", "\\'") + "', ")
-                }
-                ],
+        }
+                                                ],
                 datasets: [
                     {
                         label: "Doanh thu",
@@ -472,11 +504,11 @@
                         fill: true,
                         borderWidth: 2,
                         data: [
-                            @foreach (var data in Model.LineChartModels)
-                            {
-                               @(data.TotalRevenue.ToString() + " ,")
-                            }
-                        ],
+        @foreach (var data in Model.LineChartModels)
+        {
+            @(data.TotalRevenue.ToString() + " ,")
+        }
+                                                        ],
                     },
                 ],
             },
@@ -508,22 +540,22 @@
             type: "bar",
             data: {
                 labels: [
-                    @foreach (var data in Model.BarChartModels)
-                    {
-                        @Html.Raw("'" + data.CategoryName.Replace("'", "\\'") + "', ")
-                    }
-                ],
+        @foreach (var data in Model.BarChartModels)
+        {
+            @Html.Raw("'" + data.CategoryName.Replace("'", "\\'") + "', ")
+        }
+                                                ],
                 datasets: [
                     {
                         label: "Product",
                         backgroundColor: "rgb(23, 125, 255)",
                         borderColor: "rgb(23, 125, 255)",
                         data: [
-                            @foreach (var data in Model.BarChartModels)
-                            {
-                                @Html.Raw("'" + data.Amount.ToString().Replace("'", "\\'") + "', ")
-                            }
-                        ],
+        @foreach (var data in Model.BarChartModels)
+        {
+            @Html.Raw("'" + data.Amount.ToString().Replace("'", "\\'") + "', ")
+        }
+                                                        ],
                     },
                 ],
             },

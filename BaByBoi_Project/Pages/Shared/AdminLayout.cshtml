@@ -1,4 +1,5 @@
-﻿@using BaByBoi.Domain.Models
+﻿@using BaByBoi.DataAccess.Service.Interface
+@using BaByBoi.Domain.Models
 @using BaByBoi_Project.Common.Enum
 @using BaByBoi_Project.Extensions
 @inject IHttpContextAccessor HttpContextAccessor
@@ -6,9 +7,14 @@
 
 @{
     User user = null!;
+    int newOrder = 0;
     if (HttpContextAccessor.HttpContext != null)
     {
         user = HttpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("User");
+        var _orderService = (IOrderService)HttpContextAccessor.HttpContext.RequestServices.GetService(typeof(IOrderService))!;
+
+        newOrder = await _orderService.GetNewOrderCountAsync();
+
         if (user?.RoleId != (int)UserRole.Admin)
         {
             HttpContextAccessor.HttpContext.Response.Redirect("/CustomerViewPage/CusViewProduct");
@@ -52,21 +58,107 @@
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/assets/css/plugins.min.css" />
     <link rel="stylesheet" href="/assets/css/kaiadmin.min.css" />
+    <link href="~/css/site.css" rel="stylesheet" />
 </head>
 <body>
-    
-        <div class="wrapper">
-            <!-- Sidebar -->
-            <div class="sidebar" data-background-color="dark">
-                <div class="sidebar-logo">
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar" data-background-color="dark">
+            <div class="sidebar-logo">
+                <!-- Logo Header -->
+                <div class="logo-header" data-background-color="dark">
+                    <a href="index.html" class="logo">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/img%2FLogo_BabyBoi.png?alt=media&token=b4a8b4ed-e9a5-49e8-9b14-9a73a07b8ba1"
+                             alt="navbar brand"
+                             class="navbar-brand"
+                             height="75"
+                             style="margin-bottom: 14px" />
+                    </a>
+                    <div class="nav-toggle">
+                        <button class="btn btn-toggle toggle-sidebar">
+                            <i class="gg-menu-right"></i>
+                        </button>
+                        <button class="btn btn-toggle sidenav-toggler">
+                            <i class="gg-menu-left"></i>
+                        </button>
+                    </div>
+                    <button class="topbar-toggler more">
+                        <i class="gg-more-vertical-alt"></i>
+                    </button>
+                </div>
+                <!-- End Logo Header -->
+            </div>
+            <div class="sidebar-wrapper scrollbar scrollbar-inner">
+                <div class="sidebar-content">
+                    <ul class="nav nav-secondary">
+                        <li class="nav-item @(currentPath == "/Admin/Home" ? "active" : "")">
+                            <a href="/Admin/Home"
+                               class="collapsed"
+                               aria-expanded="false">
+                                <i class="fas fa-home"></i>
+                                <p style="margin-top: 5px">Báo cáo</p>
+                            </a>
+                        </li>
+                        <li class="nav-section">
+                            <span class="sidebar-mini-icon">
+                                <i class="fa fa-ellipsis-h"></i>
+                            </span>
+                            <h4 class="text-section">Danh sách</h4>
+                        </li>
+                        <li class="nav-item @(currentPath == "/AdminPage/NewOrder" ? "active" : "")">
+                            <a href="/AdminPage/NewOrder">
+                                <i class="fas fa-shopping-cart position-relative">
+                                    <span class="badge badge-pill badge-num position-absolute translate-middle">@newOrder</span>
+                                </i>
+                                <p class="mb-0 ms-2">Đơn hàng mới</p>
+                            </a>
+                        </li>
+                        <li class="nav-item @(currentPath == "/AdminPage/OrderManagement" ? "active" : "")">
+                            <a href="/AdminPage/OrderManagement">
+                                <i class="fas fa-shopping-cart"></i>
+                                <p class="mb-0 ms-2">Đơn hàng</p>
+                            </a>
+                        </li>
+                        <li class="nav-item @(currentPath == "/Admin/Product" ? "active" : "")">
+                            <a href="/Admin/Product">
+                                <i class="fas fa-shopping-bag"></i>
+                                <p>Sản phẩm</p>
+                            </a>
+                        </li>
+                        <li class="nav-item @(currentPath == "/Category" ? "active" : "")">
+                            <a href="/Category">
+                                <i class="fas fa-folder"></i>
+                                <p>Danh mục</p>
+                            </a>
+                        </li>
+                        <li class="nav-item @(currentPath == "/VoucherPage" ? "active" : "")">
+                            <a href="/VoucherPage">
+                                <i class="fas fa-ticket-alt"></i>
+                                <p>Khuyến mãi</p>
+                            </a>
+                        </li>
+                        <li class="nav-item @(currentPath == "/AdminPage/Index" ? "active" : "")">
+                            <a href="/AdminPage/Index">
+                                <i class="fas fa-users"></i>
+                                <p>Tài khoản</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- End Sidebar -->
+        <div class="main-panel">
+            <div class="main-header">
+                <div class="main-header-logo">
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
                         <a href="index.html" class="logo">
                             <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/img%2FLogo_BabyBoi.png?alt=media&token=b4a8b4ed-e9a5-49e8-9b14-9a73a07b8ba1"
                                  alt="navbar brand"
                                  class="navbar-brand"
-                                 height="75"
-                                 style="margin-bottom: 14px" />
+                                 height="20" />
                         </a>
                         <div class="nav-toggle">
                             <button class="btn btn-toggle toggle-sidebar">
@@ -82,200 +174,124 @@
                     </div>
                     <!-- End Logo Header -->
                 </div>
-                <div class="sidebar-wrapper scrollbar scrollbar-inner">
-                    <div class="sidebar-content">
-                        <ul class="nav nav-secondary">
-                        <li class="nav-item">
-                            <a href="/AdminPage/OrderManagement">
-                                <i class="fas fa-shopping-cart"></i>
-                                <p>Đơn hàng</p>
-                            </a>
-                        </li>
-                            <li class="nav-item active">
-                                <a
-                                   href="/Admin/Home"
-                                   class="collapsed"
+                <!-- Navbar Header -->
+                <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+                    <div class="container-fluid">
+                        <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                            <li class="nav-item topbar-user dropdown hidden-caret">
+                                <a class="dropdown-toggle profile-pic"
+                                   data-bs-toggle="dropdown"
+                                   href="#"
                                    aria-expanded="false">
-                                    <i class="fas fa-home"></i>
-                                    <p style="margin-top: 5px">Báo cáo</p>
+                                    <div class="avatar-sm">
+                                        <div class="avatar">
+                                            <span class="avatar-title rounded-circle border border-white">@(user != null ? user.FullName!.Substring(0, 1) : "A")</span>
+                                        </div>
+                                    </div>
+                                    <span class="profile-username">
+                                        <span class="op-7">Xin chào,</span>
+                                        <span class="fw-bold">@(user != null ? user.FullName : "Admin") </span>
+                                    </span>
                                 </a>
-                            </li>
-                            <li class="nav-section">
-                                <span class="sidebar-mini-icon">
-                                    <i class="fa fa-ellipsis-h"></i>
-                                </span>
-                                <h4 class="text-section">Danh sách</h4>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/Admin/Product">
-                                    <i class="fas fa-shopping-bag"></i>
-                                    <p>Sản phẩm</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                            <a href="/Category">
-                                    <i class="fas fa-folder"></i>
-                                    <p>Danh mục</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/VoucherPage">
-                                    <i class="fas fa-ticket-alt"></i>
-                                    <p>Khuyến mãi</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/AdminPage/Index">
-                                    <i class="fas fa-users"></i>
-                                    <p>Tài khoản</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- End Sidebar -->
-            <div class="main-panel">
-                <div class="main-header">
-                    <div class="main-header-logo">
-                        <!-- Logo Header -->
-                        <div class="logo-header" data-background-color="dark">
-                            <a href="index.html" class="logo">
-                                <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/img%2FLogo_BabyBoi.png?alt=media&token=b4a8b4ed-e9a5-49e8-9b14-9a73a07b8ba1"
-                                     alt="navbar brand"
-                                     class="navbar-brand"
-                                     height="20" />
-                            </a>
-                            <div class="nav-toggle">
-                                <button class="btn btn-toggle toggle-sidebar">
-                                    <i class="gg-menu-right"></i>
-                                </button>
-                                <button class="btn btn-toggle sidenav-toggler">
-                                    <i class="gg-menu-left"></i>
-                                </button>
-                            </div>
-                            <button class="topbar-toggler more">
-                                <i class="gg-more-vertical-alt"></i>
-                            </button>
-                        </div>
-                        <!-- End Logo Header -->
-                    </div>
-                    <!-- Navbar Header -->
-                    <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
-                        <div class="container-fluid">
-                            <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-                                <li class="nav-item topbar-user dropdown hidden-caret">
-                                    <a class="dropdown-toggle profile-pic"
-                                       data-bs-toggle="dropdown"
-                                       href="#"
-                                       aria-expanded="false">
-                                        <div class="avatar-sm">
+                                <ul class="dropdown-menu dropdown-user animated fadeIn">
+                                    <div class="dropdown-user-scroll scrollbar-outer">
+                                    <li>
+                                        <div class="user-box">
                                             <div class="avatar">
                                                 <span class="avatar-title rounded-circle border border-white">@(user != null ? user.FullName!.Substring(0, 1) : "A")</span>
                                             </div>
-                                        </div>
-                                        <span class="profile-username">
-                                            <span class="op-7">Xin chào,</span>
-                                            <span class="fw-bold">@(user != null ? user.FullName : "Admin") </span>
-                                        </span>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-user animated fadeIn">
-                                        <div class="dropdown-user-scroll scrollbar-outer">
-                                        <li>
-                                            <div class="user-box">
-                                                <div class="avatar">
-                                                    <span class="avatar-title rounded-circle border border-white">@(user != null ? user.FullName!.Substring(0, 1) : "A")</span>
-                                                </div>
-                                                <div class="u-text">
-                                                    <h4>@(user != null ? user.FullName : "Admin")</h4>
-                                                    <p class="text-muted">@(user != null ? user.Email : "abc@gmail.com")</p>
-                                                </div>
+                                            <div class="u-text">
+                                                <h4>@(user != null ? user.FullName : "Admin")</h4>
+                                                <p class="text-muted">@(user != null ? user.Email : "abc@gmail.com")</p>
                                             </div>
-                                        </li>
-                                        <li>
-                                            <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item text-danger" href="/Guest/LoginPage/Index">Logout</a>
-                                        </li>
-                        </div>
-                        </ul>
-                        </li>
-                        </ul>
-                </div>
-                </nav>
-                <!-- End Navbar -->
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-divider"></div>
+                                        <form method="post" asp-page="/Guest/LoginPage/Index" asp-page-handler="Logout" asp-route-returnUrl="/">
+                                            <button type="submit" class="dropdown-item text-danger">Đăng xuất</button>
+                                        </form>
+                                    </li>
+                    </div>
+                    </ul>
+                    </li>
+                    </ul>
             </div>
-
-            <div style="margin-top: 100px">
-                    @RenderBody()
-            </div>
+            </nav>
+            <!-- End Navbar -->
         </div>
 
+        <div style="margin-top: 100px">
+                @RenderBody()
         </div>
-    @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    </div>
+        @section Scripts {
+            @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
         }
-    }
-        <!--   Core JS Files   -->
-        <script src="/assets/js/core/jquery-3.7.1.min.js"></script>
-        <script src="/assets/js/core/popper.min.js"></script>
-        <script src="/assets/js/core/bootstrap.min.js"></script>
+    <!--   Core JS Files   -->
+    <script src="/assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="/assets/js/core/popper.min.js"></script>
+    <script src="/assets/js/core/bootstrap.min.js"></script>
 
-        <!-- jQuery Scrollbar -->
-        <script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+    <!-- jQuery Scrollbar -->
+    <script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
 
-        <!-- Chart JS -->
-        <script src="/assets/js/plugin/chart.js/chart.min.js"></script>
+    <!-- Chart JS -->
+    <script src="/assets/js/plugin/chart.js/chart.min.js"></script>
 
-        <!-- jQuery Sparkline -->
-        <script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+    <!-- jQuery Sparkline -->
+    <script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
 
-        <!-- Chart Circle -->
-        <script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
+    <!-- Chart Circle -->
+    <script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
 
-        <!-- Datatables -->
-        <script src="/assets/js/plugin/datatables/datatables.min.js"></script>
+    <!-- Datatables -->
+    <script src="/assets/js/plugin/datatables/datatables.min.js"></script>
 
-        <!-- Bootstrap Notify -->
-        <script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+    <!-- Bootstrap Notify -->
+    <script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
 
-        <!-- jQuery Vector Maps -->
-        <script src="/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
-        <script src="/assets/js/plugin/jsvectormap/world.js"></script>
+    <!-- jQuery Vector Maps -->
+    <script src="/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+    <script src="/assets/js/plugin/jsvectormap/world.js"></script>
 
-        <!-- Sweet Alert -->
-        <script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+    <!-- Sweet Alert -->
+    <script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
 
-        <!-- Kaiadmin JS -->
-        <script src="/assets/js/kaiadmin.min.js"></script>
+    <!-- Kaiadmin JS -->
+    <script src="/assets/js/kaiadmin.min.js"></script>
 
-        <script>
-            $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
-                type: "line",
-                height: "70",
-                width: "100%",
-                lineWidth: "2",
-                lineColor: "#177dff",
-                fillColor: "rgba(23, 125, 255, 0.14)",
-            });
+    <script>
+        $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
+            type: "line",
+            height: "70",
+            width: "100%",
+            lineWidth: "2",
+            lineColor: "#177dff",
+            fillColor: "rgba(23, 125, 255, 0.14)",
+        });
 
-            $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
-                type: "line",
-                height: "70",
-                width: "100%",
-                lineWidth: "2",
-                lineColor: "#f3545d",
-                fillColor: "rgba(243, 84, 93, .14)",
-            });
+        $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
+            type: "line",
+            height: "70",
+            width: "100%",
+            lineWidth: "2",
+            lineColor: "#f3545d",
+            fillColor: "rgba(243, 84, 93, .14)",
+        });
 
-            $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
-                type: "line",
-                height: "70",
-                width: "100%",
-                lineWidth: "2",
-                lineColor: "#ffa534",
-                fillColor: "rgba(255, 165, 52, .14)",
-            });
-        </script>
-    </body>
+        $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
+            type: "line",
+            height: "70",
+            width: "100%",
+            lineWidth: "2",
+            lineColor: "#ffa534",
+            fillColor: "rgba(255, 165, 52, .14)",
+        });
+    </script>
+        @RenderSection("Scripts", required: false)
+
+</body>
 </html>

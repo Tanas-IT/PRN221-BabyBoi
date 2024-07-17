@@ -1,4 +1,5 @@
 ﻿@page
+@using BaByBoi.DataAccess.Service.Interface
 @using BaByBoi.Domain.Models;
 @using BaByBoi_Project.Common.Enum
 @using BaByBoi_Project.Extensions
@@ -10,10 +11,13 @@
     string message = ViewData["Message"] as string;
     string errorMessage = ViewData["ErrorMessage"] as string;
     User user = null!;
+    int newOrder = 0;
     if (HttpContextAccessor.HttpContext != null)
     {
         user = HttpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("User");
-        if (user?.RoleId != (int)UserRole.Admin)
+        var _orderService = (IOrderService)HttpContextAccessor.HttpContext.RequestServices.GetService(typeof(IOrderService))!;
+
+        newOrder = await _orderService.GetNewOrderCountAsync(); if (user?.RoleId != (int)UserRole.Admin)
         {
             HttpContextAccessor.HttpContext.Response.Redirect("/CustomerViewPage/CusViewProduct");
         }
@@ -62,8 +66,8 @@
         .product-image {
             width: 75px;
             height: 75px;
-            border-radius: 50%; 
-            overflow: hidden; 
+            border-radius: 50%;
+            overflow: hidden;
             position: relative;
             cursor: pointer;
         }
@@ -72,7 +76,7 @@
                 width: 100%;
                 height: 100%;
                 border-radius: 50%;
-                object-fit: cover; 
+                object-fit: cover;
             }
 
             .product-image .overlay {
@@ -125,78 +129,96 @@
                 max-height: 80%;
             }
 
-            .product-popup .popup-content img {
+                .product-popup .popup-content img {
                     width: 600px;
                     height: 550px;
                     object-fit: contain;
-            }
-            .upload__box {
-               margin-bottom: 1px;
-            }
-            .upload__inputfile {
-              margin-top: 10px;
-              margin-bottom: 10px;
-            }
-            .upload__btn {
-              display: inline-block;
-              font-weight: 600;
-              color: #fff;
-              text-align: center;
-              min-width: 116px;
-              padding: 5px;
-              transition: all 0.3s ease;
-              cursor: pointer;
-              border: 2px solid;
-              background-color: #4045ba;
-              border-color: #4045ba;
-              border-radius: 10px;
-              line-height: 26px;
-              font-size: 14px;
-            }
+                }
+
+        .upload__box {
+            margin-bottom: 1px;
+        }
+
+        .upload__inputfile {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .upload__btn {
+            display: inline-block;
+            font-weight: 600;
+            color: #fff;
+            text-align: center;
+            min-width: 116px;
+            padding: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid;
+            background-color: #4045ba;
+            border-color: #4045ba;
+            border-radius: 10px;
+            line-height: 26px;
+            font-size: 14px;
+        }
+
             .upload__btn:hover {
-              background-color: unset;
-              color: #4045ba;
-              transition: all 0.3s ease;
-            }
-            .upload__btn-box {
-              margin-bottom: 10px;
-            }
-            .upload__img-wrap {
-              display: flex;
-              flex-wrap: wrap;
-              margin: 0 -10px;
-            }
-            .upload__img-box {
-              width: 200px;
-              padding: 0 10px;
-              margin-bottom: 12px;
-            }
-            .upload__img-close {
-              width: 24px;
-              height: 24px;
-              border-radius: 50%;
-              background-color: rgba(0, 0, 0, 0.5);
-              position: absolute;
-              top: 10px;
-              right: 10px;
-              text-align: center;
-              line-height: 24px;
-              z-index: 1;
-              cursor: pointer;
-            }
-            .upload__img-close:after {
-              content: "✖";
-              font-size: 14px;
-              color: white;
+                background-color: unset;
+                color: #4045ba;
+                transition: all 0.3s ease;
             }
 
-            .img-bg {
-              background-repeat: no-repeat;
-              background-position: center;
-              background-size: cover;
-              position: relative;
-              padding-bottom: 100%;
-                    } 
+        .upload__btn-box {
+            margin-bottom: 10px;
+        }
+
+        .upload__img-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+
+        .upload__img-box {
+            width: 200px;
+            padding: 0 10px;
+            margin-bottom: 12px;
+        }
+
+        .upload__img-close {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            text-align: center;
+            line-height: 24px;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+            .upload__img-close:after {
+                content: "✖";
+                font-size: 14px;
+                color: white;
+            }
+
+        .img-bg {
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            position: relative;
+            padding-bottom: 100%;
+        }
+
+        .badge-num {
+            top: 2px !important;
+            background-color: #ffb524;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
     </style>
     <div class="wrapper">
         @if (errorMessage != null)
@@ -261,8 +283,7 @@
                 <div class="sidebar-content">
                     <ul class="nav nav-secondary">
                         <li class="nav-item">
-                            <a
-                               href="Home"
+                            <a href="Home"
                                class="collapsed"
                                aria-expanded="false">
                                 <i class="fas fa-home"></i>
@@ -274,6 +295,20 @@
                                 <i class="fa fa-ellipsis-h"></i>
                             </span>
                             <h4 class="text-section">Danh sách</h4>
+                        </li>
+                        <li class="nav-item @(currentPath == "/AdminPage/NewOrder" ? "active" : "")">
+                            <a href="/AdminPage/NewOrder">
+                                <i class="fas fa-shopping-cart position-relative">
+                                    <span class="badge badge-pill badge-num position-absolute translate-middle">@newOrder</span>
+                                </i>
+                                <p class="mb-0 ms-2">Đơn hàng mới</p>
+                            </a>
+                        </li>
+                        <li class="nav-item @(currentPath == "/AdminPage/OrderManagement" ? "active" : "")">
+                            <a href="/AdminPage/OrderManagement">
+                                <i class="fas fa-shopping-cart"></i>
+                                <p class="mb-0 ms-2">Đơn hàng</p>
+                            </a>
                         </li>
                         <li class="nav-item active">
                             <a href="Product">
@@ -288,7 +323,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a  href="/VoucherPage">
+                            <a href="/VoucherPage">
                                 <i class="fas fa-ticket-alt"></i>
                                 <p>Khuyến mãi</p>
                             </a>
@@ -363,7 +398,9 @@
                                     </li>
                                     <li>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item text-danger" href="/Guest/LoginPage/Index">Logout</a>
+                                        <form method="post" asp-page="/Guest/LoginPage/Index" asp-page-handler="Logout" asp-route-returnUrl="/">
+                                            <button type="submit" class="dropdown-item text-danger">Đăng xuất</button>
+                                        </form>
                                     </li>
                     </div>
                     </ul>
@@ -398,17 +435,17 @@
                                 <div class="d-flex align-items-center">
                                     <h4 class="card-title">Quản lý sản phẩm</h4>
                                     <div class="d-flex align-items-center" style="margin: 0 auto">
-                                    <form asp-page-handler="SearchProduct" method="post" style="margin: 0 auto; display: flex; align-self: baseline">
-                                        <input class="form-control" style="
+                                        <form asp-page-handler="SearchProduct" method="post" style="margin: 0 auto; display: flex; align-self: baseline">
+                                            <input class="form-control" style="
                                                     height: 40px;
                                                     border-radius: 10px;
                                                     width: 330px;
                                                     padding: 10px;" type="search" id="searchInput" asp-for="SearchValue" placeholder="Search" />
-                                        <button style="border-radius: 8px; margin-left: 22px;" type="submit" class="btn btn-info">Search</button>
-                                    </form>
-                                    <form method="post" asp-page-handler="ResetProduct">
-                                        <button style="border-radius: 8px; margin-left: 22px; color: white" type="submit" class="btn btn-warning">Reset Page</button>
-                                    </form>
+                                            <button style="border-radius: 8px; margin-left: 22px;" type="submit" class="btn btn-info">Search</button>
+                                        </form>
+                                        <form method="post" asp-page-handler="ResetProduct">
+                                            <button style="border-radius: 8px; margin-left: 22px; color: white" type="submit" class="btn btn-warning">Reset Page</button>
+                                        </form>
                                     </div>
                                     <button class="btn btn-primary btn-round ms-auto"
                                             data-bs-toggle="modal"
@@ -427,20 +464,20 @@
                                      aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <form method="post" asp-page-handler="AddProduct" enctype="multipart/form-data">
-                                        <div class="modal-content">
-                                            <div class="modal-header border-0">
-                                                <h5 class="modal-title">
-                                                    <span class="fw-mediumbold"> Thêm</span>
-                                                    <span class="fw-light"> Sản Phẩm </span>
-                                                </h5>
-                                                <button type="button"
-                                                        class="close"
-                                                        data-bs-dismiss="modal"
-                                                        aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
+                                            <div class="modal-content">
+                                                <div class="modal-header border-0">
+                                                    <h5 class="modal-title">
+                                                        <span class="fw-mediumbold"> Thêm</span>
+                                                        <span class="fw-light"> Sản Phẩm </span>
+                                                    </h5>
+                                                    <button type="button"
+                                                            class="close"
+                                                            data-bs-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
                                                     <div class="row">
                                                         <div class="col-sm-12">
                                                             <div class="form-group form-group-default">
@@ -448,8 +485,7 @@
                                                                 <input id="addProductCode"
                                                                        type="text"
                                                                        class="form-control"
-                                                                       asp-for="AddProduct.ProductCode"
-                                                                       />
+                                                                       asp-for="AddProduct.ProductCode" />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12">
@@ -458,8 +494,7 @@
                                                                 <input id="addProductName"
                                                                        type="text"
                                                                        class="form-control"
-                                                                       asp-for="AddProduct.ProductName"
-                                                                       />
+                                                                       asp-for="AddProduct.ProductName" />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12">
@@ -468,21 +503,19 @@
                                                                 <input id="addProductDescription"
                                                                        type="text"
                                                                        class="form-control"
-                                                                       asp-for="AddProduct.Description"
-                                                                      />
+                                                                       asp-for="AddProduct.Description" />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label for="addProductDescription">Trạng thái</label>
-                                                                <br/>
+                                                                <br />
                                                                 <label for="activeProduct">Active</label>
                                                                 <input id="activeProduct"
                                                                        type="radio"
                                                                        value="1"
                                                                        style="margin: 15px;"
-                                                                           name="productStatus"
-                                                                       />
+                                                                       name="productStatus" />
                                                                 <label for="bannedProduct">Banned</label>
                                                                 <input id="bannedProduct"
                                                                        type="radio"
@@ -492,36 +525,36 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12" style="margin-left: 5px;">
-                                                                <label for="idCategory">Danh mục</label>
-                                                                    <select class="form-control mt-3 mb-4" id="idCategory" asp-for="AddProduct.CategoryId">
-                                                                        @foreach(var category in Model.listCagetory)
-                                                                        {
+                                                            <label for="idCategory">Danh mục</label>
+                                                            <select class="form-control mt-3 mb-4" id="idCategory" asp-for="AddProduct.CategoryId">
+                                                                    @foreach (var category in Model.listCagetory)
+                                                                    {
                                                                     <option value="@category.CategoryId">@category.CategoryName</option>
-                                                                        }
-                                                                    </select>
+                                                                    }
+                                                            </select>
                                                         </div>
                                                         <div class="col-md-12">
                                                             <div class="form-group form-group-default">
                                                                 <label for="addProductDescription">Khuyến mãi</label>
                                                                 <input id="addProductDescription"
                                                                        type="number"
-                                                                       class="form-control" 
+                                                                       class="form-control"
                                                                        asp-for="AddProduct.Discount" />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12">
                                                             <div class="form-group form-group-default">
                                                                 <label for="addProductDescription" style="margin-bottom: 10px;">Kích cỡ</label>
-                                                                    @foreach(var size in Model.listSize)
+                                                                    @foreach (var size in Model.listSize)
                                                                     {
-                                                                       <div class="d-flex align-items-center mx-3">
+                                                                    <div class="d-flex align-items-center mx-3">
                                                                         <label for="@size.SizeId">@size.SizeName</label>
                                                                         <input id="@size.SizeId"
                                                                                type="checkbox"
                                                                                value="@size.SizeId"
                                                                                style="margin: 15px;"
                                                                                name="SelectedSize" />
-                                                                        </div>
+                                                                    </div>
                                                                     <div class="d-flex align-items-center mx-3 my-2">
                                                                         <label for="quantity-@size.SizeId">Số lượng</label>
                                                                         <input style="margin-left: 10px;" id="quantity-@size.SizeId" type="number" name="productAmount" />
@@ -531,30 +564,30 @@
                                                                         <input style="margin-left: 50px;" id="price-@size.SizeId" type="number" name="productPrice" />
                                                                     </div>
                                                                     }
-                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div class="col-md-12">
                                                             <div class="form-group form-group-default upload__box">
-                                                                    <label for="upload-image">Hình ảnh</label>
+                                                                <label for="upload-image">Hình ảnh</label>
                                                                 <input id="upload-image" type="file" accept="image/*" multiple data-max_length="20" class="upload__inputfile" name="ListImgURL">
-                                                            <div class="upload__img-wrap"></div>
-                                                             </div>
+                                                                <div class="upload__img-wrap"></div>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                </div>
+                                                <div class="modal-footer border-0">
+                                                    <button type="submit"
+                                                            id="addRowButton"
+                                                            class="btn btn-primary">
+                                                        Thêm
+                                                    </button>
+                                                    <button type="button"
+                                                            class="btn btn-danger"
+                                                            data-bs-dismiss="modal">
+                                                        Đóng
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div class="modal-footer border-0">
-                                                <button type="submit"
-                                                        id="addRowButton"
-                                                        class="btn btn-primary">
-                                                    Thêm
-                                                </button>
-                                                <button type="button"
-                                                        class="btn btn-danger"
-                                                        data-bs-dismiss="modal">
-                                                    Đóng
-                                                </button>
-                                            </div>
-                                        </div>
                                         </form>
                                     </div>
                                 </div>
@@ -577,7 +610,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                                @foreach(var product in Model.ListProductPagin)
+                                                @foreach (var product in Model.ListProductPagin)
                                                 {
                                                 <tr>
                                                     <td>@product.ProductId</td>
@@ -619,9 +652,9 @@
                                                             }
                                                     </td>
                                                     <td>@product.Description</td>
-                                                        @if(product.Status == 1)
+                                                        @if (product.Status == 1)
                                                         {
-                                                            <td>
+                                                        <td>
                                                             <span style="display: block;
                                                                 border: 1px solid;
                                                                 padding: 5px;
@@ -630,8 +663,9 @@
                                                                 font-weight: bold;
                                                                 text-align: center;
                                                                 color: white;">Active</span>
-                                                            </td>
-                                                        } else
+                                                        </td>
+                                                        }
+                                                        else
                                                         {
                                                         <td>
                                                             <span style="display: block;
@@ -644,7 +678,7 @@
                                                                 color: white;">Banned</span>
                                                         </td>
                                                         }
-                                                        <td>@product.Category.CategoryName</td>
+                                                    <td>@product.Category.CategoryName</td>
                                                     <td>@product.Discount</td>
                                                     <td>
                                                         <div class="form-button-action">
@@ -687,7 +721,7 @@
                                                                                                    class="form-control"
                                                                                                    value="@product.ProductCode"
                                                                                                    asp-for="UpdateProduct.ProductCode" />
-                                                                                                   <input type="hidden" value="@product.ProductId" asp-for="UpdateProduct.ProductId" />
+                                                                                            <input type="hidden" value="@product.ProductId" asp-for="UpdateProduct.ProductId" />
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="col-md-6">
@@ -700,7 +734,7 @@
                                                                                                    asp-for="UpdateProduct.ProductName" />
                                                                                         </div>
                                                                                     </div>
-                                                                                   
+
                                                                                     <div class="col-md-6">
                                                                                         <div class="form-group form-group-default">
                                                                                             <label for="updateProductDescription">Khuyến mãi</label>
@@ -719,7 +753,7 @@
                                                                                             <input id="activeProduct"
                                                                                                    type="radio"
                                                                                                    value="1"
-                                                                                                   checked ="@(product.Status == 1 ? true : false)"
+                                                                                                   checked="@(product.Status == 1 ? true : false)"
                                                                                                    style="margin: 15px;"
                                                                                                    name="productStatus" />
                                                                                             <label for="bannedProduct">Banned</label>
@@ -753,61 +787,61 @@
                                                                                     <div class="col-md-12">
                                                                                         <div class="form-group form-group-default">
                                                                                             <label for="addProductDescription" style="margin-bottom: 10px;">Kích cỡ</label>
-                                                                                                    @if(product.ProductSizes.Count > 0)
+                                                                                                @if (product.ProductSizes.Count > 0)
+                                                                                                {
+                                                                                                    @foreach (var size in Model.listSize)
                                                                                                     {
-                                                                                                        @foreach (var size in Model.listSize)
-                                                                                                        {
                                                                                                         bool flag = true;
                                                                                                         @foreach (var productSize in product.ProductSizes)
-                                                                                                            {
-                                                                                                                if(productSize.SizeId == size.SizeId)
-                                                                                                                {
-                                                                                                                    <div class="d-flex align-items-center mx-3">
-
-                                                                                                                        <label for="@productSize.SizeId">@productSize.Size.SizeName</label>
-                                                                                                                        <input id="@productSize.SizeId"
-                                                                                                                               type="checkbox"
-                                                                                                                               checked="@(productSize.SizeId == @productSize.SizeId ? true : false)"
-                                                                                                                               value="@productSize.SizeId"
-                                                                                                                               style="margin: 15px;"
-                                                                                                                               name="SelectedUpdateSize" />
-
-
-                                                                                                                    </div>
-                                                                                                                    <div class="d-flex align-items-center mx-3 my-2">
-                                                                                                                        <label for="quantity-@productSize.SizeId">Số lượng</label>
-                                                                                                                        <input style="margin-left: 10px;" value="@productSize.Quantity" id="quantity-@productSize.SizeId" type="number" name="productUpdateAmount" />
-                                                                                                                    </div>
-                                                                                                                    <div class="d-flex align-items-center mx-3 my-2">
-                                                                                                                        <label for="price-@productSize.SizeId">Giá</label>
-                                                                                                                        <input style="margin-left: 50px;" value="@productSize.Price" id="price-@productSize.SizeId" type="number" name="productUpdatePrice" />
-                                                                                                                </div>
-                                                                                                                flag = false;
-                                                                                                            }  
-                                                                                                            }
-                                                                                                        @if(flag)
                                                                                                         {
+                                                                                                            if (productSize.SizeId == size.SizeId)
+                                                                                                            {
                                                                                                             <div class="d-flex align-items-center mx-3">
-                                                                                                                <label for="@size.SizeId">@size.SizeName</label>
-                                                                                                                <input id="@size.SizeId"
+
+                                                                                                                <label for="@productSize.SizeId">@productSize.Size.SizeName</label>
+                                                                                                                <input id="@productSize.SizeId"
                                                                                                                        type="checkbox"
-                                                                                                                       value="@size.SizeId"
+                                                                                                                       checked="@(productSize.SizeId == @productSize.SizeId ? true : false)"
+                                                                                                                       value="@productSize.SizeId"
                                                                                                                        style="margin: 15px;"
                                                                                                                        name="SelectedUpdateSize" />
+
+
                                                                                                             </div>
                                                                                                             <div class="d-flex align-items-center mx-3 my-2">
-                                                                                                                <label for="quantity-@size.SizeId">Số lượng</label>
-                                                                                                                <input style="margin-left: 10px;" id="quantity-@size.SizeId" type="number" name="productUpdateAmount" />
+                                                                                                                <label for="quantity-@productSize.SizeId">Số lượng</label>
+                                                                                                                <input style="margin-left: 10px;" value="@productSize.Quantity" id="quantity-@productSize.SizeId" type="number" name="productUpdateAmount" />
                                                                                                             </div>
                                                                                                             <div class="d-flex align-items-center mx-3 my-2">
-                                                                                                                <label for="price-@size.SizeId">Giá</label>
-                                                                                                                <input style="margin-left: 50px;" id="price-@size.SizeId" type="number" name="productUpdatePrice" />
+                                                                                                                <label for="price-@productSize.SizeId">Giá</label>
+                                                                                                                <input style="margin-left: 50px;" value="@productSize.Price" id="price-@productSize.SizeId" type="number" name="productUpdatePrice" />
                                                                                                             </div>
+                                                                                                                flag = false;
+                                                                                                            }
                                                                                                         }
+                                                                                                        @if (flag)
+                                                                                                        {
+                                                                                                        <div class="d-flex align-items-center mx-3">
+                                                                                                            <label for="@size.SizeId">@size.SizeName</label>
+                                                                                                            <input id="@size.SizeId"
+                                                                                                                   type="checkbox"
+                                                                                                                   value="@size.SizeId"
+                                                                                                                   style="margin: 15px;"
+                                                                                                                   name="SelectedUpdateSize" />
+                                                                                                        </div>
+                                                                                                        <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                            <label for="quantity-@size.SizeId">Số lượng</label>
+                                                                                                            <input style="margin-left: 10px;" id="quantity-@size.SizeId" type="number" name="productUpdateAmount" />
+                                                                                                        </div>
+                                                                                                        <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                            <label for="price-@size.SizeId">Giá</label>
+                                                                                                            <input style="margin-left: 50px;" id="price-@size.SizeId" type="number" name="productUpdatePrice" />
+                                                                                                        </div>
                                                                                                         }
-                                                                                                    } 
-                                                                                                    else
-                                                                                                    {
+                                                                                                    }
+                                                                                                }
+                                                                                                else
+                                                                                                {
                                                                                                     @foreach (var size in Model.listSize)
                                                                                                     {
                                                                                                     <div class="d-flex align-items-center mx-3">
@@ -827,28 +861,28 @@
                                                                                                         <input style="margin-left: 50px;" id="price-@size.SizeId" type="number" name="productUpdatePrice" />
                                                                                                     </div>
                                                                                                     }
-                                                                                                    }
+                                                                                                }
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="col-md-12">
                                                                                         <div class="form-group form-group-default">
                                                                                             <label for="upload-image">Hình ảnh</label>
                                                                                             <div class="image-gallery">
-                                                                                                        @foreach (var productImages in product.ProductImages)
-                                                                                                        {
-                                                                                                        <div class="upload_image-container">
-                                                                                                            <img src="@productImages.ImageUrl" alt="@productImages.ImageName">
+                                                                                                    @foreach (var productImages in product.ProductImages)
+                                                                                                    {
+                                                                                                    <div class="upload_image-container">
+                                                                                                        <img src="@productImages.ImageUrl" alt="@productImages.ImageName">
                                                                                                         <input type="hidden" value="@productImages.ImageUrl" name="imageUrlsUpLoad" />
-                                                                                                            <div class="preview">
-                                                                                                                Preview
-                                                                                                            </div>
-                                                                                                            <span class="close-icon">x</span>
+                                                                                                        <div class="preview">
+                                                                                                            Preview
                                                                                                         </div>
-                                                                                                        }
-                                                                                                </div>
+                                                                                                        <span class="close-icon">x</span>
+                                                                                                    </div>
+                                                                                                    }
+                                                                                            </div>
 
                                                                                             <div class="upload-container">
-                                                                                                    <input type="file" accept="image/*" multiple data-max_length="20" class="upload-btn" name="imageUrls">
+                                                                                                <input type="file" accept="image/*" multiple data-max_length="20" class="upload-btn" name="imageUrls">
                                                                                             </div>
 
                                                                                             <div class="upload_overlay">
@@ -928,16 +962,17 @@
                                                     </td>
                                                 </tr>
                                                 }
-                                            </tbody>
+                                        </tbody>
                                     </table>
                                     <nav aria-label="..." style="display: flex; justify-content: center">
                                         <ul class="pagination">
-                                                @if(Model.CurrentIndex > 1)
+                                                @if (Model.CurrentIndex > 1)
                                                 {
                                                 <li class="page-item">
                                                     <a asp-route-PageIndex="@(Model.CurrentIndex - 1)" asp-route-PageSize="5" class="page-link" tabindex="-1">Previous</a>
-                                                    </li>
-                                                } else
+                                                </li>
+                                                }
+                                                else
                                                 {
                                                 <li class="page-item disabled">
                                                     <a class="page-link" href="#" tabindex="-1">Previous</a>
@@ -1023,7 +1058,7 @@
 
     <!-- Kaiadmin JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
     <script>
         const rows = document.querySelectorAll('.image-row');
 
@@ -1043,13 +1078,13 @@
             });
         });
         $(document).ready(function () {
-           
-            
+
+
         });
         jQuery(document).ready(function () {
             ImgUpload();
         });
-        
+
 
         function ImgUpload() {
             var imgWrap = "";
@@ -1109,7 +1144,7 @@
                 $(this).parent().parent().remove();
             });
         }
-      
+
     </script>
 </body>
 </html>
