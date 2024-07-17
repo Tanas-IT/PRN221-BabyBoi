@@ -13,15 +13,19 @@
     <style>
         .container {
             margin-top: 20px;
+            max-width: 900px;
         }
 
         .address-container, .order-details, .payment-method {
             border: 1px solid #ddd;
             padding: 20px;
             margin-bottom: 20px;
-            border-radius: 5px;
             border-radius: 10px;
         }
+
+            .order-details .row {
+                margin-bottom: 10px;
+            }
 
         .total-price {
             font-size: 24px;
@@ -37,28 +41,32 @@
             padding: 10px;
         }
 
+        .voucher-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 20px;
+        }
+
+            .voucher-section .form-group {
+                flex-grow: 1;
+                margin-right: 10px;
+            }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Shipping Address
-         <div class="address-container">
-             <h4>Địa chỉ nhận hàng</h4>
-             <p>/*Model.Customer.FullName */ (Model.Customer.Phone)</p>
-             <input type="type" name="shiping address" value="Model.order.Address" />
-         </div>
-         -->
         <!-- Order Details -->
-        <div class="order-details">
+        <div class="order-details" style="margin-top: 200px;">
             <h4>Order Details</h4>
             @{
                 var priceEachProduct = new double();
             }
-            @foreach (var item in Model.orderDetailsPurchase)
-            {
-                <div class="row">
+            <div class="row">
+                @foreach (var item in Model.orderDetailsPurchase)
+                {
                     <div class="col-2">
-                        <img src="@item.Product.ProductImages.FirstOrDefault()" alt="@item.Product.ProductName" class="img-fluid" />
+                        <img src="@item.Product.ProductImages.FirstOrDefault()!.ImageUrl" alt="@item.Product.ProductName" class="img-fluid" />
                     </div>
                     <div class="col-4">
                         <p>@item.Product.ProductName</p>
@@ -76,9 +84,9 @@
                         }
                         <p>@(priceEachProduct.ToString("C"))</p>
                     </div>
-                </div>
-                <hr />
-            }
+                }
+            </div>
+            <hr />
             <div class="row">
                 <div class="col-12 text-end">
                     <p class="total-price">Total: @(Model.totalPay.ToString("C"))</p>
@@ -87,19 +95,14 @@
         </div>
 
         <!-- Voucher Input -->
-        <form method="post">
-            <div class="row">
-                <div class="col-9">
-                    <div class="form-group">
-                        <label for="voucherCode">Voucher Code</label>
-                        <input type="text" class="form-control" name="voucherCode" placeholder="Enter voucher code" />
-                    </div>
-                </div>
-                <div class="col-3" style="padding-bottom: 20px;">
-                    <button asp-page-handler="ApplyVoucher" type="submit" class="btn btn-primary" style="margin-top: 25px; ">Apply</button>
-                </div>
+        <form method="post" class="voucher-section">
+            <div class="form-group">
+                <label for="voucherCode">Voucher Code</label>
+                <input type="text" class="form-control" name="voucherCode" placeholder="Enter voucher code" />
             </div>
+            <button asp-page-handler="ApplyVoucher" type="submit" class="btn btn-primary">Apply</button>
         </form>
+
         @if (Model.voucher != null)
         {
             <div class="row">
@@ -111,7 +114,6 @@
 
         <!-- Payment Method -->
         <form method="post">
-
             @if (Model.paymentMethod != null)
             {
                 <div class="payment-method">
@@ -147,7 +149,6 @@
                 </div>
             </div>
         </form>
-
     </div>
 
     <script>

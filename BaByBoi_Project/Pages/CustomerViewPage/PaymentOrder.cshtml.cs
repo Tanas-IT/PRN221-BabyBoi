@@ -56,7 +56,7 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
         }
         private void getCustomerFromSession()
         {
-            Customer = HttpContext.Session.GetObjectFromJson<User>("Customer");
+            Customer = HttpContext.Session.GetObjectFromJson<User>("User");
         }
 
         private void LoadMessagesFromTempData()
@@ -89,7 +89,7 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
                 voucher = await _voucherService.getVoucherByCode(appliedVoucherCode);
                 if (voucher != null && DateTime.Now >= voucher.StartDate && DateTime.Now <= voucher.EndDate && voucher.Status == (int)StatusExist.Exist)
                 {
-                    var discount = totalPay * voucher.Percent!.Value/100;
+                    var discount = totalPay * voucher.Percent!.Value / 100;
                     if (discount > voucher.TriggerValue)
                     {
                         discount = voucher.TriggerValue.Value;
@@ -112,9 +112,9 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
                     Descriptuon = $"Thanh toán đơn hàng tại BabiBoi Store lúc {DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}",
                     OrderCode = order.OrderCode!,
                 };
-                return Redirect(_vnpayService.CreatePaymentUrl(HttpContext, vnpayModel, paymentId, totalPrice,voucherId));
+                return Redirect(_vnpayService.CreatePaymentUrl(HttpContext, vnpayModel, paymentId, totalPrice, voucherId));
             }
-            return RedirectToPage(new { handler = "PlaceOrder", paymentId, totalPrice, orderCode = order.OrderCode , voucherId = voucherId});
+            return RedirectToPage(new { handler = "PlaceOrder", paymentId, totalPrice, orderCode = order.OrderCode, voucherId = voucherId });
         }
 
         public async Task<IActionResult> OnPostApplyVoucher(string voucherCode)
@@ -135,7 +135,7 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
             }
             else
             {
-                var discount = totalPay * (voucher.Percent!.Value)/100;
+                var discount = totalPay * (voucher.Percent!.Value) / 100;
                 if (discount > voucher.TriggerValue)
                 {
                     discount = voucher.TriggerValue.Value;
@@ -169,7 +169,11 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
             order.TotalProduct = orderDetailsPurchase.Count();
             order.OrderDetails = orderDetailsPurchase;
             order.TotalPrice = totalPrice;
-            order.VoucherId = voucherId;
+            order.UserId = Customer.UserId;
+            if (voucherId != 0)
+            {
+                order.VoucherId = voucherId;
+            }
 
             orderDetailsPurchase.ForEach(od =>
             {

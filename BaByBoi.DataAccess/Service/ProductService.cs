@@ -135,6 +135,8 @@ namespace BaByBoi.DataAccess.Service
             return await _unitOfWork.ProductRepository.GetProductsForStatistic();
         }
 
+        public async Task<List<ProductSize>> GetProductInCategoryId(int CategoryId)
+            => await _unitOfWork.ProductRepository.GetProductByCategoryId(categoryId: CategoryId);
 
     }
 }

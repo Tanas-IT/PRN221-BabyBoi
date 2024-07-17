@@ -45,7 +45,7 @@
                     <td>@order.OrderCode</td>
                     <td>@order.OrderDate?.ToString("dd-MM-yyyy")</td>
                     <td>
-                       @order.Address
+                        @order.Address
                     </td>
                     <td>@order.Description</td>
                     @if (order.Status == 1)
@@ -69,13 +69,22 @@
                                          padding: 5px;
                                          border-radius: 8px;
                                          background-color: red;
-                                         font-weight: bold; 
+                                         font-weight: bold;
                                          text-align: center;
                                          color: white;">Payment Failed</span>
                         </td>
                     }
                     <td>@order.Payment.PaymentName</td>
-                    <td>@order.Voucher.Percent</td>
+                    @{
+                        if (order.Voucher != null)
+                        {
+                            <td>@order.Voucher.Percent</td>
+                        }
+                        else
+                        {
+                            <td>N/A</td>
+                        }
+                    }
                     <td>@order.TotalProduct</td>
                     <td>@order.TotalPrice</td>
                     <td>
@@ -87,8 +96,8 @@
                                 <div>
                                     <a asp-page="Detail" asp-route-orderCode="@order.OrderCode" style="text-decoration: none">
                                         <i class="fa fa-eye"></i>
-                                    </a>                                
-                                    </div>
+                                    </a>
+                                </div>
                             </button>
                         </div>
                     </td>

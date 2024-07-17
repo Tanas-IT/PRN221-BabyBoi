@@ -4,11 +4,14 @@
 
 @{
     User user = null!;
+    List<OrderDetail> ShoppingCart = null! ;
     if (HttpContextAccessor.HttpContext != null)
     {
         user = HttpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("User");
+        ShoppingCart = HttpContextAccessor.HttpContext.Session.GetObjectFromJson<List<OrderDetail>>("OrderList") ?? new List<OrderDetail>()!;
     }
     var currentPath = HttpContextAccessor.HttpContext?.Request.Path;
+    
 }
 
 <!DOCTYPE html>
@@ -73,7 +76,7 @@
         </div>
         <div class="container px-0">
             <nav class="navbar navbar-light bg-white navbar-expand-xl">
-                <a href="index.html" class="navbar-brand"><h1 class="text-primary display-6">BabiBoi Store</h1></a>
+                <a href="/CustomerViewPage/CusViewProduct" class="navbar-brand"><h1 class="text-primary display-6">BabiBoi Store</h1></a>
                 <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                     <span class="fa fa-bars text-primary"></span>
                 </button>
@@ -87,7 +90,7 @@
                         <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search text-primary"></i></button>
                         <a href="/CustomerViewPage/ShoppingCart" class="position-relative me-4 my-auto">
                             <i class="fa fa-shopping-bag fa-2x"></i>
-                            <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
+                            <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">@ShoppingCart.Count()</span>
                         </a>
                         @if (user == null)
                         {
