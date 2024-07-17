@@ -12,11 +12,15 @@ namespace BaByBoi.Domain.Repositories.Interface
     {
         Task<Order> GetByOrderCode(string OrderCode);
         Task<List<Order>> GetAllOrderOfCustomer(int UserId);
+        Task<int> GetNewOrderCountAsync();
         Task<List<LineChartModels>> GetAllOrderByMonth();
         Task<List<Order>> GetAllOrder();
+        Task<List<Order>> GetOrderByStatus(int status);
+
         Task<List<OrderDetail>> GetOrderDetailsById(int orderId);
         Task<Order> GetOrderById(int orderId);
         Task<bool> AddFeedback(Order OrderFeedback);
+        Task<bool> UpdateOrderStatus(int id, int status);
 
     }
 }

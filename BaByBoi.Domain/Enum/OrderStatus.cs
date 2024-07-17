@@ -5,5 +5,6 @@
         WaitingAccept = 1,
         IsCancel = 2,
         IsReject = 3,
+        IsConfirmed = 4,
     }
 }

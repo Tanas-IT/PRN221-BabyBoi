@@ -89,6 +89,8 @@
         color: var(--bs-white) !important;
     }
 
+
+
 /*** Topbar Start ***/
 .fixed-top {
     transition: 0.5s;
@@ -485,7 +487,6 @@
 
 /*** Single Page Start ***/
 .pagination {
-    display: inline-block;
 }
 
     .pagination a {

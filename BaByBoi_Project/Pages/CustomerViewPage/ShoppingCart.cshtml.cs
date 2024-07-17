@@ -26,7 +26,7 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
         }
         private void getCustomerFromSession()
         {
-            Customer = HttpContext.Session.GetObjectFromJson<User>("Customer");
+            Customer = HttpContext.Session.GetObjectFromJson<User>("User");
         }
         private void LoadMessagesFromTempData()
         {
