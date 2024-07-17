@@ -31,6 +31,7 @@ namespace BaByBoi.Domain.Repositories.Interface
         public Task<List<BarChartModel>> GetProductsForStatistic();
         Task<List<ProductSize>> GetProductSizeByProductId(int ProductId);
 
+        Task<List<ProductSize>> GetProductByCategoryId(int categoryId);
 
     }
 }

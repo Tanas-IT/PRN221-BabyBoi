@@ -83,6 +83,7 @@ namespace BaByBoi.Domain.Repositories
                                     .Include(x => x.Product.ProductImages)
                                     .Include(x => x.Product.ProductSizes)
                                     .ThenInclude(x => x.Size)
+                                    .Include(x => x.Order.User)
                                     .ToListAsync();
             return result;
         }

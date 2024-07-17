@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-﻿using BaByBoi.Domain.Common.Enum;
+using BaByBoi.Domain.Common.Enum;
 using BaByBoi.Domain.BusinessModel;
 
 
@@ -30,7 +30,7 @@ namespace BaByBoi.Domain.Repositories
         {
             int checkSearchInt = 0;
             bool checkSearch = int.TryParse(searchValue, out checkSearchInt);
-            if(checkSearch)
+            if (checkSearch)
             {
                 return await _context.Products
                                  .Include(x => x.Category)
@@ -38,12 +38,12 @@ namespace BaByBoi.Domain.Repositories
                                 .Include(x => x.ProductSizes)
                                 .Where(x => x.ProductId == checkSearchInt || x.Discount == checkSearchInt || x.Status == checkSearchInt)
                                 .ToListAsync();
-            } 
+            }
             else
             {
                 DateTime checkDate = DateTime.Now;
                 bool checkDateTime = DateTime.TryParse(searchValue, out checkDate);
-                if(checkDateTime)
+                if (checkDateTime)
                 {
                     return await _context.Products
                                    .Include(x => x.Category)
@@ -58,8 +58,8 @@ namespace BaByBoi.Domain.Repositories
                                    .Include(x => x.Category)
                                    .Include(x => x.ProductImages)
                                    .Include(x => x.ProductSizes)
-                                   .Where(x => x.ProductCode.ToLower().Contains(searchValue.ToLower()) 
-                                               || x.ProductName.ToLower().Contains(searchValue.ToLower()) 
+                                   .Where(x => x.ProductCode.ToLower().Contains(searchValue.ToLower())
+                                               || x.ProductName.ToLower().Contains(searchValue.ToLower())
                                                || x.Description.ToLower().Contains(searchValue.ToLower())
                                                || x.Category.CategoryName.ToLower().Contains(searchValue.ToLower())
                                                )
@@ -92,11 +92,11 @@ namespace BaByBoi.Domain.Repositories
 
         public async Task<Product> AddProduct(Product product)
         {
-            if(product != null)
+            if (product != null)
             {
-                _context.Products.Add(product); 
+                _context.Products.Add(product);
                 var result = await _context.SaveChangesAsync();
-                if(result > 0)
+                if (result > 0)
                 {
                     var productNew = _context.Products.OrderByDescending(x => x.ProductId).First();
                     return productNew;
@@ -105,29 +105,29 @@ namespace BaByBoi.Domain.Repositories
             return null;
         }
 
-      
+
         public async Task<bool> AddImagesAndSize(Product product, List<ProductImage> productImagesLink, List<ProductSize> productSize, List<ProductSize> oldProductSize)
         {
-            if(product != null)
+            if (product != null)
             {
                 foreach (var productImage in productImagesLink)
                 {
                     _context.ProductImages.Add(productImage);
                 }
 
-                foreach(var size in productSize)
+                foreach (var size in productSize)
                 {
                     bool flag = false;
-                    foreach(var oldSize in oldProductSize)
+                    foreach (var oldSize in oldProductSize)
                     {
-                        if(size.ProductId == oldSize.ProductId && size.SizeId == oldSize.SizeId)
+                        if (size.ProductId == oldSize.ProductId && size.SizeId == oldSize.SizeId)
                         {
                             flag = true;
                             break;
                         }
 
                     }
-                    if(!flag)
+                    if (!flag)
                     {
                         _context.ProductSizes.Add(size);
 
@@ -142,18 +142,18 @@ namespace BaByBoi.Domain.Repositories
 
         public async Task<List<ProductImage>> GetImages()
         {
-                var listImages = await _context.ProductImages.ToListAsync();
-                return listImages;
+            var listImages = await _context.ProductImages.ToListAsync();
+            return listImages;
         }
         public async Task<Product> GetProductByProductId(int productId)
         {
-             var product = await _context.Products
-                                    .Include(x => x.Category)
-                                    .Include(x => x.ProductImages)
-                                    .Include(x => x.ProductSizes)
-                                    .ThenInclude(x => x.Size)
-                                    .FirstOrDefaultAsync(x => x.ProductId == productId);
-             if(product != null)
+            var product = await _context.Products
+                                   .Include(x => x.Category)
+                                   .Include(x => x.ProductImages)
+                                   .Include(x => x.ProductSizes)
+                                   .ThenInclude(x => x.Size)
+                                   .FirstOrDefaultAsync(x => x.ProductId == productId);
+            if (product != null)
             {
                 return product;
             }
@@ -163,7 +163,7 @@ namespace BaByBoi.Domain.Repositories
         {
             var listProdutImages = await _context.ProductImages.Where(x => x.ProductId == productId).ToListAsync();
             //var listProductSizes = await _context.ProductSizes.Where(x => x.ProductId == productId).ToListAsync();
-            if(listProdutImages.Any())
+            if (listProdutImages.Any())
             {
                 _context.ProductImages.RemoveRange(listProdutImages);
             }
@@ -178,7 +178,7 @@ namespace BaByBoi.Domain.Repositories
         public async Task<Product> UpdateProduct(Product UpdateProduct)
         {
             var oldProduct = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == UpdateProduct.ProductId);
-            if(oldProduct != null)
+            if (oldProduct != null)
             {
                 oldProduct.ProductCode = UpdateProduct.ProductCode;
                 oldProduct.ProductName = UpdateProduct.ProductName;
@@ -198,7 +198,7 @@ namespace BaByBoi.Domain.Repositories
         public async Task<bool> DeleteProduct(int productId)
         {
             var deleteProduct = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
-            if(deleteProduct != null)
+            if (deleteProduct != null)
             {
                 deleteProduct.Status = 0;
                 var result = await _context.SaveChangesAsync();
@@ -224,14 +224,14 @@ namespace BaByBoi.Domain.Repositories
             else
             {
                 var productSizes = await _context.ProductSizes
-            .Where(ps =>  ps.Product.ProductName!.ToLower().Contains(searchValue.ToLower()))
+            .Where(ps => ps.Product.ProductName!.ToLower().Contains(searchValue.ToLower()))
             .Include(ps => ps.Product)
             .Include(ps => ps.Size)
             .Include(ps => ps.Product.ProductImages)
             .ToListAsync();
 
                 return productSizes.DistinctBy(ps => ps.ProductId).ToList();
-                
+
             }
         }
 
@@ -239,14 +239,14 @@ namespace BaByBoi.Domain.Repositories
         {
             var productSize = await _context.ProductSizes
                 .Include(x => x.Product)
-                .ThenInclude( x => x.ProductImages)
+                .ThenInclude(x => x.ProductImages)
                 .Include(x => x.Size)
                 .Where(x => x.ProductId == productId && x.SizeId == sizeId)
                 .FirstOrDefaultAsync();
             return productSize!;
         }
 
-            public async Task<List<Product>> Search(string searchValue)
+        public async Task<List<Product>> Search(string searchValue)
         {
 
             // building query
@@ -296,6 +296,18 @@ namespace BaByBoi.Domain.Repositories
             return await _context.ProductSizes.Where(x => x.ProductId == ProductId).ToListAsync();
         }
 
+        public async Task<List<ProductSize>> GetProductByCategoryId(int categoryId)
+        {
+            var productSizes = await _context.ProductSizes
+            .Include(x => x.Product)
+            .Include(x => x.Product.ProductImages)
+            .Include(ps => ps.Size)
+            .Include(ps => ps.Product.ProductImages)
+            .Where(x => x.Product.CategoryId == categoryId)
+            .ToListAsync();
 
+            return productSizes.DistinctBy(ps => ps.ProductId).ToList();
+
+        }
     }
 }
