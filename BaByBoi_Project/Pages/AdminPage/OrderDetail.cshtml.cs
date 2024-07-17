@@ -68,17 +68,5 @@ namespace BaByBoi_Project.Pages.AdminPage
             return Page();
 
         }
-
-        public async Task<IActionResult> OnPostAcceptOrder(int selelectedStatus, int OrderId)
-        {
-            var orderUpdate = await _orderService.GetOrderById(OrderId);
-            if (orderUpdate != null)
-            {
-                orderUpdate.Status = selelectedStatus;
-            }
-            await LoadData(orderUpdate.OrderCode!);
-            return this.Page();
-        }
-        
     }
 }

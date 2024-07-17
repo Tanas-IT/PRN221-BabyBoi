@@ -1,6 +1,8 @@
 ﻿@page
+@using BaByBoi.DataAccess.Common.Enum
 @model BaByBoi_Project.Pages.HistoryOrder.DetailModel
 @{
+    Layout = "UsersLayout";
     string message = ViewData["FeedbackMessage"] as string;
     string errorMessage = ViewData["FeedbackErrorMessage"] as string;
     Layout = "UsersLayout";
@@ -77,6 +79,7 @@
                         <div class="text-grey-m2">
                             <div class="my-1">
                                 Address: @Model.Order.Address
+                                Address: @Model.Order.Address
                             </div>
                             <div class="my-1"><i class="fa fa-envelope fa-flip-horizontal text-secondary"></i> <b class="text-600">Email: @Model.Order.User.Email</b></div>
                         </div>
@@ -87,7 +90,7 @@
                         <hr class="d-sm-none" />
                         <div class="text-grey-m2">
                             <div class="mt-1 mb-2 text-secondary-m1 text-600 text-125">
-                                Hóa đơn
+                                Đơn hàng
                             </div>
 
                             <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Order Code: </span>@Model.Order.OrderCode</div>
@@ -95,15 +98,27 @@
                             <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Issue Date: </span>@Model.Order.OrderDate.Value.ToString("dd/MM/yyyy")</div>
 
                             <div class="my-2">
-                                <i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Status: </span>
-                                @if (Model.Order.Status == 1)
-                                {
-                                    <span class="badge badge-success badge-pill px-25">Success</span>
+                                @{
+                                    var status = (OrderStatus)@Model.Order.Status!;
+                                    var statusColor = status switch
+                                    {
+                                        OrderStatus.WaitingAccept => "#ffc107", // Yellow
+                                        OrderStatus.IsCancel => "#dc3545", // Red
+                                        OrderStatus.IsReject => "#6c757d", // Gray
+                                        OrderStatus.IsConfirmed => "#28a745", // Green
+                                        _ => "#007bff" // Default (Blue)
+                                    };
+                                    var statusText = status switch
+                                    {
+                                        OrderStatus.WaitingAccept => "Chờ chấp nhận",
+                                        OrderStatus.IsCancel => "Đã huỷ",
+                                        OrderStatus.IsReject => "Bị từ chối",
+                                        OrderStatus.IsConfirmed => "Đã xác nhận",
+                                        _ => "Không xác định"
+                                    };
                                 }
-                                else
-                                {
-                                    <span class="badge badge-danger badge-pill px-25">Failed</span>
-                                }
+                                <span class="text-600 text-90">Status: </span>
+                                <span class="badge badge-pill px-25" style="background-color: @statusColor; color: white;">@statusText</span>
                             </div>
                         </div>
                     </div>
@@ -127,10 +142,13 @@
 
                             <tbody class="text-95 text-secondary-d3">
                                 @foreach (var orderDetail in Model.ListOrderDetail)
+                                @foreach (var orderDetail in Model.ListOrderDetail)
                                 {
                                     <tr>
                                         <td>@orderDetail.ProductId</td>
                                         <td class="image-row">
+                                            @if (orderDetail.Product.ProductImages.Count > 0)
+                                            {
                                             @if (orderDetail.Product.ProductImages.Count > 0)
                                             {
                                                 <div class="product-image">
@@ -149,6 +167,9 @@
                                             }
                                             @if (orderDetail.Product.ProductImages.Count == 0)
                                             {
+                                            }
+                                            @if (orderDetail.Product.ProductImages.Count == 0)
+                                            {
                                                 <div class="product-image">
                                                     <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/product%2Fdefault-product-image.png?alt=media&token=76492637-3b09-4a43-8d7e-6426fe976faf"
                                                          alt="Default Product Image"
@@ -162,6 +183,7 @@
                                                         <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/product%2Fdefault-product-image.png?alt=media&token=76492637-3b09-4a43-8d7e-6426fe976faf" alt="Default Product Image">
                                                     </div>
                                                 </div>
+                                            }
                                             }
                                         </td>
                                         <td>@orderDetail.Product.ProductName</td>
@@ -214,12 +236,16 @@
                     <hr />
 
                     @if (Model.Order.Feedback != null || Model.Order.Rating > 0)
+                    @if (Model.Order.Feedback != null || Model.Order.Rating > 0)
                     {
                         <div>
                             <h2 style="color: red; text-align: center">Phản hồi</h2>
                             <h4>
                                 Rating: @Model.Order.Rating
+                            <h4>
+                                Rating: @Model.Order.Rating
                                 <span style="color:#FFD600">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                 </span>
                             </h4>
@@ -227,6 +253,7 @@
                         </div>
                     }
                     else
+                    {
                     {
                         <div>
                             <span class="text-secondary-d1 text-105">Cảm ơn bạn đã mua hàng ở BabyBoi</span>
@@ -282,6 +309,7 @@
                                 </div>
                             </div>
                         </div>
+                    }
                     }
                 </div>
             </div>

@@ -103,10 +103,9 @@ namespace BaByBoi_Project.Pages.LoginPage
             {
                 return RedirectToPage("/Admin/Home");
             }
-            else
-            {
-                return RedirectToPage("/CustomerViewPage/CusViewProduct");
-            }
+
+            return RedirectToPage("/CustomerViewPage/CusViewProduct");
+
         }
 
         public IActionResult OnPostLogout(string returnUrl = null!)
