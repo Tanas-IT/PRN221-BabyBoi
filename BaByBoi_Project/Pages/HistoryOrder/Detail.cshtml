@@ -190,7 +190,7 @@
                                         <td>@orderDetail.Product.Description</td>
                                         <td>@orderDetail.Quantity</td>
                                         <td>@orderDetail.ProductSize.Size.SizeName</td>
-                                        <td>@orderDetail.Price?.ToVietnameseCurrency()!.Value.ToVietnameseCurrency()</td>
+                                        <td>@orderDetail.Price!.Value.ToVietnameseCurrency()</td>
                                     </tr>
                                 }
                             </tbody>
