@@ -1,5 +1,6 @@
 ﻿using BaByBoi.DataAccess.Common.Enum;
 using BaByBoi.DataAccess.Service.Interface;
+using BaByBoi.DataAccess.Service.WorkerService;
 using BaByBoi.Domain.BusinessModel;
 using BaByBoi.Domain.Models;
 using BaByBoi.Domain.Repositories.Interface;
@@ -14,10 +15,12 @@ namespace BaByBoi.DataAccess.Service
     public class OrderSerivce : IOrderService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEmailService _emailService;
 
-        public OrderSerivce(IUnitOfWork unitOfWork)
+        public OrderSerivce(IUnitOfWork unitOfWork, IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
+            _emailService = emailService;
         }
 
         public Task<bool> deleteById(string orderCode)
@@ -51,7 +54,7 @@ namespace BaByBoi.DataAccess.Service
             {
                 return entity;
             }
-            return null! ;
+            return null!;
         }
 
         public async Task<Order> update(Order entityUpdate)
@@ -67,7 +70,7 @@ namespace BaByBoi.DataAccess.Service
         public async Task<List<LineChartModels>> GetAllOrderByMonth()
         {
             var result = await _unitOfWork.OrderRepository.GetAllOrderByMonth();
-            if(result != null)
+            if (result != null)
             {
                 return result;
             }
@@ -108,8 +111,67 @@ namespace BaByBoi.DataAccess.Service
         public async Task<double> GetTotalRevenueAsync()
                 => await _unitOfWork.OrderRepository.GetTotalRevenueAsync();
 
-        public async Task<int> GetAllOrderCountAsync()
-                => await _unitOfWork.OrderRepository.GetAllOrderCountAsync();
+        public async Task CheckOrderStatusexpired()
+        {
+            var ordersExpired = await _unitOfWork.OrderRepository.CheckOrderStatusexpired();
+            if (ordersExpired != null)
+            {
+                foreach (var item in ordersExpired)
+                {
+                    if (item.Status == (int)OrderStatus.IsExpired)
+                    {
 
+                        var user = await _unitOfWork.UserRepository.GetById(item.UserId.Value);
+                        var order = await _unitOfWork.OrderRepository.GetOrderById(item.OrderId);
+                        var subject = "Đơn hàng của bạn đã bị huỷ do 2 ngày chưa được duyệt";
+                        var emailBody = BuildOrderEmailBody(order, user);
+                        await _emailService.SendEmailAsync(user.Email, subject, emailBody);
+
+                    }
+                }
+            }
+        }
+
+        private string BuildOrderEmailBody(Order order, User user)
+        {
+            var sb = new StringBuilder();
+            sb.Append("<html>");
+            sb.Append("<head>");
+            sb.Append("<style>");
+            sb.Append("body { font-family: Arial, sans-serif; line-height: 1.6; }");
+            sb.Append("table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }");
+            sb.Append("th, td { padding: 8px; border: 1px solid #dddddd; text-align: center; }");
+            sb.Append("th { background-color: #21409A; color: white; }");
+            sb.Append("</style>");
+            sb.Append("</head>");
+            sb.Append("<body>");
+
+            sb.Append($"<p>Xin Chào {user.FullName},</p>");
+
+            sb.Append($"<p>Đơn hàng của bạn (Mã: {order.OrderCode}) đã bị huỷ do hết hạn.</p>");
+            sb.Append("<p>Vui lòng liên hệ với chúng tôi để được hỗ trợ thêm.</p>");
+            sb.Append("<p>Chúng tôi xin lỗi vì bất kỳ sự bất tiện nào có thể gây ra.</p>");
+
+            sb.Append("<table>");
+            sb.Append("<tr><th>Mã sản phẩm</th><th>Tên sản phẩm</th><th>Kích thước</th><th>Số lượng</th><th>Giá</th></tr>");
+            foreach (var detail in order.OrderDetails)
+            {
+                sb.Append($"<tr><td>{detail.ProductId}</td><td>{detail.Product?.ProductName}</td><td>{detail.ProductSize?.Size?.Description}</td><td>{detail.Quantity}</td><td>{detail.Price}</td></tr>");
+            }
+            sb.Append("</table>");
+
+            sb.Append($"<p><strong>Tổng giá: {order.TotalPrice}</strong></p>");
+            sb.Append("<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>");
+            sb.Append("<p>Trân trọng,<br/>");
+            sb.Append("BaByBoi</p>");
+
+            sb.Append("</body>");
+            sb.Append("</html>");
+
+            return sb.ToString();
+        }
+
+        public async Task<int> GetAllOrderCountAsync()
+        => await _unitOfWork.OrderRepository.GetAllOrderCountAsync();
     }
 }

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using BaByBoi.DataAccess.DTOs;
 using BaByBoi.DataAccess.Service.VNpayService;
 using FUMiniHotelManagement.Hubs;
+using BaByBoi.DataAccess.Service.WorkerService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,7 +82,7 @@ builder.Services.AddAuthentication(options =>
     googleOptions.CallbackPath = "/dang-nhap-google";
 });
 
-
+builder.Services.AddHostedService<WorkerService>();
 
 var app = builder.Build();
 
