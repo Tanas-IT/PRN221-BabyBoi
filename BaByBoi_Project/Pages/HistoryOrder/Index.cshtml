@@ -1,6 +1,7 @@
 ﻿@page
 @model BaByBoi_Project.Pages.HistoryOrder.IndexModel
 @{
+    Layout = "UsersLayout";
 }
 <!-- Fonts and icons -->
 <script src="/assets/js/plugin/webfont/webfont.min.js"></script>
@@ -105,8 +106,8 @@
             }
         </tbody>
     </table>
-    <nav aria-label="..." style="display: flex; justify-content: center">
-        <ul class="pagination">
+    <nav aria-label="...">
+        <ul class="pagination" style="display: flex; justify-content: center">
             @if (Model.CurrentIndex > 1)
             {
                 <li class="page-item">
@@ -119,11 +120,11 @@
                     <a class="page-link" href="#" tabindex="-1">Previous</a>
                 </li>
             }
-            @for (int i = 1; i <= Model.TotalPage; i++)
+            @for (int i = 1; i < Model.TotalPage; i++)
             {
                 <li style="margin: 0 10px;" class="page-item @(Model.CurrentIndex == i ? "active" : "")"><a asp-route-PageIndex="@i" asp-route-PageSize="5" class="page-link">@i</a></li>
             }
-            @if (Model.CurrentIndex < Model.TotalPage)
+            @if (Model.CurrentIndex <= Model.TotalPage)
             {
                 <li class="page-item"><a asp-route-PageIndex="@(Model.CurrentIndex + 1)" asp-route-PageSize="5" class="page-link">Next</a></li>
             }
