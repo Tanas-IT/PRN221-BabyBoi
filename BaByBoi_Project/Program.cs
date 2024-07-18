@@ -49,8 +49,6 @@ builder.Services.AddScoped<IOrderService, OrderSerivce>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddHttpContextAccessor();
-
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(60);

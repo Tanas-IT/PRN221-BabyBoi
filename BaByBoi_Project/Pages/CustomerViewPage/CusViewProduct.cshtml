@@ -126,7 +126,7 @@
                                                 </div>
                                             </div>
                                             <div class="text-center py-4">
-                                                <a class="h6 text-decoration-none text-truncate" href="">@productSize.Product.ProductName</a>
+                                                <p class="h6 text-decoration-none text-truncate" >@productSize.Product.ProductName</p>
                                                 <div class="d-flex align-items-center justify-content-center mt-2">
                                                     <h5>@(productSize.Price!.Value.ToString("C"))</h5>
                                                 </div>
@@ -162,20 +162,20 @@
                                 }
                                 <div class="col-12">
                                     <div class="pagination d-flex justify-content-center mt-5">
-                                        <a class="@prevDisabled" asp-page="./Index" asp-route-pageIndex="1" asp-route-searchValue="@(Model.SearchValue)" class="rounded">&laquo;</a>
+                                        <a class="@prevDisabled" asp-page="./CusViewProduct" asp-route-pageIndex="1" asp-route-searchValue="@(Model.SearchValue)" class="rounded">&laquo;</a>
 
-                                        <a class="@prevDisabled" asp-page="./Index" asp-route-pageIndex="@(Model.PageIndex - 1)" asp-route-searchValue="@(Model.SearchValue)" class="rounded">&laquo;</a>
+                                        <a class="@prevDisabled" asp-page="./CusViewProduct" asp-route-pageIndex="@(Model.PageIndex - 1)" asp-route-searchValue="@(Model.SearchValue)" class="rounded">&laquo;</a>
 
                                         @for (int i = startPage; i <= endPage; i++)
                                         {
-                                            <a class="@(i == Model.PageIndex ? "active" : "" ) rounded" asp-page="./Index" asp-route-pageIndex="@i" asp-route-searchValue="@(Model.SearchValue)">@i</a>
+                                            <a class="@(i == Model.PageIndex ? "active" : "" ) rounded" asp-page="./CusViewProduct" asp-route-pageIndex="@i" asp-route-searchValue="@(Model.SearchValue)">@i</a>
                                         }
 
-                                        <a class="@nextDisabled rounded" asp-page="./Index" asp-route-pageIndex="@(Model.PageIndex + 1)" asp-route-searchValue="@(Model.SearchValue)" aria-label="Next">
+                                        <a class="@nextDisabled rounded" asp-page="./CusViewProduct" asp-route-pageIndex="@(Model.PageIndex + 1)" asp-route-searchValue="@(Model.SearchValue)" aria-label="Next">
                                             &rsaquo;
                                         </a>
 
-                                        <a class=" @nextDisabled rounded" asp-page="./Index" asp-route-pageIndex="@(Model.Products.TotalPages)" asp-route-searchValue="@(Model.SearchValue)" aria-label="Next">
+                                        <a class=" @nextDisabled rounded" asp-page="./CusViewProduct" asp-route-pageIndex="@(Model.Products.TotalPages)" asp-route-searchValue="@(Model.SearchValue)" aria-label="Next">
                                             &raquo;
                                         </a>
                                     </div>

@@ -187,7 +187,8 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
             });
 
             var result = await _orderService.Insert(order);
-
+            HttpContext.Session.Remove("ListPurchase");
+            HttpContext.Session.Remove("OrderList");
             if (result != null)
             {
                 TempData["SuccessMessage"] = "Đã đặt hàng thành công";
