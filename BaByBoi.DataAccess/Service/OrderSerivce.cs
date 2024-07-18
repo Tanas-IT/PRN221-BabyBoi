@@ -96,5 +96,13 @@ namespace BaByBoi.DataAccess.Service
             return result;
         }
 
+        public async Task<int> GetNewOrderCountAsync()
+                => await _unitOfWork.OrderRepository.GetNewOrderCountAsync();
+
+        public async Task<List<Order>> GetOrderByStatus(int status)
+                => await _unitOfWork.OrderRepository.GetOrderByStatus(status);
+
+        public async Task<bool> UpdateOrderStatus(int id, int status)
+                => await _unitOfWork.OrderRepository.UpdateOrderStatus(id, status);
     }
 }

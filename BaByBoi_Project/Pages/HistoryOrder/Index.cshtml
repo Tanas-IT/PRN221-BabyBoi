@@ -1,8 +1,10 @@
 ﻿@page
+@using BaByBoi.DataAccess.Common.Enum
 @model BaByBoi_Project.Pages.HistoryOrder.IndexModel
 @{
     Layout = "UsersLayout";
 }
+
 <!-- Fonts and icons -->
 <script src="/assets/js/plugin/webfont/webfont.min.js"></script>
 <script>
@@ -22,57 +24,65 @@
         },
     });
 </script>
-<div class="table-responsive">
-    <table id="add-row"
-           class="display table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>OrderCode</th>
-                <th>OrderDate</th>
-                <th>Address</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>PaymentMethod</th>
-                <th>Voucher</th>
-                <th>TotalProduct</th>
-                <th>TotalPrice</th>
-                <th style="width: 10%">Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var order in Model.ListHistoryOrderPagin)
-            {
-                <tr>
-                    <td>@order.OrderCode</td>
-                    <td>@order.OrderDate?.ToString("dd-MM-yyyy")</td>
-                    <td>
-                        @order.Address
-                    </td>
-                    <td>@order.Description</td>
-                    @if (order.Status == 1)
-                    {
+<div class="mainContainer mb-4">
+    <div class="table-responsive">
+        <table id="add-row"
+               class="display table table-striped table-hover">
+            <h2>Lịch sử đơn hàng</h2>
+            <thead>
+                <tr class="table-row">
+                    <th>Mã đơn hàng</th>
+                    <th>Ngày đặt hàng</th>
+                    <th>Địa chỉ</th>
+                    <th>Mô tả</th>
+                    <th>Trạng thái</th>
+                    <th>Phương thức thanh toán</th>
+                    <th>Voucher</th>
+                    <th>Tổng sản phẩm</th>
+                    <th>Tổng giá</th>
+                    <th style="width: 10%">Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model.ListHistoryOrderPagin)
+                {
+                    <tr>
+                        <td>@order.OrderCode</td>
+                        <td>@order.OrderDate?.ToString("dd-MM-yyyy")</td>
                         <td>
-                            <span style="display: block;
-                                         border: 1px solid;
-                                         padding: 5px;
-                                         border-radius: 8px;
-                                         background-color: #31ce36;
-                                         font-weight: bold;
-                                         text-align: center;
-                                         color: white;">Payment Success</span>
+                            @order.Address
                         </td>
-                    }
-                    else
-                    {
+                        <td>@order.Description</td>
                         <td>
+                            @{
+                                var status = (OrderStatus)order.Status!;
+                                var statusColor = status switch
+                                {
+                                    OrderStatus.WaitingAccept => "#ffc107", // Yellow
+                                    OrderStatus.IsCancel => "#dc3545", // Red
+                                    OrderStatus.IsReject => "#6c757d", // Gray
+                                    OrderStatus.IsConfirmed => "#28a745", // Green
+                                    _ => "#007bff" // Default (Blue)
+                                };
+                                var statusText = status switch
+                                {
+                                    OrderStatus.WaitingAccept => "Chờ chấp nhận",
+                                    OrderStatus.IsCancel => "Đã huỷ",
+                                    OrderStatus.IsReject => "Bị từ chối",
+                                    OrderStatus.IsConfirmed => "Đã xác nhận",
+                                    _ => "Không xác định"
+                                };
+                            }
                             <span style="display: block;
-                                         border: 1px solid;
-                                         padding: 5px;
-                                         border-radius: 8px;
-                                         background-color: red;
-                                         font-weight: bold;
-                                         text-align: center;
-                                         color: white;">Payment Failed</span>
+                                     border: 1px solid;
+                                     padding: 5px;
+                                     border-radius: 8px;
+                                     background-color: @statusColor;
+                                     font-weight: bold;
+                                     text-align: center;
+                                     color: white;">
+                                @statusText
+                            </span>
                         </td>
                     }
                     <td>@order.Payment.PaymentName</td>

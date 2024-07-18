@@ -282,6 +282,7 @@ hr {
 }
 
 .btn-google {
+    font-weight: 400;
     background: #ea4335;
     color: #fff !important;
 }

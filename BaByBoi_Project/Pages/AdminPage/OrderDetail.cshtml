@@ -1,6 +1,8 @@
 ﻿@page
+@using BaByBoi.DataAccess.Common.Enum
 @model BaByBoi_Project.Pages.AdminPage.OrderDetailModel
 @{
+    Layout = "AdminLayout";
     string message = ViewData["FeedbackMessage"] as string;
     string errorMessage = ViewData["FeedbackErrorMessage"] as string;
 }
@@ -86,7 +88,7 @@
                         <hr class="d-sm-none" />
                         <div class="text-grey-m2">
                             <div class="mt-1 mb-2 text-secondary-m1 text-600 text-125">
-                                Hóa đơn
+                                Đơn hàng
                             </div>
 
                             <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Order Code: </span>@Model.Order.OrderCode</div>
@@ -94,24 +96,27 @@
                             <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Issue Date: </span>@Model.Order.OrderDate!.Value.ToString("dd/MM/yyyy")</div>
 
                             <div class="my-2">
-                                <i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Status: </span>
-                                <form method="post" asp-page-handler="AcceptOrder">
-                                    <input name="OrderId" value="@Model.Order.OrderId" type="hidden" />
-                                    @if (Model.Order.Status == 0)
+                                @{
+                                    var status = (OrderStatus)@Model.Order.Status!;
+                                    var statusColor = status switch
                                     {
-                                        <input name="selelectedStatus" value="1" type="hidden" />
-                                        <span class="badge badge-warning badge-pill px-25">Chờ xét duyệt</span>
-                                        <button type="submit" class="btn btn-success" style=" padding: 0px 15px; margin-left: 30px;" >
-                                            Xác Nhận
-                                        </button>
-                                    }
-                                    else
+                                        OrderStatus.WaitingAccept => "#ffc107", // Yellow
+                                        OrderStatus.IsCancel => "#dc3545", // Red
+                                        OrderStatus.IsReject => "#6c757d", // Gray
+                                        OrderStatus.IsConfirmed => "#28a745", // Green
+                                        _ => "#007bff" // Default (Blue)
+                                    };
+                                    var statusText = status switch
                                     {
-                                        <span class="badge badge-success badge-pill px-25">Đã xác nhận</span>
-                                    }
-                                </form>
-
-
+                                        OrderStatus.WaitingAccept => "Chờ chấp nhận",
+                                        OrderStatus.IsCancel => "Đã huỷ",
+                                        OrderStatus.IsReject => "Bị từ chối",
+                                        OrderStatus.IsConfirmed => "Đã xác nhận",
+                                        _ => "Không xác định"
+                                    };
+                                }
+                                <span class="text-600 text-90">Status: </span>
+                                <span class="badge badge-pill px-25" style="background-color: @statusColor; color: white;">@statusText</span>
                             </div>
                         </div>
                     </div>
