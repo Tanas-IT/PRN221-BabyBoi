@@ -127,12 +127,12 @@
                                                 </div>
                                             </div>
                                             <div class="text-center py-4">
-                                                <p class="h6 text-decoration-none text-truncate product-name">@productSize.Product.ProductName</p>
+                                                <p class="h6 text-decoration-none text-truncate">@productSize.Product.ProductName</p>
                                                 <div class="d-flex align-items-center justify-content-center mt-2" style="flex-direction:column;height:3.5vw">
                                                     <h5 style="text-decoration:line-through">@(productSize.Price!.Value.ToVietnameseCurrency())</h5>
                                                     @if (productSize.Product.Discount != null && productSize.Product.Discount != 0)
                                                     {
-                                                        <h5 style="color:red" class="product-price">
+                                                        <h5 style="color:red">
                                                             @((productSize.Price!.Value - productSize.Price!.Value * productSize.Product.Discount.Value/100).ToVietnameseCurrency()
                                                                 )
                                                         </h5>
