@@ -23,6 +23,8 @@ namespace BaByBoi.Domain.Repositories.Interface
         Task<Order> GetOrderById(int orderId);
         Task<bool> AddFeedback(Order OrderFeedback);
         Task<bool> UpdateOrderStatus(int id, int status);
+        Task<List<Order>> CheckOrderStatusexpired();
+
 
     }
 }

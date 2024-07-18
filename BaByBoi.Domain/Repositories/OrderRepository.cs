@@ -161,5 +161,29 @@ namespace BaByBoi.Domain.Repositories
 
             return totalRevenue;
         }
+
+        public async Task<List<Order>> CheckOrderStatusexpired()
+        {
+
+            var currentDate = DateTime.Now;
+
+            var bookingsToUpdate = await _context.Orders
+                .Include(b => b.OrderDetails)
+                .Include(b => b.User)
+                .Include(b => b.Payment)
+                .Include(b => b.Voucher)
+                .Where(b => EF.Functions.DateDiffDay(b.OrderDate, currentDate) >= 2 &&
+                            b.Status == (int)OrderStatus.WaitingAccept)
+                .ToListAsync();
+
+            foreach (var booking in bookingsToUpdate)
+            {
+                booking.Status = (int)OrderStatus.IsExpired;
+            }
+
+            await _context.SaveChangesAsync();
+            return bookingsToUpdate;
+
+        }
     }
 }
