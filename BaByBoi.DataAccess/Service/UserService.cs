@@ -87,5 +87,8 @@ namespace BaByBoi.DataAccess.Service
         {
             return await _unitOfWork.UserRepository.SearchUser(searchValue);            
         }
+
+        public async Task<int> GetTotalUserAsync()
+                => await _unitOfWork.UserRepository.GetTotalUserAsync();
     }
 }

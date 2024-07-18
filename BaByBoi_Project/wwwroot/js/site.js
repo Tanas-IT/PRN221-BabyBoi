@@ -1,4 +1,19 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿"use strict";
 
-// Write your JavaScript code.
+var connection = new signalR.HubConnectionBuilder().withUrl("/signalrServer").build();
+
+connection.on("ReceiveUserCount", function (count) {
+    $('#userCount').text(count);
+});
+
+connection.on("ReceiveTotalRevenue", function (count) {
+    $('#totalRevenue').text(count);
+});
+
+connection.on("ReceiveNewOrderCount", function (count) {
+    $('.newOrderCount').text(count);
+});
+
+connection.start().catch(function (err) {
+    console.error(err.toString());
+});

@@ -17,5 +17,8 @@ namespace BaByBoi.Domain.Repositories.Interface
         Task<IEnumerable<User>> GetAll();
         Task<IEnumerable<User>> SearchUser(string searchValue);
         Task<bool> ExistsAsync(int id);
+
+        Task<int> GetTotalUserAsync();
+
     }
 }

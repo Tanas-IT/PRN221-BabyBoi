@@ -152,5 +152,14 @@ namespace BaByBoi.Domain.Repositories
             order.Status = status;
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<double> GetTotalRevenueAsync()
+        {
+            var totalRevenue = await _context.Orders
+            .Where(o => o.Status == (int)OrderStatus.IsConfirmed)
+            .SumAsync(o => o.TotalPrice ?? 0.0);
+
+            return totalRevenue;
+        }
     }
 }

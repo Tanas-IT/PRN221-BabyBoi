@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Configuration;
 using BaByBoi.DataAccess.DTOs;
 using BaByBoi.DataAccess.Service.VNpayService;
+using FUMiniHotelManagement.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,8 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddSignalR();
+
 // config send email
 builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
 builder.Services.AddSingleton<IEmailService, EmailService>();
@@ -92,6 +95,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHub<SignalrServer>("/signalrServer");
 
 app.MapRazorPages();
 app.MapControllers();

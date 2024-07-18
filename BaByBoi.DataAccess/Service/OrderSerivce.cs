@@ -104,5 +104,8 @@ namespace BaByBoi.DataAccess.Service
 
         public async Task<bool> UpdateOrderStatus(int id, int status)
                 => await _unitOfWork.OrderRepository.UpdateOrderStatus(id, status);
+
+        public async Task<double> GetTotalRevenueAsync()
+                => await _unitOfWork.OrderRepository.GetTotalRevenueAsync();
     }
 }

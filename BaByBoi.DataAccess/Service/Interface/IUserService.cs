@@ -21,6 +21,7 @@ namespace BaByBoi.DataAccess.Service.Interface
         Task<User> ChangePasswordByEmail(string email, string newPassword);
         Task<User> GetUserByEmail(string email);
         Task<bool> AddAsync(User user);
+        Task<int> GetTotalUserAsync();
 
     }
 }
