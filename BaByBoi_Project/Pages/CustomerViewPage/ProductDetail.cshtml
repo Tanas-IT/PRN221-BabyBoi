@@ -1,4 +1,5 @@
 ﻿@page
+@using BaByBoi.DataAccess.Utils
 @model BaByBoi_Project.Pages.CustomerViewPage.ProductDetailModel
 @{
     ViewData["Title"] = "Shop Detail";
@@ -60,7 +61,7 @@
                         <div class="col-lg-6">
                             <h4 class="fw-bold mb-3">@Model.Product.ProductName</h4>
                             <p class="mb-3">Category: @Model.Product.Category!.CategoryName</p>
-                            <h5 class="fw-bold mb-3">@(Model.Product.ProductSizes.OrderBy(x => x.SizeId).FirstOrDefault()!.Price - Model.Product.Discount)</h5>
+                            <h5 class="fw-bold mb-3">@((Model.Product.ProductSizes.OrderBy(x => x.SizeId).FirstOrDefault()!.Price - Model.Product.Discount)!.Value.ToVietnameseCurrency())</h5>
                             @foreach (var size in Model.Product.ProductSizes)
                             {
                                 var flag = 1;
