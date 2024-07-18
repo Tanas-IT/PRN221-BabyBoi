@@ -32,6 +32,16 @@ connection.on("ReceiveNewOrder", function () {
     }
 });
 
+connection.on("UpdateProductInCustomer", function (productId) {
+    var currentPath = window.location.pathname;
+    if (currentPath === "/CustomerViewPage/CusViewProduct") {
+        var url = "/Admin/UpdateProductRealTime/" + productId;
+        loadDataAndRender(url, renderNewProductItem);
+    }
+});
+
+
+
 connection.start().catch(function (err) {
     console.error(err.toString());
 });
@@ -115,6 +125,23 @@ function renderOrderTable(orders) {
     });
 
     tableBody.html(tr);
+}
+
+function renderNewProductItem(product) {
+    var productElement = document.querySelector(`[data-product-id='${product.productId}']`);
+
+    if (productElement) {
+        // Nếu sản phẩm đã tồn tại, cập nhật thông tin sản phẩm
+        productElement.querySelector('.product-img img').src = product.imageUrl;
+        productElement.querySelector('.product-name').innerText = product.productName;
+        productElement.querySelector('.product-price').innerText = product.price;
+
+        if (product.discount) {
+            productElement.querySelector('.product-discount').innerText = `${product.discount}% off`;
+        } else {
+            productElement.querySelector('.product-discount').innerText = '';
+        }
+    }
 }
 
 function getOrderStatusText(status) {
