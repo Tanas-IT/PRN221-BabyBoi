@@ -2,7 +2,7 @@
 
 :root {
     --bs-primary: #21409A;
-/*    --bs-secondary: #fff;*/
+    /*    --bs-secondary: #fff;*/
 }
 
 .bg-primary {
@@ -355,6 +355,11 @@
             }
 /*** Fruits End ***/
 
+.product-price {
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
 
 /*** vesitable Start ***/
 .vesitable .vesitable-item {
