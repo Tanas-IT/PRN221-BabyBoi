@@ -33,7 +33,10 @@ namespace BaByBoi.Domain.Repositories
                     .ThenInclude(x => x.Product)
                     .Include(x => x.Payment)
                     .Include(x => x.Voucher)
-                    .Where(x => x.UserId == UserId).ToListAsync();
+                    .Where(x => x.UserId == UserId)
+                    .OrderBy(x => x.Status)
+                    .ThenByDescending(x => x.OrderId)
+                    .ToListAsync();
             }
             return OrderList;
         }
@@ -151,6 +154,21 @@ namespace BaByBoi.Domain.Repositories
             }
             order.Status = status;
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<double> GetTotalRevenueAsync()
+        {
+            var totalRevenue = await _context.Orders
+            .Where(o => o.Status == (int)OrderStatus.IsConfirmed)
+            .SumAsync(o => o.TotalPrice ?? 0.0);
+
+            return totalRevenue;
+        }
+
+        public async Task<int> GetAllOrderCountAsync()
+        {
+            var count = await _context.Orders.CountAsync();
+            return count;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using BaByBoi.Domain.Common.Enum;
+﻿using BaByBoi.DataAccess.Common.Enum;
+using BaByBoi.Domain.Common.Enum;
 using BaByBoi.Domain.Models;
 using BaByBoi.Domain.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -65,7 +66,7 @@ namespace BaByBoi.Domain.Repositories
 
         public async Task<IEnumerable<User>> SearchUser(string searchValue)
         {
-            return await _context.Users.Include(u => u.Role).Where(u => u.Email.Contains(searchValue) && u.Status != (int)StatusExist.Deleted).OrderByDescending(u=> u.UpdateDate).ToListAsync();
+            return await _context.Users.Include(u => u.Role).Where(u => u.Email.Contains(searchValue) && u.Status != (int)StatusExist.Deleted).OrderByDescending(u => u.UpdateDate).ToListAsync();
         }
         public override async Task<User> GetById(int id)
         {
@@ -79,5 +80,12 @@ namespace BaByBoi.Domain.Repositories
             return await _context.Users.AnyAsync(e => e.UserId == id);
         }
 
+        public async Task<int> GetTotalUserAsync()
+        {
+            var totalUser = await _context.Users
+              .Where(o => o.Status == (int)StatusExist.Exist)
+              .CountAsync();
+            return totalUser;
+        }
     }
 }

@@ -6,9 +6,11 @@ using BaByBoi.DataAccess.Service.Interface;
 using BaByBoi.Domain.Models;
 using BaByBoi_Project.Common.Enum;
 using BaByBoi_Project.Extensions;
+using FUMiniHotelManagement.Hubs;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 
 namespace BaByBoi_Project.Pages.RegisterPage
@@ -17,11 +19,13 @@ namespace BaByBoi_Project.Pages.RegisterPage
     {
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
+        private readonly IHubContext<SignalrServer> _signalRHub;
 
-        public IndexModel(IUserService userService, IEmailService emailService)
+        public IndexModel(IUserService userService, IEmailService emailService, IHubContext<SignalrServer> signalRHub)
         {
             _userService = userService;
             _emailService = emailService;
+            _signalRHub = signalRHub;
         }
 
         [BindProperty]
@@ -121,6 +125,9 @@ namespace BaByBoi_Project.Pages.RegisterPage
             var result = await _userService.AddAsync(User);
             if (result)
             {
+                int totalUser = await _userService.GetTotalUserAsync();
+                await _signalRHub.Clients.All.SendAsync("ReceiveUserCount", totalUser);
+
                 var user = await _userService.GetUserByEmail(User.Email);
                 HttpContext.Session.SetObjectAsJson("User", user);
                 HttpContext.Session.Remove("VerificationCode");

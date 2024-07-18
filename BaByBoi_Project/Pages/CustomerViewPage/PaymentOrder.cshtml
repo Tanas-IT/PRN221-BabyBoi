@@ -1,4 +1,5 @@
 ﻿@page
+@using BaByBoi.DataAccess.Utils
 @model BaByBoi_Project.Pages.CustomerViewPage.PaymentOrderModel
 @{
     Layout = "UsersLayout";
@@ -73,7 +74,7 @@
                         <p>Size: @item.ProductSize.Size.SizeName</p>
                     </div>
                     <div class="col-2">
-                        <p>@(Math.Ceiling((decimal)(item.ProductSize.Price - (item.ProductSize.Price * item.Product.Discount) / 100)!)) </p>
+                        <p>@(  (Math.Ceiling( (double)(item.ProductSize.Price - (item.ProductSize.Price * item.Product.Discount) / 100)!) ).ToVietnameseCurrency()  )</p>
                     </div>
                     <div class="col-2">
                         <p>Quantity: @item.Quantity</p>
@@ -82,14 +83,14 @@
                         @{
                             priceEachProduct = (double)(Math.Ceiling((double)(item.ProductSize.Price - (item.ProductSize.Price * item.Product.Discount) / 100)!) * item.Quantity)!;
                         }
-                        <p>@(priceEachProduct.ToString("C"))</p>
+                        <p>@(priceEachProduct.ToVietnameseCurrency() )</p>
                     </div>
                 }
             </div>
             <hr />
             <div class="row">
                 <div class="col-12 text-end">
-                    <p class="total-price">Total: @(Model.totalPay.ToString("C"))</p>
+                    <p class="total-price">Total: @(Model.totalPay.ToVietnameseCurrency())</p>
                 </div>
             </div>
         </div>

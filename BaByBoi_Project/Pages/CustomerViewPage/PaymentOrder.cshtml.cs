@@ -4,8 +4,10 @@ using BaByBoi.DataAccess.Service.VNpayService;
 using BaByBoi.Domain.Models;
 using BaByBoi_Project.Common.Enum;
 using BaByBoi_Project.Extensions;
+using FUMiniHotelManagement.Hubs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
 
 namespace BaByBoi_Project.Pages.CustomerViewPage
 {
@@ -16,14 +18,16 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
         private readonly IPaymentService _paymentService;
         private readonly IVnpayService _vnpayService;
         private readonly IVoucherService _voucherService;
+        private readonly IHubContext<SignalrServer> _signalRHub;
 
-        public PaymentOrderModel(IProductService productService, IOrderService orderService, IPaymentService paymentService, IVnpayService vnpayService, IVoucherService voucherService)
+        public PaymentOrderModel(IProductService productService, IOrderService orderService, IPaymentService paymentService, IVnpayService vnpayService, IVoucherService voucherService, IHubContext<SignalrServer> signalRHub)
         {
             _productService = productService;
             _orderService = orderService;
             _paymentService = paymentService;
             _vnpayService = vnpayService;
             _voucherService = voucherService;
+            _signalRHub = signalRHub;
         }
         public List<Payment> paymentMethod { get; set; }
         public List<OrderDetail> orderDetailsPurchase { get; set; }
@@ -183,10 +187,19 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
             });
 
             var result = await _orderService.Insert(order);
-
+            HttpContext.Session.Remove("ListPurchase");
+            HttpContext.Session.Remove("OrderList");
             if (result != null)
             {
                 TempData["SuccessMessage"] = "Đã đặt hàng thành công";
+
+                int newOrderCount = await _orderService.GetNewOrderCountAsync();
+                int allOrderCount = await _orderService.GetAllOrderCountAsync();
+
+                await _signalRHub.Clients.All.SendAsync("ReceiveNewOrderCount", newOrderCount);
+                await _signalRHub.Clients.All.SendAsync("ReceiveAllOrderCount", allOrderCount);
+                await _signalRHub.Clients.All.SendAsync("ReceiveNewOrder");
+
                 return RedirectToPage("/HistoryOrder/Detail", new { orderCode = order.OrderCode });
             }
             return this.Page();

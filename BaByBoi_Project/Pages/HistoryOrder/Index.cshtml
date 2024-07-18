@@ -1,4 +1,5 @@
 ﻿@page
+@using BaByBoi.DataAccess.Utils
 @using BaByBoi.DataAccess.Common.Enum
 @model BaByBoi_Project.Pages.HistoryOrder.IndexModel
 @{
@@ -26,9 +27,8 @@
 </script>
 <div class="mainContainer mb-4">
     <div class="table-responsive">
-        <table id="add-row"
-               class="display table table-striped table-hover">
-            <h2>Lịch sử đơn hàng</h2>
+        <h2>Lịch sử đơn hàng</h2>
+        <table id="add-row" class="display table table-striped table-hover">
             <thead>
                 <tr class="table-row">
                     <th>Mã đơn hàng</th>
@@ -43,10 +43,10 @@
                     <th style="width: 10%">Chi tiết</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="orderHistoryTable">
                 @foreach (var order in Model.ListHistoryOrderPagin)
                 {
-                    <tr>
+                    <tr id="orderRow-@order.OrderId">
                         <td>@order.OrderCode</td>
                         <td>@order.OrderDate?.ToString("dd-MM-yyyy")</td>
                         <td>
@@ -73,7 +73,7 @@
                                     _ => "Không xác định"
                                 };
                             }
-                            <span style="display: block;
+                            <span id="orderStatus-@order.OrderId" style="display: block;
                                      border: 1px solid;
                                      padding: 5px;
                                      border-radius: 8px;
@@ -84,59 +84,67 @@
                                 @statusText
                             </span>
                         </td>
-                        <td>@order.Payment.PaymentName</td>
-                        <td>@order.Voucher.Percent</td>
-                        <td>@order.TotalProduct</td>
-                        <td>@order.TotalPrice</td>
-                        <td>
-                            <div class="form-button-action">
-                                <button type="button"
-                                        title=""
-                                        class="btn btn-link btn-lg"
-                                        data-original-title="View Order Detail">
-                                    <div>
-                                        <a asp-page="Detail" asp-route-orderCode="@order.OrderCode" style="text-decoration: none">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </div>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <nav aria-label="..." style="display: flex; justify-content: center">
-            <ul class="pagination d-flex">
-                @if (Model.CurrentIndex > 1)
-                {
-                    <li class="page-item">
-                        <a asp-route-PageIndex="@(Model.CurrentIndex - 1)" asp-route-PageSize="5" class="page-link" tabindex="-1">Previous</a>
-                    </li>
-                }
-                else
-                {
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1">Previous</a>
-                    </li>
-                }
-                @for (int i = 1; i <= Model.TotalPage; i++)
-                {
-                    <li style="margin: 0 10px;" class="page-item @(Model.CurrentIndex == i ? "active" : "")"><a asp-route-PageIndex="@i" asp-route-PageSize="5" class="page-link">@i</a></li>
-                }
-                @if (Model.CurrentIndex < Model.TotalPage)
-                {
-                    <li class="page-item"><a asp-route-PageIndex="@(Model.CurrentIndex + 1)" asp-route-PageSize="5" class="page-link">Next</a></li>
-                }
-                else
-                {
-                    <li class="page-item disabled"><a class="page-link">Next</a></li>
-                }
-            </ul>
-        </nav>
-    </div>
+                    }
+                    <td>@order.Payment.PaymentName</td>
+                    @{
+                        if (order.Voucher != null)
+                        {
+                            <td>@order.Voucher.Percent</td>
+                        }
+                        else
+                        {
+                            <td>N/A</td>
+                        }
+                    }
+                    <td>@order.TotalProduct</td>
+                    <td>@order.TotalPrice!.Value.ToVietnameseCurrency()</td>
+                    <td>
+                        <div class="form-button-action">
+                            <button type="button"
+                                    title=""
+                                    class="btn btn-link btn-lg"
+                                    data-original-title="View Order Detail">
+                                <div>
+                                    <a asp-page="Detail" asp-route-orderCode="@order.OrderCode" style="text-decoration: none">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                </div>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <nav aria-label="...">
+        <ul class="pagination" style="display: flex; justify-content: center">
+            @if (Model.CurrentIndex > 1)
+            {
+                <li class="page-item">
+                    <a asp-route-PageIndex="@(Model.CurrentIndex - 1)" asp-route-PageSize="5" class="page-link" tabindex="-1">Previous</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+            }
+            @for (int i = 1; i < Model.TotalPage; i++)
+            {
+                <li style="margin: 0 10px;" class="page-item @(Model.CurrentIndex == i ? "active" : "")"><a asp-route-PageIndex="@i" asp-route-PageSize="5" class="page-link">@i</a></li>
+            }
+            @if (Model.CurrentIndex + 1 < Model.TotalPage)
+            {
+                <li class="page-item"><a asp-route-PageIndex="@(Model.CurrentIndex + 1)" asp-route-PageSize="5" class="page-link">Next</a></li>
+            }
+            else
+            {
+                <li class="page-item disabled"><a class="page-link">Next</a></li>
+            }
+        </ul>
+    </nav>
 </div>
-
 <script src="/assets/js/core/jquery-3.7.1.min.js"></script>
 <script src="/assets/js/core/popper.min.js"></script>
 <script src="/assets/js/core/bootstrap.min.js"></script>

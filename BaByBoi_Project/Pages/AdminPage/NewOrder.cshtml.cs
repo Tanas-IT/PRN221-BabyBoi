@@ -1,12 +1,15 @@
 ﻿using BaByBoi.DataAccess.Common.Enum;
 using BaByBoi.DataAccess.Service.Interface;
+using BaByBoi.DataAccess.Utils;
 using BaByBoi.Domain.Models;
 using BaByBoi.Domain.PaginModel;
 using BaByBoi.Domain.Utils;
 using BaByBoi_Project.Common.Enum;
 using BaByBoi_Project.Extensions;
+using FUMiniHotelManagement.Hubs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
 using System.Text;
 
 namespace BaByBoi_Project.Pages.AdminPage
@@ -16,12 +19,14 @@ namespace BaByBoi_Project.Pages.AdminPage
         private readonly IOrderService _orderService;
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
+        private readonly IHubContext<SignalrServer> _signalRHub;
 
-        public NewOrderModel(IOrderService orderService, IUserService userService, IEmailService emailService)
+        public NewOrderModel(IOrderService orderService, IUserService userService, IEmailService emailService, IHubContext<SignalrServer> signalRHub)
         {
             _orderService = orderService;
             _userService = userService;
             _emailService = emailService;
+            _signalRHub = signalRHub;
         }
 
         [BindProperty]
@@ -110,11 +115,20 @@ namespace BaByBoi_Project.Pages.AdminPage
                 {
                     var user = await _userService.GetByIdAsync(customerId);
                     var order = await _orderService.GetOrderById(orderId);
+
+                    double totalRevenue = await _orderService.GetTotalRevenueAsync();
+                    await _signalRHub.Clients.All.SendAsync("ReceiveTotalRevenue", totalRevenue.ToVietnameseCurrency());
+
+                    int newOrderCount = await _orderService.GetNewOrderCountAsync();
+                    await _signalRHub.Clients.All.SendAsync("ReceiveNewOrderCount", newOrderCount);
+
+
                     var subject = "Đơn hàng của bạn đã được xác nhận";
                     var emailBody = BuildOrderEmailBody(order, user, true);
                     try
                     {
                         await _emailService.SendEmailAsync(user.Email, subject, emailBody);
+                        await _signalRHub.Clients.All.SendAsync("ReceiveOrderStatusUpdate", orderId, OrderStatus.IsConfirmed);
                         TempData["SuccessMessage"] = "Đơn hàng đã được xác nhận và email đã được gửi.";
                     }
                     catch (Exception)
@@ -148,11 +162,17 @@ namespace BaByBoi_Project.Pages.AdminPage
                 {
                     var user = await _userService.GetByIdAsync(customerId);
                     var order = await _orderService.GetOrderById(orderId);
+
+                    int newOrderCount = await _orderService.GetNewOrderCountAsync();
+                    await _signalRHub.Clients.All.SendAsync("ReceiveNewOrderCount", newOrderCount);
+
+
                     var subject = "Đơn hàng của bạn đã bị từ chối";
                     var emailBody = BuildOrderEmailBody(order, user, false);
                     try
                     {
                         await _emailService.SendEmailAsync(user.Email, subject, emailBody);
+                        await _signalRHub.Clients.All.SendAsync("ReceiveOrderStatusUpdate", orderId, OrderStatus.IsReject);
                         SetSuccessMessage("Đơn hàng đã bị từ chối và email đã được gửi.");
                     }
                     catch (Exception)
@@ -211,11 +231,11 @@ namespace BaByBoi_Project.Pages.AdminPage
             sb.Append("<tr><th>Mã sản phẩm</th><th>Tên sản phẩm</th><th>Kích thước</th><th>Số lượng</th><th>Giá</th></tr>");
             foreach (var detail in order.OrderDetails)
             {
-                sb.Append($"<tr><td>{detail.ProductId}</td><td>{detail.Product?.ProductName}</td><td>{detail.ProductSize?.Size?.Description}</td><td>{detail.Quantity}</td><td>{detail.Price}</td></tr>");
+                sb.Append($"<tr><td>{detail.ProductId}</td><td>{detail.Product?.ProductName}</td><td>{detail.ProductSize?.Size?.Description}</td><td>{detail.Quantity}</td><td>{detail.Price?.ToVietnameseCurrency()}</td></tr>");
             }
             sb.Append("</table>");
 
-            sb.Append($"<p><strong>Tổng giá: {order.TotalPrice}</strong></p>");
+            sb.Append($"<p><strong>Tổng giá: {order.TotalPrice?.ToVietnameseCurrency()}</strong></p>");
             sb.Append("<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>");
             sb.Append("<p>Trân trọng,<br/>");
             sb.Append("BaByBoi</p>");

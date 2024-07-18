@@ -13,6 +13,10 @@ namespace BaByBoi.Domain.Repositories.Interface
         Task<Order> GetByOrderCode(string OrderCode);
         Task<List<Order>> GetAllOrderOfCustomer(int UserId);
         Task<int> GetNewOrderCountAsync();
+        Task<int> GetAllOrderCountAsync();
+
+        Task<double> GetTotalRevenueAsync();
+
         Task<List<LineChartModels>> GetAllOrderByMonth();
         Task<List<Order>> GetAllOrder();
         Task<List<Order>> GetOrderByStatus(int status);

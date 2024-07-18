@@ -109,7 +109,7 @@
                         <li class="nav-item @(currentPath == "/AdminPage/NewOrder" ? "active" : "")">
                             <a href="/AdminPage/NewOrder">
                                 <i class="fas fa-shopping-cart position-relative">
-                                    <span class="badge badge-pill badge-num position-absolute translate-middle">@newOrder</span>
+                                    <span id="newOrderCount" class="badge badge-pill badge-num position-absolute translate-middle">@newOrder</span>
                                 </i>
                                 <p class="mb-0 ms-2">Đơn hàng mới</p>
                             </a>
@@ -234,6 +234,10 @@
     <script src="/assets/js/core/jquery-3.7.1.min.js"></script>
     <script src="/assets/js/core/popper.min.js"></script>
     <script src="/assets/js/core/bootstrap.min.js"></script>
+
+    <!--   Core signalr Files   -->
+    <script src="~/js//signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
     <!-- jQuery Scrollbar -->
     <script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
