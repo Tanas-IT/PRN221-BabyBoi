@@ -301,7 +301,7 @@
                                 <i class="fas fa-shopping-cart position-relative">
                                     <span class="badge badge-pill badge-num position-absolute translate-middle">@newOrder</span>
                                 </i>
-                                <p class="mb-0 ms-2">Đơn hàng mới</p>
+                                <p id="newOrderCount" class="mb-0 ms-2">Đơn hàng mới</p>
                             </a>
                         </li>
                         <li class="nav-item @(currentPath == "/AdminPage/OrderManagement" ? "active" : "")">
@@ -1149,5 +1149,8 @@
         }
 
     </script>
+    <!--   Core signalr Files   -->
+    <script src="~/js//signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 </html>

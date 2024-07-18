@@ -3,6 +3,7 @@
 @using BaByBoi.Domain.Models;
 @using BaByBoi_Project.Common.Enum
 @using BaByBoi_Project.Extensions
+@using BaByBoi.DataAccess.Utils
 @model BaByBoi_Project.Pages.Admin.HomeModel
 @inject IHttpContextAccessor HttpContextAccessor
 
@@ -118,7 +119,7 @@
                         <li class="nav-item @(currentPath == "/AdminPage/NewOrder" ? "active" : "")">
                             <a href="/AdminPage/NewOrder">
                                 <i class="fas fa-shopping-cart position-relative">
-                                    <span class="badge badge-pill badge-num position-absolute translate-middle">@newOrder</span>
+                                    <span class="newOrderCount badge badge-pill badge-num position-absolute translate-middle">@newOrder</span>
                                 </i>
                                 <p class="mb-0 ms-2">Đơn hàng mới</p>
                             </a>
@@ -251,7 +252,7 @@
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
                                             <p class="card-category">Người dùng</p>
-                                            <h4 class="card-title">@Model.NumberOfUser</h4>
+                                            <h4 id="userCount" class="card-title">@Model.NumberOfUser</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -270,7 +271,7 @@
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
                                             <p class="card-category">Doanh thu</p>
-                                            <h4 class="card-title">$ @Model.Revenue</h4>
+                                            <h4 id="totalRevenue" class="card-title">@Model.Revenue?.ToVietnameseCurrency()</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -289,7 +290,7 @@
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
                                             <p class="card-category">Đơn hàng</p>
-                                            <h4 class="card-title">@Model.NumberOfOrder</h4>
+                                            <h4 class="card-title newOrderCount ">@Model.NumberOfOrder</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -489,7 +490,7 @@
         {
             @Html.Raw("'" + month.Month.Replace("'", "\\'") + "', ")
         }
-                                                ],
+                                                        ],
                 datasets: [
                     {
                         label: "Doanh thu",
@@ -508,7 +509,7 @@
         {
             @(data.TotalRevenue.ToString() + " ,")
         }
-                                                        ],
+                                                                ],
                     },
                 ],
             },
@@ -544,7 +545,7 @@
         {
             @Html.Raw("'" + data.CategoryName.Replace("'", "\\'") + "', ")
         }
-                                                ],
+                                                        ],
                 datasets: [
                     {
                         label: "Product",
@@ -555,7 +556,7 @@
         {
             @Html.Raw("'" + data.Amount.ToString().Replace("'", "\\'") + "', ")
         }
-                                                        ],
+                                                                ],
                     },
                 ],
             },
@@ -574,6 +575,9 @@
             },
         });
     </script>
+    <!--   Core signalr Files   -->
+    <script src="~/js//signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 </html>
 
