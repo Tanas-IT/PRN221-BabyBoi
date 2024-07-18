@@ -45,8 +45,8 @@ namespace BaByBoi_Project.Pages.Admin
 
             Revenue = await _orderService.GetTotalRevenueAsync();
 
-            var tempOrder = await _orderService.GetAllOrder();
-            NumberOfOrder = tempOrder.Count;
+            NumberOfOrder = await _orderService.GetAllOrderCountAsync();
+
             var tempAllUser = await _userService.GetAll();
             ListAllUser = tempAllUser.OrderByDescending(x => x.CreateDate).Take(5).ToList();
             ListAllOrder = await _orderService.GetAllOrder();
