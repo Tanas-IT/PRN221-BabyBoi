@@ -1,4 +1,4 @@
-using BaByBoi.DataAccess.DTOs;
+﻿using BaByBoi.DataAccess.DTOs;
 using BaByBoi.DataAccess.Service.Interface;
 using BaByBoi.DataAccess.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +34,10 @@ namespace BaByBoi_Project.Pages.Admin
                 ProductName = product.ProductName,
                 Discount = product.Discount,
                 ImageUrl = product.ProductImages.FirstOrDefault()!.ImageUrl,
-                Price = product.ProductSizes.FirstOrDefault()!.Price?.ToVietnameseCurrency()
+                Price = product.ProductSizes.FirstOrDefault()!.Price?.ToVietnameseCurrency(),
+                DiscountedPrice = product.Discount.HasValue
+                    ? ((product.ProductSizes.FirstOrDefault()?.Price ?? 0) * (1 - product.Discount.Value / 100.0)).ToVietnameseCurrency()
+                    : (product.ProductSizes.FirstOrDefault()?.Price?.ToVietnameseCurrency() ?? "0")
             };
             return new JsonResult(productDto);
         }

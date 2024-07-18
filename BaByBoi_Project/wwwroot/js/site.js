@@ -51,7 +51,6 @@ function loadDataAndRender(url, renderFunction) {
         url: url,
         method: 'GET',
         success: function (result) {
-            console.log(result)
             renderFunction(result);
         },
         error: function (error) {
@@ -128,20 +127,41 @@ function renderOrderTable(orders) {
 }
 
 function renderNewProductItem(product) {
-    var productElement = document.querySelector(`[data-product-id='${product.productId}']`);
+    var productElement = document.querySelector(`[data-product-id='${product.ProductId}']`);
 
-    if (productElement) {
-        // Nếu sản phẩm đã tồn tại, cập nhật thông tin sản phẩm
-        productElement.querySelector('.product-img img').src = product.imageUrl;
-        productElement.querySelector('.product-name').innerText = product.productName;
-        productElement.querySelector('.product-price').innerText = product.price;
+    var productItemHtml = `
+            <div class="product-item bg-light">
+                <div class="product-img position-relative overflow-hidden">
+                    <img src="${product.ImageUrl}" class="img-fluid w-100 rounded-top" alt="${product.ProductName}">
+                    <div class="product-action" style="display:flex; justify-content:center">
+                        <a style="padding:20px; margin-right:30px;" class="btn btn-outline-dark btn-square" href="@Url.Page('CusViewProduct', 'AddToCart', { productId: product.ProductId, sizeId: product.SizeId })"><i class="fa fa-shopping-cart"></i></a>
+                        <a style="padding:20px; margin-right:30px;" class="btn btn-outline-dark btn-square" href="@Url.Page('CusViewProduct', 'ViewDetail', { productId: product.ProductId, categoryID: product.Category.CategoryId })"><i class="far fa-eye"></i></a>
+                    </div>
+                </div>
+                <div class="text-center py-4">
+                    <p class="h6 text-decoration-none text-truncate product-name">${product.ProductName}</p>
+                    <div class="d-flex align-items-center justify-content-center mt-2" style="flex-direction:column;height:3.5vw;">
+                        <div class="d-flex" style="column-gap:0.5vw; height:100%;">
+                            ${product.Discount && product.Discount !== 0 ?
+            `<h5 style="text-decoration:line-through" class="product-old-price">${product.Price}</h5>
+                                 <h5 style="font-size:1vw;color:red" class="product-discount">-${product.Discount}%</h5>` :
+            `<h5 class="product-price">${product.Price}</h5>`}
+                        </div>
+                        ${product.Discount && product.Discount !== 0 ?
+            `<h5 style="color:red" class="product-price-discount">${product.DiscountedPrice}</h5>` : ''}
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center mb-1">
+                        <small class="fa fa-star text-primary mr-1"></small>
+                        <small class="fa fa-star text-primary mr-1"></small>
+                        <small class="fa fa-star text-primary mr-1"></small>
+                        <small class="fa fa-star text-primary mr-1"></small>
+                        <small class="fa fa-star text-primary mr-1"></small>
+                        <small>(99)</small>
+                    </div>
+                </div>
+            </div>`;
 
-        if (product.discount) {
-            productElement.querySelector('.product-discount').innerText = `${product.discount}% off`;
-        } else {
-            productElement.querySelector('.product-discount').innerText = '';
-        }
-    }
+    productElement.innerHTML = productItemHtml;
 }
 
 function getOrderStatusText(status) {

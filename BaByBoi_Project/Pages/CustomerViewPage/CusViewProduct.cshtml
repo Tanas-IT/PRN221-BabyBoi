@@ -109,7 +109,7 @@
                             <div class="row g-4">
                                 @foreach (var productSize in Model.Products)
                                 {
-                                    <div class="col-xl-4 col-md-6" data-product-id="@productSize.Product.ProductId">
+                                    <div class="col-xl-4 col-md-6" data-product-id="@productSize.ProductId">
                                         <div class="product-item bg-light">
                                             <div class="product-img position-relative overflow-hidden">
 
@@ -127,18 +127,30 @@
                                                 </div>
                                             </div>
                                             <div class="text-center py-4">
-                                                <p class="h6 text-decoration-none text-truncate">@productSize.Product.ProductName</p>
-                                                <div class="d-flex align-items-center justify-content-center mt-2" style="flex-direction:column;height:3.5vw">
-                                                    <h5 style="text-decoration:line-through">@(productSize.Price!.Value.ToVietnameseCurrency())</h5>
+                                                <p class="h6 text-decoration-none text-truncate product-name">@productSize.Product.ProductName</p>
+
+                                                <div class="d-flex align-items-center justify-content-center mt-2" style="flex-direction:column;height:3.5vw;">
+                                                    <div class="d-flex" style="column-gap:0.5vw; height:100%;">
+                                                        @if (productSize.Product.Discount != null && productSize.Product.Discount != 0)
+                                                        {
+                                                            <h5 style="text-decoration:line-through" class="product-old-price">@(productSize.Price!.Value.ToVietnameseCurrency())</h5>
+                                                            <h5 style="font-size:1vw;color:red" class="product-discount">@("-" + (productSize.Product.Discount.Value).ToString() + "%")</h5>
+                                                        }
+                                                        else
+                                                        {
+                                                            <h5 class="product-price">@(productSize.Price!.Value.ToVietnameseCurrency())</h5>
+                                                        }
+                                                    </div>
                                                     @if (productSize.Product.Discount != null && productSize.Product.Discount != 0)
                                                     {
-                                                        <h5 style="color:red">
-                                                            @((productSize.Price!.Value - productSize.Price!.Value * productSize.Product.Discount.Value/100).ToVietnameseCurrency()
+                                                        <h5 style="color:red" class="product-price-discount">
+                                                            @((productSize.Price!.Value - productSize.Price!.Value * productSize.Product.Discount.Value / 100).ToVietnameseCurrency()
                                                                 )
                                                         </h5>
                                                     }
 
                                                 </div>
+
                                                 <div class="d-flex align-items-center justify-content-center mb-1">
                                                     <small class="fa fa-star text-primary mr-1"></small>
                                                     <small class="fa fa-star text-primary mr-1"></small>

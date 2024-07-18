@@ -13,6 +13,8 @@ using System.Net.Http;
 using System;
 using BaByBoi_Project.Extensions;
 using Microsoft.CodeAnalysis;
+using FUMiniHotelManagement.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace BaByBoi_Project.Pages.Admin
 {
@@ -20,12 +22,13 @@ namespace BaByBoi_Project.Pages.Admin
     {
         private readonly IProductService _productService;
         private readonly IUserService _userService;
+        private readonly IHubContext<SignalrServer> _signalRHub;
 
-
-        public ProductModel(IProductService productService, IUserService userService = null)
+        public ProductModel(IProductService productService, IUserService userService, IHubContext<SignalrServer> signalRHub)
         {
             _productService = productService;
             _userService = userService;
+            _signalRHub = signalRHub;
         }
 
         [BindProperty]
@@ -429,6 +432,7 @@ namespace BaByBoi_Project.Pages.Admin
                 var checkAdd = await _productService.AddImagesAndSize(oldProduct, ListDownloadURL, ListProductSize, getOldProductSize);
                 if(checkAdd)
                 {
+                    await _signalRHub.Clients.All.SendAsync("UpdateProductInCustomer", oldProduct.ProductId);
                     ViewData["Message"] = "Update Product Success";
                 } else
                 {
