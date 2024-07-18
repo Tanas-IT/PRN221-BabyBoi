@@ -1,5 +1,6 @@
 ﻿@page
 @using BaByBoi.DataAccess.Common.Enum
+@using BaByBoi.DataAccess.Utils
 @model BaByBoi_Project.Pages.AdminPage.OrderManagementModel
 @{
     Layout = "AdminLayout";
@@ -104,11 +105,11 @@
                             }
                             else
                             {
-                                <td>@order.Voucher.Percent</td>
+                                <td>@order.Voucher.Percent%</td>
                             }
                         }
                         <td>@order.TotalProduct</td>
-                        <td>@order.TotalPrice</td>
+                        <td>@order.TotalPrice?.ToVietnameseCurrency()</td>
                         <td>
                             <div class="form-button-action">
                                 <button type="button" title="" class="btn btn-link btn-lg" data-original-title="View Order Detail">

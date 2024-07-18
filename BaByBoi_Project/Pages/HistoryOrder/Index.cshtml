@@ -27,9 +27,8 @@
 </script>
 <div class="mainContainer mb-4">
     <div class="table-responsive">
-        <table id="add-row"
-               class="display table table-striped table-hover">
-            <h2>Lịch sử đơn hàng</h2>
+        <h2>Lịch sử đơn hàng</h2>
+        <table id="add-row" class="display table table-striped table-hover">
             <thead>
                 <tr class="table-row">
                     <th>Mã đơn hàng</th>
@@ -44,10 +43,10 @@
                     <th style="width: 10%">Chi tiết</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="orderHistoryTable">
                 @foreach (var order in Model.ListHistoryOrderPagin)
                 {
-                    <tr>
+                    <tr id="orderRow-@order.OrderId">
                         <td>@order.OrderCode</td>
                         <td>@order.OrderDate?.ToString("dd-MM-yyyy")</td>
                         <td>
@@ -74,7 +73,7 @@
                                     _ => "Không xác định"
                                 };
                             }
-                            <span style="display: block;
+                            <span id="orderStatus-@order.OrderId" style="display: block;
                                      border: 1px solid;
                                      padding: 5px;
                                      border-radius: 8px;

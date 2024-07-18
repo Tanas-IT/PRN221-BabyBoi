@@ -107,5 +107,9 @@ namespace BaByBoi.DataAccess.Service
 
         public async Task<double> GetTotalRevenueAsync()
                 => await _unitOfWork.OrderRepository.GetTotalRevenueAsync();
+
+        public async Task<int> GetAllOrderCountAsync()
+                => await _unitOfWork.OrderRepository.GetAllOrderCountAsync();
+
     }
 }
