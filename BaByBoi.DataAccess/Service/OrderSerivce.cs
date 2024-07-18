@@ -170,5 +170,8 @@ namespace BaByBoi.DataAccess.Service
 
             return sb.ToString();
         }
+
+        public async Task<int> GetAllOrderCountAsync()
+        => await _unitOfWork.OrderRepository.GetAllOrderCountAsync();
     }
 }

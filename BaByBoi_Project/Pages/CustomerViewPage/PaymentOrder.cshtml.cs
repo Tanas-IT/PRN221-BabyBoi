@@ -192,9 +192,14 @@ namespace BaByBoi_Project.Pages.CustomerViewPage
             if (result != null)
             {
                 TempData["SuccessMessage"] = "Đã đặt hàng thành công";
+
                 int newOrderCount = await _orderService.GetNewOrderCountAsync();
+                int allOrderCount = await _orderService.GetAllOrderCountAsync();
+
                 await _signalRHub.Clients.All.SendAsync("ReceiveNewOrderCount", newOrderCount);
-                await _signalRHub.Clients.All.SendAsync("ReceiveTotalRevenue", newOrderCount);
+                await _signalRHub.Clients.All.SendAsync("ReceiveAllOrderCount", allOrderCount);
+                await _signalRHub.Clients.All.SendAsync("ReceiveNewOrder");
+
                 return RedirectToPage("/HistoryOrder/Detail", new { orderCode = order.OrderCode });
             }
             return this.Page();

@@ -4,9 +4,9 @@ namespace FUMiniHotelManagement.Hubs
 {
     public class SignalrServer : Hub
     {
-        public async Task UpdateRoomData()
+        public async Task UpdateOrderData()
         {
-            await Clients.All.SendAsync("LoadRooms");
+            await Clients.All.SendAsync("ReceiveNewOrder");
         }
 
         public async Task UpdateCustomerData()

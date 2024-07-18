@@ -119,7 +119,7 @@
                         <li class="nav-item @(currentPath == "/AdminPage/NewOrder" ? "active" : "")">
                             <a href="/AdminPage/NewOrder">
                                 <i class="fas fa-shopping-cart position-relative">
-                                    <span class="newOrderCount badge badge-pill badge-num position-absolute translate-middle">@newOrder</span>
+                                    <span id="newOrderCount" class="badge badge-pill badge-num position-absolute translate-middle">@newOrder</span>
                                 </i>
                                 <p class="mb-0 ms-2">Đơn hàng mới</p>
                             </a>
@@ -290,7 +290,7 @@
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
                                             <p class="card-category">Đơn hàng</p>
-                                            <h4 class="card-title newOrderCount ">@Model.NumberOfOrder</h4>
+                                            <h4 id="allOrderCount" class="card-title">@Model.NumberOfOrder</h4>
                                         </div>
                                     </div>
                                 </div>

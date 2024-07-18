@@ -7,15 +7,20 @@ using BaByBoi.DataAccess.Service.Interface;
 using BaByBoi_Project.Extensions;
 using BaByBoi.Domain.Models;
 using BaByBoi_Project.Common.Enum;
+using FUMiniHotelManagement.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace BaByBoi_Project.Pages.LoginPage
 {
     public class IndexModel : PageModel
     {
         private readonly IUserService _userService;
-        public IndexModel(IUserService userService)
+        private readonly IHubContext<SignalrServer> _signalRHub;
+
+        public IndexModel(IUserService userService, IHubContext<SignalrServer> signalRHub)
         {
             _userService = userService;
+            _signalRHub = signalRHub;
         }
 
         [BindProperty]
@@ -95,6 +100,8 @@ namespace BaByBoi_Project.Pages.LoginPage
                 var result = await _userService.AddAsync(user);
                 if (result)
                 {
+                    int totalUser = await _userService.GetTotalUserAsync();
+                    await _signalRHub.Clients.All.SendAsync("ReceiveUserCount", totalUser);
                     user = await _userService.GetUserByEmail(email!);
                 }
             }
