@@ -47,27 +47,27 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.User[0].Email)
+                    Email
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.User[0].Phone)
+                    Số điện thoại
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.User[0].FullName)
+                    Tên đầy đủ
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.User[0].Status)
+                    Trạng thái
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.User[0].BirthDate)
+                    Ngày sinh
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.User[0].Gender)
+                    Giới tính
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.User[0].Role.RoleName)
+                    Vai trò
                 </th>
-                <th>Action</th>
+                <th>Hành động</th>
             </tr>
         </thead>
         <tbody>
@@ -84,7 +84,7 @@
                         @(item.FullName ?? "N/A")
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Status)
+                        @(item.Status == 1 ? "Hoạt động" : (item.Status == 2 ? "Bị xóa" : "Bị cấm"))
                     </td>
                     <td>
                         @(item.BirthDate != null ? item.BirthDate.Value.ToString("yyyy-MM-dd") : "N/A")
@@ -93,7 +93,7 @@
                         @(item.Gender == 1 ? "Nam" : (item.Gender == 2 ? "Nữ" : "N/A"))
                     </td>
                     <td>
-                        @(item.Role?.RoleName ?? "N/A")
+                        @(item.Role?.RoleId == 1 ? "Quản trị viên" : (item.Role?.RoleId == 2 ? "Khách hàng" : "N/A"))
                     </td>
                     <td>
                         <a asp-page="./Edit" asp-route-id="@item.UserId">Chỉnh sửa</a> |
