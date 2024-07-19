@@ -33,6 +33,8 @@ namespace BaByBoi_Project.Pages.Admin
                 ProductId = product.ProductId,
                 ProductName = product.ProductName,
                 Discount = product.Discount,
+                CategoryId = product.CategoryId,
+                SizeId = product.ProductSizes.FirstOrDefault()?.SizeId,
                 ImageUrl = product.ProductImages.FirstOrDefault()!.ImageUrl,
                 Price = product.ProductSizes.FirstOrDefault()!.Price?.ToVietnameseCurrency(),
                 DiscountedPrice = product.Discount.HasValue

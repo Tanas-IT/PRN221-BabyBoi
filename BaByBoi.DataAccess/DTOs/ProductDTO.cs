@@ -12,6 +12,9 @@ namespace BaByBoi.DataAccess.DTOs
         public string? ProductCode { get; set; }
         public string? ProductName { get; set; }
         public string? Description { get; set; }
+        public int? CategoryId { get; set; }
+        public int? SizeId { get; set; }
+
         public int? Status { get; set; }
         public string? Price { get; set; }
         public string? DiscountedPrice { get; set; }
