@@ -3,10 +3,9 @@
 
 @{
     Layout = "AdminLayout";
-
 }
 
-<h1>Create</h1>
+<h1>Tạo Mới</h1>
 
 <h4>Voucher</h4>
 <hr />
@@ -15,56 +14,58 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Voucher.VoucherCode" class="control-label"></label>
+                <label asp-for="Voucher.VoucherCode" class="control-label">Mã</label>
                 <input asp-for="Voucher.VoucherCode" class="form-control" />
                 <span asp-validation-for="Voucher.VoucherCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Voucher.StartDate" class="control-label"></label>
+                <label asp-for="Voucher.StartDate" class="control-label">Ngày Bắt Đầu</label>
                 <input asp-for="Voucher.StartDate" class="form-control" />
                 <span asp-validation-for="Voucher.StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Voucher.EndDate" class="control-label"></label>
+                <label asp-for="Voucher.EndDate" class="control-label">Ngày Kết Thúc</label>
                 <input asp-for="Voucher.EndDate" class="form-control" />
                 <span asp-validation-for="Voucher.EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Voucher.Type" class="control-label"></label>
+                <label asp-for="Voucher.Type" class="control-label">Loại</label>
                 <input asp-for="Voucher.Type" class="form-control" />
                 <span asp-validation-for="Voucher.Type" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Voucher.Percent" class="control-label"></label>
+                <label asp-for="Voucher.Percent" class="control-label">Phần Trăm</label>
                 <input asp-for="Voucher.Percent" class="form-control" />
                 <span asp-validation-for="Voucher.Percent" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Voucher.Value" class="control-label"></label>
+                <label asp-for="Voucher.Value" class="control-label">Giá Trị</label>
                 <input asp-for="Voucher.Value" class="form-control" />
                 <span asp-validation-for="Voucher.Value" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Voucher.TriggerValue" class="control-label"></label>
+                <label asp-for="Voucher.TriggerValue" class="control-label">Giá Trị Kích Hoạt</label>
                 <input asp-for="Voucher.TriggerValue" class="form-control" />
                 <span asp-validation-for="Voucher.TriggerValue" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Voucher.Status" class="control-label"></label>
+                <label asp-for="Voucher.Status" class="control-label">Trạng Thái</label>
                 <input asp-for="Voucher.Status" class="form-control" />
                 <span asp-validation-for="Voucher.Status" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Tạo Mới" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="Index">Quay lại danh sách</a>
 </div>
 
 <script>
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 </script>

@@ -187,7 +187,7 @@ namespace BaByBoi.Domain.Repositories
 
             foreach (var booking in bookingsToUpdate)
             {
-                booking.Status = (int)OrderStatus.IsExpired;
+                booking.Status = (int)OrderStatus.IsReject;
             }
 
             await _context.SaveChangesAsync();

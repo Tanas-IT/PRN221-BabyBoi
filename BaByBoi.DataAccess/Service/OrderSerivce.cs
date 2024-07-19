@@ -84,7 +84,7 @@ namespace BaByBoi.DataAccess.Service
         public async Task<List<OrderDetail>> GetOrderDetailById(int orderId)
         {
             var result = await _unitOfWork.OrderRepository.GetOrderDetailsById(orderId);
-            return result.ToList();
+            return result;
         }
 
         public async Task<Order> GetOrderById(int orderId)

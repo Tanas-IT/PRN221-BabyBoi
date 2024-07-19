@@ -2,7 +2,7 @@
 @using BaByBoi.DataAccess.Utils
 @model BaByBoi_Project.Pages.CustomerViewPage.PaymentOrderModel
 @{
-    Layout = "UsersLayout";
+    Layout = "PaymentLayout";
 }
 <!DOCTYPE html>
 <html>
@@ -59,7 +59,7 @@
     <div class="container">
         <!-- Order Details -->
         <div class="order-details" style="margin-top: 200px;">
-            <h4>Order Details</h4>
+            <h4>Chi tiết đơn hàng</h4>
             @{
                 var priceEachProduct = new double();
             }
@@ -90,7 +90,7 @@
             <hr />
             <div class="row">
                 <div class="col-12 text-end">
-                    <p class="total-price">Total: @(Model.totalPay.ToVietnameseCurrency())</p>
+                    <p class="total-price">Tổng:  @(Model.totalPay.ToVietnameseCurrency())</p>
                 </div>
             </div>
         </div>
@@ -98,10 +98,10 @@
         <!-- Voucher Input -->
         <form method="post" class="voucher-section">
             <div class="form-group">
-                <label for="voucherCode">Voucher Code</label>
-                <input type="text" class="form-control" name="voucherCode" placeholder="Enter voucher code" />
+                <label for="voucherCode">Mã giảm giá</label>
+                <input type="text" class="form-control" name="voucherCode" placeholder="Nhập mã giảm giá" />
             </div>
-            <button asp-page-handler="ApplyVoucher" type="submit" class="btn btn-primary">Apply</button>
+            <button asp-page-handler="ApplyVoucher" type="submit" class="btn btn-primary">Áp dụng</button>
         </form>
 
         @if (Model.voucher != null)
@@ -118,7 +118,7 @@
             @if (Model.paymentMethod != null)
             {
                 <div class="payment-method">
-                    <h4>Payment Method</h4>
+                    <h4>Phương thức thanh toán</h4>
                     @{
                         var paymentDefault = "Cash on Delivery";
                     }
@@ -127,7 +127,7 @@
                         if (paymethod.PaymentName!.Equals(paymentDefault))
                         {
                             <input type="radio" id="@paymethod.PaymentName" name="paymentID" value="@paymethod.PaymentId" checked="checked" />
-                            <label for="@paymethod.PaymentName">@paymethod.PaymentName</label>
+                            <label for="@paymethod.PaymentName">Thanh toán khi nhận hàng</label>
                         }
                         else
                         {
@@ -146,7 +146,7 @@
                     {
                         <input type="hidden" name="voucherId" value="@Model.voucher.VoucherId" />
                     }
-                    <button asp-page-handler="VnpayAction" type="submit" class="btn btn-submit">Place Order</button>
+                    <button asp-page-handler="VnpayAction" type="submit" class="btn btn-submit">Đặt hàng</button>
                 </div>
             </div>
         </form>
