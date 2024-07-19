@@ -68,7 +68,8 @@ namespace BaByBoi.DataAccess.Service
         public async Task<bool> DeleteUserAsync(int userId)
         {
             var user = await _unitOfWork.UserRepository.GetById(userId);
-            if (user == null)
+            var order = await _unitOfWork.OrderRepository.GetAllOrderOfCustomer(userId);
+            if (user == null || order != null && user !=null)
             {
                 return false;
             }
@@ -87,5 +88,8 @@ namespace BaByBoi.DataAccess.Service
         {
             return await _unitOfWork.UserRepository.SearchUser(searchValue);            
         }
+
+        public async Task<int> GetTotalUserAsync()
+                => await _unitOfWork.UserRepository.GetTotalUserAsync();
     }
 }

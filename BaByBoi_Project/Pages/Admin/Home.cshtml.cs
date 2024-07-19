@@ -40,12 +40,13 @@ namespace BaByBoi_Project.Pages.Admin
         {
             LineChartModels = await _orderService.GetAllOrderByMonth();
             BarChartModels = await _productService.GetProductsForStatistic();
-            var temp = await _userService.GetAll();
-            NumberOfUser = temp.Count;
-            var tempRevenue = await _orderService.GetAllOrder();
-            Revenue = tempRevenue.Sum(x => x.TotalPrice);
-            var tempOrder = await _orderService.GetAllOrder();
-            NumberOfOrder = tempOrder.Count;
+
+            NumberOfUser = await _userService.GetTotalUserAsync();
+
+            Revenue = await _orderService.GetTotalRevenueAsync();
+
+            NumberOfOrder = await _orderService.GetAllOrderCountAsync();
+
             var tempAllUser = await _userService.GetAll();
             ListAllUser = tempAllUser.OrderByDescending(x => x.CreateDate).Take(5).ToList();
             ListAllOrder = await _orderService.GetAllOrder();

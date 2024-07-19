@@ -1,5 +1,6 @@
 ﻿@page
 @using BaByBoi.DataAccess.Common.Enum
+@using BaByBoi.DataAccess.Utils
 @model BaByBoi_Project.Pages.AdminPage.NewOrderModel
 @{
     Layout = "AdminLayout";
@@ -53,7 +54,6 @@ else
                         <th>Mã đơn hàng</th>
                         <th>Ngày đặt hàng</th>
                         <th>Địa chỉ</th>
-                        <th>Mô tả</th>
                         <th>Trạng thái</th>
                         <th>Phương thức thanh toán</th>
                         <th>Voucher</th>
@@ -69,8 +69,7 @@ else
                         <tr class="table-row">
                             <td>@order.OrderCode</td>
                             <td>@order.OrderDate?.ToString("dd-MM-yyyy")</td>
-                            <td>@order.Address</td>
-                            <td>@order.Description</td>
+                            <td>@(order.Address ?? "N/A")</td>
                             <td>
                                 @{
                                     var status = (OrderStatus)order.Status!;
@@ -94,11 +93,11 @@ else
                                 }
                                 else
                                 {
-                                    <td>@order.Voucher.Percent</td>
+                                    <td>@order.Voucher.Percent%</td>
                                 }
                             }
                             <td>@order.TotalProduct</td>
-                            <td>@order.TotalPrice</td>
+                            <td>@order.TotalPrice?.ToVietnameseCurrency()</td>
                             <td>
                                 <div class="form-button-action">
                                     <button type="button" title="" class="btn btn-link btn-lg" data-original-title="View Order Detail">

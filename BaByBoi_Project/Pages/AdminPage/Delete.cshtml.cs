@@ -21,6 +21,7 @@ namespace BaByBoi_Project.Pages.AdminPage
 
         [BindProperty]
         public User User { get; set; } = default!;
+        public string ErrorMessage { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -50,7 +51,9 @@ namespace BaByBoi_Project.Pages.AdminPage
 
             if (!result)
             {
-                return NotFound();
+                ErrorMessage = "Không thể xóa người dùng. Vui lòng thử lại.";
+                User = await _userService.GetByIdAsync(User.UserId); // Refresh the user data
+                return Page();
             }
 
             return RedirectToPage("/AdminPage/Index");

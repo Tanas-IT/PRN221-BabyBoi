@@ -21,9 +21,10 @@ namespace BaByBoi.DataAccess.Service.Interface
         Task<Order> GetOrderById(int orderId);
         Task<bool> AddFeedback(Order OrderFeedback);
         Task<int> GetNewOrderCountAsync();
+        Task<double> GetTotalRevenueAsync();
         Task<List<Order>> GetOrderByStatus(int status);
         Task<bool> UpdateOrderStatus(int id, int status);
-
-
+        Task<int> GetAllOrderCountAsync();
+        Task CheckOrderStatusexpired();
     }
 }

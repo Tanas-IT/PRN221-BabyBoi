@@ -299,7 +299,7 @@
                         <li class="nav-item @(currentPath == "/AdminPage/NewOrder" ? "active" : "")">
                             <a href="/AdminPage/NewOrder">
                                 <i class="fas fa-shopping-cart position-relative">
-                                    <span class="badge badge-pill badge-num position-absolute translate-middle">@newOrder</span>
+                                    <span id="newOrderCount" class="badge badge-pill badge-num position-absolute translate-middle">@newOrder</span>
                                 </i>
                                 <p class="mb-0 ms-2">Đơn hàng mới</p>
                             </a>
@@ -509,14 +509,13 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label for="addProductDescription">Trạng thái</label>
-                                                                <br/>
+                                                                <br />
                                                                 <label for="activeProduct">Khả dụng</label>
                                                                 <input id="activeProduct"
                                                                        type="radio"
                                                                        value="1"
                                                                        style="margin: 15px;"
-                                                                           name="productStatus"
-                                                                       />
+                                                                       name="productStatus" />
                                                                 <label for="bannedProduct">Hết hàng</label>
                                                                 <input id="bannedProduct"
                                                                        type="radio"
@@ -664,8 +663,9 @@
                                                                 font-weight: bold;
                                                                 text-align: center;
                                                                 color: white;">Khả dụng</span>
-                                                            </td>
-                                                        } else
+                                                        </td>
+                                                        }
+                                                        else
                                                         {
                                                         <td>
                                                             <span style="display: block;
@@ -682,7 +682,7 @@
                                                     <td>@product.Discount</td>
                                                     <td>
                                                         <div class="form-button-action">
-                                                   
+
                                                             <button type="button"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#updateModal_@product.ProductId"
@@ -808,36 +808,36 @@
                                                                                                                        name="SelectedUpdateSize" />
 
 
-                                                                                                                    </div>
-                                                                                                                    <div class="d-flex align-items-center mx-3 my-2">
-                                                                                                                        <label for="quantity-@productSize.SizeId">Số lượng</label>
-                                                                                                                        <input style="margin-left: 10px;" value="@productSize.Quantity" id="quantity-@productSize.SizeId" type="number" name="productUpdateAmount" />
-                                                                                                                    </div>
-                                                                                                                    <div class="d-flex align-items-center mx-3 my-2">
-                                                                                                                        <label for="price-@productSize.SizeId">Giá</label>
-                                                                                                                        <input min="10000" placeholder="VND" style="margin-left: 50px;" value="@productSize.Price" id="price-@productSize.SizeId" type="number" name="productUpdatePrice" />
-                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                                <label for="quantity-@productSize.SizeId">Số lượng</label>
+                                                                                                                <input style="margin-left: 10px;" value="@productSize.Quantity" id="quantity-@productSize.SizeId" type="number" name="productUpdateAmount" />
+                                                                                                            </div>
+                                                                                                            <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                                <label for="price-@productSize.SizeId">Giá</label>
+                                                                                                                <input min="10000" placeholder="VND" style="margin-left: 50px;" value="@productSize.Price" id="price-@productSize.SizeId" type="number" name="productUpdatePrice" />
+                                                                                                            </div>
                                                                                                                 flag = false;
                                                                                                             }
                                                                                                         }
                                                                                                         @if (flag)
                                                                                                         {
-                                                                                                            <div class="d-flex align-items-center mx-3">
-                                                                                                                <label for="@size.SizeId">@size.SizeName</label>
-                                                                                                                <input id="@size.SizeId"
-                                                                                                                       type="checkbox"
-                                                                                                                       value="@size.SizeId"
-                                                                                                                       style="margin: 15px;"
-                                                                                                                       name="SelectedUpdateSize" />
-                                                                                                            </div>
-                                                                                                            <div class="d-flex align-items-center mx-3 my-2">
-                                                                                                                <label for="quantity-@size.SizeId">Số lượng</label>
-                                                                                                                <input style="margin-left: 10px;" id="quantity-@size.SizeId" type="number" name="productUpdateAmount" />
-                                                                                                            </div>
-                                                                                                            <div class="d-flex align-items-center mx-3 my-2">
-                                                                                                                <label for="price-@size.SizeId">Giá</label>
-                                                                                                                <input placeholder="VND" style="margin-left: 50px;" id="price-@size.SizeId" min="10000" type="number" name="productUpdatePrice" />
-                                                                                                            </div>
+                                                                                                        <div class="d-flex align-items-center mx-3">
+                                                                                                            <label for="@size.SizeId">@size.SizeName</label>
+                                                                                                            <input id="@size.SizeId"
+                                                                                                                   type="checkbox"
+                                                                                                                   value="@size.SizeId"
+                                                                                                                   style="margin: 15px;"
+                                                                                                                   name="SelectedUpdateSize" />
+                                                                                                        </div>
+                                                                                                        <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                            <label for="quantity-@size.SizeId">Số lượng</label>
+                                                                                                            <input style="margin-left: 10px;" id="quantity-@size.SizeId" type="number" name="productUpdateAmount" />
+                                                                                                        </div>
+                                                                                                        <div class="d-flex align-items-center mx-3 my-2">
+                                                                                                            <label for="price-@size.SizeId">Giá</label>
+                                                                                                            <input placeholder="VND" style="margin-left: 50px;" id="price-@size.SizeId" min="10000" type="number" name="productUpdatePrice" />
+                                                                                                        </div>
                                                                                                         }
                                                                                                     }
                                                                                                 }
@@ -911,56 +911,57 @@
                                                                     </form>
                                                                 </div>
                                                             </div>
-                                                            @if(product.Status == 1) {
-                                                            <button type="button"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#removeModal_@product.ProductId"
-                                                                    class="btn btn-link btn-danger"
-                                                                    data-original-title="Remove">
-                                                                <i class="fa fa-times"></i>
-                                                            </button>
-                                                            <!-- Modal -->
-                                                            <div class="modal fade"
-                                                                 id="removeModal_@product.ProductId"
-                                                                 tabindex="-1"
-                                                                 role="dialog"
-                                                                 aria-hidden="true">
-                                                                <div class="modal-dialog" role="document">
-                                                                    <form method="post" asp-page-handler="RemoveProduct">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header border-0">
-                                                                                <h5 class="modal-title text-center">
-                                                                                    <span class="fw-mediumbold">Xóa Sản Phẩm</span>
-                                                                                </h5>
-                                                                                <button type="button"
-                                                                                        class="close"
-                                                                                        data-bs-dismiss="modal"
-                                                                                        aria-label="Close">
-                                                                                    <span aria-hidden="true">&times;</span>
-                                                                                </button>
+                                                                @if (product.Status == 1)
+                                                                {
+                                                                <button type="button"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#removeModal_@product.ProductId"
+                                                                        class="btn btn-link btn-danger"
+                                                                        data-original-title="Remove">
+                                                                    <i class="fa fa-times"></i>
+                                                                </button>
+                                                                <!-- Modal -->
+                                                                <div class="modal fade"
+                                                                     id="removeModal_@product.ProductId"
+                                                                     tabindex="-1"
+                                                                     role="dialog"
+                                                                     aria-hidden="true">
+                                                                    <div class="modal-dialog" role="document">
+                                                                        <form method="post" asp-page-handler="RemoveProduct">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header border-0">
+                                                                                    <h5 class="modal-title text-center">
+                                                                                        <span class="fw-mediumbold">Xóa Sản Phẩm</span>
+                                                                                    </h5>
+                                                                                    <button type="button"
+                                                                                            class="close"
+                                                                                            data-bs-dismiss="modal"
+                                                                                            aria-label="Close">
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    <input type="hidden" asp-for="ProductIdRemove" value="@product.ProductId" />
+                                                                                    <p>Bạn có chắc chắn muốn xóa sản phẩm này không</p>
+                                                                                </div>
+                                                                                <div class="modal-footer border-0">
+                                                                                    <button type="submit"
+                                                                                            id="RemoveButtonSubmit"
+                                                                                            class="btn btn-danger">
+                                                                                        Xác nhận
+                                                                                    </button>
+                                                                                    <button type="button"
+                                                                                            class="btn btn-secondary"
+                                                                                            data-bs-dismiss="modal">
+                                                                                        Đóng
+                                                                                    </button>
+                                                                                </div>
                                                                             </div>
-                                                                            <div class="modal-body">
-                                                                                <input type="hidden" asp-for="ProductIdRemove" value="@product.ProductId" />
-                                                                                <p>Bạn có chắc chắn muốn xóa sản phẩm này không</p>
-                                                                            </div>
-                                                                            <div class="modal-footer border-0">
-                                                                                <button type="submit"
-                                                                                        id="RemoveButtonSubmit"
-                                                                                        class="btn btn-danger">
-                                                                                    Xác nhận
-                                                                                </button>
-                                                                                <button type="button"
-                                                                                        class="btn btn-secondary"
-                                                                                        data-bs-dismiss="modal">
-                                                                                    Đóng
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                        <input type="hidden" asp-for="CurrentIndex" value="@Model.CurrentIndex" />
-                                                                    </form>
+                                                                            <input type="hidden" asp-for="CurrentIndex" value="@Model.CurrentIndex" />
+                                                                        </form>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            }
+                                                                }
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -1149,5 +1150,8 @@
         }
 
     </script>
+    <!--   Core signalr Files   -->
+    <script src="~/js//signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 </html>

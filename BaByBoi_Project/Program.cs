@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Configuration;
 using BaByBoi.DataAccess.DTOs;
 using BaByBoi.DataAccess.Service.VNpayService;
+using FUMiniHotelManagement.Hubs;
+using BaByBoi.DataAccess.Service.WorkerService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,14 +50,18 @@ builder.Services.AddScoped<IOrderService, OrderSerivce>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddHttpContextAccessor();
-
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(60);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddControllers().AddJsonOptions(options => {
+    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+});
+
+builder.Services.AddSignalR();
 
 // config send email
 builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
@@ -76,17 +82,14 @@ builder.Services.AddAuthentication(options =>
     googleOptions.CallbackPath = "/dang-nhap-google";
 });
 
-
+builder.Services.AddHostedService<WorkerService>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
+
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-}
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
@@ -94,6 +97,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHub<SignalrServer>("/signalrServer");
 
 app.MapRazorPages();
 app.MapControllers();

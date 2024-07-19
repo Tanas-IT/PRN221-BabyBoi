@@ -6,5 +6,6 @@
         IsCancel = 2,
         IsReject = 3,
         IsConfirmed = 4,
+        IsExpired = 5,
     }
 }

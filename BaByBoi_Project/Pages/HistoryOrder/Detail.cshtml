@@ -1,5 +1,6 @@
 ﻿@page
 @using BaByBoi.DataAccess.Common.Enum
+@using BaByBoi.DataAccess.Utils
 @model BaByBoi_Project.Pages.HistoryOrder.DetailModel
 @{
     Layout = "UsersLayout";
@@ -79,7 +80,6 @@
                         <div class="text-grey-m2">
                             <div class="my-1">
                                 Address: @Model.Order.Address
-                                Address: @Model.Order.Address
                             </div>
                             <div class="my-1"><i class="fa fa-envelope fa-flip-horizontal text-secondary"></i> <b class="text-600">Email: @Model.Order.User.Email</b></div>
                         </div>
@@ -95,7 +95,7 @@
 
                             <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Order Code: </span>@Model.Order.OrderCode</div>
 
-                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Issue Date: </span>@Model.Order.OrderDate.Value.ToString("dd/MM/yyyy")</div>
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Issue Date: </span>@Model.Order.OrderDate!.Value.ToString("dd/MM/yyyy")</div>
 
                             <div class="my-2">
                                 @{
@@ -118,7 +118,7 @@
                                     };
                                 }
                                 <span class="text-600 text-90">Status: </span>
-                                <span class="badge badge-pill px-25" style="background-color: @statusColor; color: white;">@statusText</span>
+                                <span id="orderStatus-@Model.Order.OrderId" class="badge badge-pill px-25" style="background-color: @statusColor; color: white;">@statusText</span>
                             </div>
                         </div>
                     </div>
@@ -149,48 +149,48 @@
                                         <td class="image-row">
                                             @if (orderDetail.Product.ProductImages.Count > 0)
                                             {
-                                            @if (orderDetail.Product.ProductImages.Count > 0)
-                                            {
-                                                <div class="product-image">
-                                                    <img src="@orderDetail.Product.ProductImages.First().ImageUrl"
-                                                         alt="@orderDetail.Product.ProductImages.First().ImageName"
-                                                         class="avatar-img rounded-circle" />
-                                                    <div class="overlay">
-                                                        <span class="preview">Preview</span>
+                                                @if (orderDetail.Product.ProductImages.Count > 0)
+                                                {
+                                                    <div class="product-image">
+                                                        <img src="@orderDetail.Product.ProductImages.First().ImageUrl"
+                                                             alt="@orderDetail.Product.ProductImages.First().ImageName"
+                                                             class="avatar-img rounded-circle" />
+                                                        <div class="overlay">
+                                                            <span class="preview">Preview</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="product-popup">
-                                                    <div class="popup-content">
-                                                        <img src="@orderDetail.Product.ProductImages.First().ImageUrl" alt="@orderDetail.Product.ProductImages.First().ImageName">
+                                                    <div class="product-popup">
+                                                        <div class="popup-content">
+                                                            <img src="@orderDetail.Product.ProductImages.First().ImageUrl" alt="@orderDetail.Product.ProductImages.First().ImageName">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            }
-                                            @if (orderDetail.Product.ProductImages.Count == 0)
-                                            {
-                                            }
-                                            @if (orderDetail.Product.ProductImages.Count == 0)
-                                            {
-                                                <div class="product-image">
-                                                    <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/product%2Fdefault-product-image.png?alt=media&token=76492637-3b09-4a43-8d7e-6426fe976faf"
-                                                         alt="Default Product Image"
-                                                         class="avatar-img rounded-circle" />
-                                                    <div class="overlay">
-                                                        <span class="preview">Preview</span>
+                                                }
+                                                @if (orderDetail.Product.ProductImages.Count == 0)
+                                                {
+                                                }
+                                                @if (orderDetail.Product.ProductImages.Count == 0)
+                                                {
+                                                    <div class="product-image">
+                                                        <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/product%2Fdefault-product-image.png?alt=media&token=76492637-3b09-4a43-8d7e-6426fe976faf"
+                                                             alt="Default Product Image"
+                                                             class="avatar-img rounded-circle" />
+                                                        <div class="overlay">
+                                                            <span class="preview">Preview</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="product-popup">
-                                                    <div class="popup-content">
-                                                        <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/product%2Fdefault-product-image.png?alt=media&token=76492637-3b09-4a43-8d7e-6426fe976faf" alt="Default Product Image">
+                                                    <div class="product-popup">
+                                                        <div class="popup-content">
+                                                            <img src="https://firebasestorage.googleapis.com/v0/b/babyboi-d872c.appspot.com/o/product%2Fdefault-product-image.png?alt=media&token=76492637-3b09-4a43-8d7e-6426fe976faf" alt="Default Product Image">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            }
+                                                }
                                             }
                                         </td>
                                         <td>@orderDetail.Product.ProductName</td>
                                         <td>@orderDetail.Product.Description</td>
                                         <td>@orderDetail.Quantity</td>
                                         <td>@orderDetail.ProductSize.Size.SizeName</td>
-                                        <td>@orderDetail.Price</td>
+                                        <td>@orderDetail.Price!.Value.ToVietnameseCurrency()</td>
                                     </tr>
                                 }
                             </tbody>
@@ -205,7 +205,7 @@
                                     Tạm tính
                                 </div>
                                 <div class="col-5">
-                                    <span class="text-120 text-secondary-d1">$ @Model.ListOrderDetail.Sum(x => x.Price)</span>
+                                    <span class="text-120 text-secondary-d1">$ @Model.ListOrderDetail.Sum(x => x.Price)!.Value.ToVietnameseCurrency()</span>
                                 </div>
                             </div>
 
@@ -227,7 +227,7 @@
                                     Tổng tiền
                                 </div>
                                 <div class="col-5">
-                                    <span class="text-150 text-success-d3 opacity-2">$ @Model.Order.TotalPrice</span>
+                                    <span class="text-150 text-success-d3 opacity-2">$ @Model.Order.TotalPrice!.Value.ToVietnameseCurrency()</span>
                                 </div>
                             </div>
                         </div>
@@ -236,81 +236,81 @@
                     <hr />
 
                     @if (Model.Order.Feedback != null || Model.Order.Rating > 0)
-                    @if (Model.Order.Feedback != null || Model.Order.Rating > 0)
-                    {
-                        <div>
-                            <h2 style="color: red; text-align: center">Phản hồi</h2>
-                            <h4>
-                                Rating: @Model.Order.Rating
-                            <h4>
-                                Rating: @Model.Order.Rating
-                                <span style="color:#FFD600">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                </span>
-                            </h4>
-                            <textarea style="width: 100%; height: 200px" readonly>@Model.Order.Feedback</textarea>
-                        </div>
-                    }
-                    else
-                    {
-                    {
-                        <div>
-                            <span class="text-secondary-d1 text-105">Cảm ơn bạn đã mua hàng ở BabyBoi</span>
-                            <button data-bs-toggle="modal"
-                                    data-bs-target="#feedbackId_form"
-                                    class="btn btn-info btn-bold px-4 float-right mt-3 mt-lg-0">
-                                Phản hồi
-                            </button>
-                            <div class="modal fade"
-                                 id="feedbackId_form"
-                                 tabindex="-1"
-                                 role="dialog"
-                                 aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <form method="post" asp-page-handler="AddFeedback">
-                                        <div class="modal-content">
-                                            <div class="modal-header border-0">
-                                                <h5 class="modal-title text-center">
-                                                    <span class="fw-mediumbold">Phản hồi đơn hàng</span>
-                                                </h5>
-                                                <button type="button"
-                                                        class="close"
-                                                        data-bs-dismiss="modal"
-                                                        aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="rating">
-                                                    <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
-                                                    <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
-                                                    <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
-                                                    <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
-                                                    <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
-                                                </div>
-                                                <input type="hidden" name="OrderCode" value="@Model.Order.OrderCode" />
-                                                <textarea style="width: 100%; height: 200px" asp-for="FeedBackContent" placeholder="Điền phản hồi của bạn"></textarea>
-                                            </div>
-                                            <div class="modal-footer border-0">
-                                                <button type="submit"
-                                                        id="RemoveButtonSubmit"
-                                                        class="btn btn-info">
-                                                    Xác nhận
-                                                </button>
-                                                <button type="button"
-                                                        class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">
-                                                    Đóng
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                        @if (Model.Order.Feedback != null || Model.Order.Rating > 0)
+                        {
+                            <div>
+                                <h2 style="color: red; text-align: center">Phản hồi</h2>
+                                <h4>
+                                    Rating: @Model.Order.Rating
+                                    <h4>
+                                        Rating: @Model.Order.Rating
+                                        <span style="color:#FFD600">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </span>
+                                    </h4>
+                                    <textarea style="width: 100%; height: 200px" readonly>@Model.Order.Feedback</textarea>
                             </div>
-                        </div>
-                    }
-                    }
+                        }
+                        else
+                        {
+                            {
+                                <div>
+                                    <span class="text-secondary-d1 text-105">Cảm ơn bạn đã mua hàng ở BabyBoi</span>
+                                    <button data-bs-toggle="modal"
+                                            data-bs-target="#feedbackId_form"
+                                            class="btn btn-info btn-bold px-4 float-right mt-3 mt-lg-0">
+                                        Phản hồi
+                                    </button>
+                                    <div class="modal fade"
+                                         id="feedbackId_form"
+                                         tabindex="-1"
+                                         role="dialog"
+                                         aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <form method="post" asp-page-handler="AddFeedback">
+                                                <div class="modal-content">
+                                                    <div class="modal-header border-0">
+                                                        <h5 class="modal-title text-center">
+                                                            <span class="fw-mediumbold">Phản hồi đơn hàng</span>
+                                                        </h5>
+                                                        <button type="button"
+                                                                class="close"
+                                                                data-bs-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="rating">
+                                                            <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
+                                                            <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+                                                            <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                                                            <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                                                            <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                                                        </div>
+                                                        <input type="hidden" name="OrderCode" value="@Model.Order.OrderCode" />
+                                                        <textarea style="width: 100%; height: 200px" asp-for="FeedBackContent" placeholder="Điền phản hồi của bạn"></textarea>
+                                                    </div>
+                                                    <div class="modal-footer border-0">
+                                                        <button type="submit"
+                                                                id="RemoveButtonSubmit"
+                                                                class="btn btn-info">
+                                                            Xác nhận
+                                                        </button>
+                                                        <button type="button"
+                                                                class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">
+                                                            Đóng
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
                 </div>
             </div>
         </div>

@@ -1,4 +1,5 @@
 ﻿@page
+@using BaByBoi.DataAccess.Utils
 @model ShoppingCartModel
 @{
     ViewData["Title"] = "Shopping Cart";
@@ -43,10 +44,10 @@
                                 </td>
                                 <td>
                                     @{
-                                        var priceAfterDiscount = Math.Ceiling((decimal)(item.Price - (item.Price * item.Product.Discount) / 100)!);
+                                        var priceAfterDiscount = Math.Ceiling((double)(item.Price - (item.Price * item.Product.Discount) / 100)!);
                                     }
 
-                                    <p class="mb-0 mt-4">@priceAfterDiscount VND</p>
+                                    <p class="mb-0 mt-4">@(priceAfterDiscount.ToVietnameseCurrency())</p>
                                 </td>
                                 <td>
                                     <div class="input-group quantity mt-4" style="width: 100px;">
@@ -84,7 +85,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p class="mb-0 mt-4">@(item.Quantity * priceAfterDiscount)</p>
+                                    <p class="mb-0 mt-4">@((item.Quantity * priceAfterDiscount)!.Value.ToVietnameseCurrency() )</p>
                                     @{
                                         totalCart += (double)(item.Quantity * priceAfterDiscount)!;
                                     }
