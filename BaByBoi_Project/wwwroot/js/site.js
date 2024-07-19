@@ -134,8 +134,8 @@ function renderNewProductItem(product) {
                 <div class="product-img position-relative overflow-hidden">
                     <img src="${product.ImageUrl}" class="img-fluid w-100 rounded-top" alt="${product.ProductName}">
                     <div class="product-action" style="display:flex; justify-content:center">
-                        <a style="padding:20px; margin-right:30px;" class="btn btn-outline-dark btn-square" href="@Url.Page('CusViewProduct', 'AddToCart', { productId: product.ProductId, sizeId: product.SizeId })"><i class="fa fa-shopping-cart"></i></a>
-                        <a style="padding:20px; margin-right:30px;" class="btn btn-outline-dark btn-square" href="@Url.Page('CusViewProduct', 'ViewDetail', { productId: product.ProductId, categoryID: product.Category.CategoryId })"><i class="far fa-eye"></i></a>
+                        <a style="padding:20px; margin-right:30px;" class="btn btn-outline-dark btn-square" href="/CustomerViewPage/CusViewProduct?handler=AddToCart&productId=${product.ProductId}&sizeId=${product.SizeId}"><i class="fa fa-shopping-cart"></i></a>
+                        <a style="padding:20px; margin-right:30px;" class="btn btn-outline-dark btn-square" href="/CustomerViewPage/CusViewProduct?handler=ViewDetail&productId=${product.ProductId}&categoryId=${product.CategoryId}"><i class="far fa-eye"></i></a>
                     </div>
                 </div>
                 <div class="text-center py-4">

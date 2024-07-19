@@ -1,43 +1,64 @@
 ﻿using BaByBoi.Domain.Models;
 using BusinessObject.IService;
-using DataAccess.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace BusinessObject.Service
+public class CategoryService : ICategoryService
 {
-    public class CategoryService : ICategoryService
+    private readonly BaByBoiContext _context;
+
+    public CategoryService(BaByBoiContext context)
     {
-        private readonly ICategoryRepository _categoryRepository;
+        _context = context;
+    }
 
-        public CategoryService(ICategoryRepository categoryRepository)
+    public async Task<(List<Category> Categories, int TotalCount)> GetPaginatedCategoriesAsync(string searchString, int pageNumber, int pageSize)
+    {
+        var query = _context.Categories.AsQueryable();
+
+        if (!string.IsNullOrEmpty(searchString))
         {
-            _categoryRepository = categoryRepository;
+            query = query.Where(c => c.CategoryName.Contains(searchString));
         }
 
-        public async Task<(List<Category> Categories, int TotalCount)> GetPaginatedCategoriesAsync(string searchString, int pageNumber, int pageSize)
-        {
-            return await _categoryRepository.GetPaginatedCategoriesAsync(searchString, pageNumber, pageSize);
-        }
+        int totalCount = await query.CountAsync();
 
-        public async Task<Category> GetCategoryByIdAsync(int id)
-        {
-            return await _categoryRepository.GetCategoryByIdAsync(id);
-        }
+        var categories = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
-        public async Task AddCategoryAsync(Category category)
-        {
-            await _categoryRepository.AddCategoryAsync(category);
-        }
+        return (categories, totalCount);
+    }
 
-        public async Task UpdateCategoryAsync(Category category)
-        {
-            await _categoryRepository.UpdateCategoryAsync(category);
-        }
+    public async Task<Category> GetCategoryByIdAsync(int id)
+    {
+        return await _context.Categories.FindAsync(id);
+    }
 
-        public async Task DeleteCategoryAsync(int id)
+    public async Task<Category> GetCategoryByCode(string categoryCode)
+    {
+        return await _context.Categories.FirstOrDefaultAsync(c => c.CategoryCode == categoryCode);
+    }
+
+    public async Task AddCategoryAsync(Category category)
+    {
+        _context.Categories.Add(category);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateCategoryAsync(Category category)
+    {
+        _context.Categories.Update(category);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteCategoryAsync(int id)
+    {
+        var category = await _context.Categories.FindAsync(id);
+        if (category != null)
         {
-            await _categoryRepository.DeleteCategoryAsync(id);
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
         }
     }
 }
