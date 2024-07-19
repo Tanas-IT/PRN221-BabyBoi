@@ -74,12 +74,12 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div>
-                            <span class="text-sm text-grey-m2 align-middle">To:</span>
+                            <span class="text-sm text-grey-m2 align-middle">Đến:</span>
                             <span class="text-600 text-110 text-blue align-middle">@Model.Order.User!.FullName</span>
                         </div>
                         <div class="text-grey-m2">
                             <div class="my-1">
-                                Address: @Model.Order.Address
+                                Địa chỉ: @Model.Order.Address
                             </div>
                             <div class="my-1"><i class="fa fa-envelope fa-flip-horizontal text-secondary"></i> <b class="text-600">Email: @Model.Order.User.Email</b></div>
                         </div>
@@ -93,9 +93,9 @@
                                 Đơn hàng
                             </div>
 
-                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Order Code: </span>@Model.Order.OrderCode</div>
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Mã hàng: </span>@Model.Order.OrderCode</div>
 
-                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Issue Date: </span>@Model.Order.OrderDate!.Value.ToString("dd/MM/yyyy")</div>
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Ngày phát hành: </span>@Model.Order.OrderDate!.Value.ToString("dd/MM/yyyy")</div>
 
                             <div class="my-2">
                                 @{
@@ -117,7 +117,7 @@
                                         _ => "Không xác định"
                                     };
                                 }
-                                <span class="text-600 text-90">Status: </span>
+                                <span class="text-600 text-90">Trạng thái: </span>
                                 <span id="orderStatus-@Model.Order.OrderId" class="badge badge-pill px-25" style="background-color: @statusColor; color: white;">@statusText</span>
                             </div>
                         </div>
@@ -205,7 +205,7 @@
                                     Tạm tính
                                 </div>
                                 <div class="col-5">
-                                    <span class="text-120 text-secondary-d1">$ @Model.ListOrderDetail.Sum(x => x.Price)!.Value.ToVietnameseCurrency()</span>
+                                    <span class="text-120 text-secondary-d1">@Model.ListOrderDetail.Sum(x => x.Price)!.Value.ToVietnameseCurrency()</span>
                                 </div>
                             </div>
 
@@ -217,7 +217,7 @@
                                             <p> Khuyến mãi( @Model.Order.Voucher!.Percent %)</p>
                                         </div>
                                         <div class="col-5">
-                                            <span class="text-110 text-secondary-d1">$ @((Model.Order.TotalPrice * Model.Order.Voucher.Percent) / 100)</span>
+                                            <span class="text-110 text-secondary-d1">@((Model.Order.TotalPrice * Model.Order.Voucher.Percent) / 100)</span>
                                         </div>
                                     </div>
                                 }
@@ -227,7 +227,7 @@
                                     Tổng tiền
                                 </div>
                                 <div class="col-5">
-                                    <span class="text-150 text-success-d3 opacity-2">$ @Model.Order.TotalPrice!.Value.ToVietnameseCurrency()</span>
+                                    <span class="text-150 text-success-d3 opacity-2">@Model.Order.TotalPrice!.Value.ToVietnameseCurrency()</span>
                                 </div>
                             </div>
                         </div>

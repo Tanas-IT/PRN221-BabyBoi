@@ -3,12 +3,11 @@
 
 @{
     Layout = "AdminLayout";
-
 }
 
-<h1>Edit</h1>
+<h1>Chỉnh sửa</h1>
 
-<h4>Voucher</h4>
+<h4>Mã giảm giá</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -16,52 +15,52 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Voucher.VoucherId" />
             <div class="form-group">
-                <label asp-for="Voucher.VoucherCode" class="control-label"></label>
+                <label asp-for="Voucher.VoucherCode" class="control-label">Mã giảm giá</label>
                 <input asp-for="Voucher.VoucherCode" class="form-control" />
                 <span asp-validation-for="Voucher.VoucherCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Voucher.StartDate" class="control-label"></label>
+                <label asp-for="Voucher.StartDate" class="control-label">Ngày bắt đầu</label>
                 <input asp-for="Voucher.StartDate" class="form-control" />
                 <span asp-validation-for="Voucher.StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Voucher.EndDate" class="control-label"></label>
+                <label asp-for="Voucher.EndDate" class="control-label">Ngày kết thúc</label>
                 <input asp-for="Voucher.EndDate" class="form-control" />
                 <span asp-validation-for="Voucher.EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Voucher.Type" class="control-label"></label>
+                <label asp-for="Voucher.Type" class="control-label">Loại</label>
                 <input asp-for="Voucher.Type" class="form-control" />
                 <span asp-validation-for="Voucher.Type" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Voucher.Percent" class="control-label"></label>
+                <label asp-for="Voucher.Percent" class="control-label">Phần trăm</label>
                 <input asp-for="Voucher.Percent" class="form-control" />
                 <span asp-validation-for="Voucher.Percent" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Voucher.Value" class="control-label"></label>
+                <label asp-for="Voucher.Value" class="control-label">Giá trị</label>
                 <input asp-for="Voucher.Value" class="form-control" />
                 <span asp-validation-for="Voucher.Value" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Voucher.TriggerValue" class="control-label"></label>
+                <label asp-for="Voucher.TriggerValue" class="control-label">Giá trị kích hoạt</label>
                 <input asp-for="Voucher.TriggerValue" class="form-control" />
                 <span asp-validation-for="Voucher.TriggerValue" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Voucher.Status" class="control-label"></label>
+                <label asp-for="Voucher.Status" class="control-label">Trạng thái</label>
                 <input asp-for="Voucher.Status" class="form-control" />
                 <span asp-validation-for="Voucher.Status" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Lưu" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index">Quay lại</a>
 </div>
