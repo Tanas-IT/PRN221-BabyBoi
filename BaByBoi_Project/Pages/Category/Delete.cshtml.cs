@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -23,38 +20,46 @@ namespace BaByBoi_Project.Pages.Category
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories.FirstOrDefaultAsync(m => m.CategoryId == id);
+            Category = await _context.Categories.FirstOrDefaultAsync(m => m.CategoryId == id);
 
-            if (category == null)
+            if (Category == null)
             {
                 return NotFound();
             }
-            else
-            {
-                Category = category;
-            }
+
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync()
         {
-            if (id == null || _context.Categories == null)
+            if (Category?.CategoryId == null)
             {
                 return NotFound();
             }
-            var category = await _context.Categories.FindAsync(id);
 
-            if (category != null)
+            Category = await _context.Categories.FindAsync(Category.CategoryId);
+
+            if (Category == null)
             {
-                Category = category;
-                _context.Categories.Remove(Category);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
+
+            // Check if there are products associated with this category
+            bool hasProducts = await _context.Products.AnyAsync(p => p.CategoryId == Category.CategoryId);
+
+            if (hasProducts)
+            {
+                ModelState.AddModelError(string.Empty, "Cannot delete this category because it is referenced by products.");
+                return Page(); // Return the delete page with the error message
+            }
+
+            _context.Categories.Remove(Category);
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }

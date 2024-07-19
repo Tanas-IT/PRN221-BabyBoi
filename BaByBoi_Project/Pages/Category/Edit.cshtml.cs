@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BaByBoi.Domain.Models;
 
@@ -24,22 +22,23 @@ namespace BaByBoi_Project.Pages.Category
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories.FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
+            Category = await _context.Categories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.CategoryId == id);
+
+            if (Category == null)
             {
                 return NotFound();
             }
-            Category = category;
+
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -47,7 +46,22 @@ namespace BaByBoi_Project.Pages.Category
                 return Page();
             }
 
-            _context.Attach(Category).State = EntityState.Modified;
+            var categoryToUpdate = await _context.Categories
+                .FirstOrDefaultAsync(c => c.CategoryId == Category.CategoryId);
+
+            if (categoryToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            // Update the properties
+            categoryToUpdate.CategoryCode = Category.CategoryCode;
+            categoryToUpdate.CategoryName = Category.CategoryName;
+            categoryToUpdate.CreateDate = Category.CreateDate;
+            categoryToUpdate.UpdateDate = Category.UpdateDate;
+            categoryToUpdate.UpdateBy = Category.UpdateBy;
+            categoryToUpdate.CreateBy = Category.CreateBy;
+            categoryToUpdate.Status = Category.Status;
 
             try
             {
@@ -70,7 +84,7 @@ namespace BaByBoi_Project.Pages.Category
 
         private bool CategoryExists(int id)
         {
-            return (_context.Categories?.Any(e => e.CategoryId == id)).GetValueOrDefault();
+            return _context.Categories.Any(e => e.CategoryId == id);
         }
     }
 }
