@@ -1,143 +1,98 @@
 ﻿@page
-@model IndexModel
+@model BaByBoi_Project.Pages.Category.IndexModel
 
 @{
     Layout = "AdminLayout";
 }
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
-<style>
-    /* Product Card Styles */
-    .product-card {
-        position: relative;
-        border: 1px solid #ccc;
-        padding: 15px;
-        text-align: center;
-        background-color: #fff;
-        transition: transform 0.3s;
-    }
 
-        .product-card:hover {
-            transform: scale(1.05);
-        }
+<div class="index-page">
+    <div class="card-header">
+        <div class="d-flex align-items-center">
+            <h4 class="card-title">Quản lý loại</h4>
+            <div class="d-flex align-items-center" style="margin: 0 auto">
+                <form asp-page-handler="PostSearchAsync" method="post" style="margin: 0 auto; display: flex; align-self: baseline">
+                    <input class="form-control" style="height: 40px; border-radius: 10px; width: 330px; padding: 10px;" type="search" id="searchInput" asp-for="SearchValue" placeholder="Tìm kiếm" />
+                    <button style="border-radius: 8px; margin-left: 22px;" type="submit" class="btn btn-info">Tìm kiếm</button>
+                </form>
+                <form method="post" asp-page-handler="PostResetAsync">
+                    <button style="border-radius: 8px; margin-left: 22px; color: white" type="submit" class="btn btn-warning">Làm mới trang</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    /* Product Image Styles */
-    .product-image {
-        position: relative;
-    }
-
-    /* Discount Banner Styles */
-    .discount,
-    .discount-banner {
-        position: absolute;
-        top: 0;
-        left: 0;
-        background-color: #dc3545;
-        color: white;
-        padding: 5px 10px;
-        transform: translate(-50%, -50%) rotate(-45deg);
-        z-index: 1;
-    }
-
-    /* Discount Label Styles */
-    .discount-label {
-        display: block;
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    /* Price Styles */
-    .price {
-        margin-top: 10px;
-        font-size: 18px;
-    }
-
-    /* Original Price Styles */
-    .original-price {
-        text-decoration: line-through;
-        color: #999;
-    }
-
-    /* Status Styles */
-    .status {
-        margin-top: 10px;
-    }
-
-    /* Button Primary Styles */
-    .btn-primary {
-        margin-top: 15px;
-    }
-
-    /* Additional Table Styles for Category Page */
-    .table th,
-    .table td {
-        vertical-align: middle;
-        text-align: center;
-    }
-</style>
-
-<h1>Category</h1>
-
-<p>
-    <a asp-page="Create" class="btn btn-success">Create New</a>
-</p>
-<table class="table table-bordered">
-    <thead class="thead-light">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Category[0].CategoryCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category[0].CategoryName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category[0].CreateDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category[0].UpdateDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category[0].UpdateBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category[0].CreateBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category[0].Status)
-            </th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Category)
-        {
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CategoryCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CategoryName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreateDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UpdateDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UpdateBy)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreateBy)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.CategoryId" class="btn btn-primary btn-sm">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.CategoryId" class="btn btn-info btn-sm">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.CategoryId" class="btn btn-danger btn-sm">Delete</a>
-                </td>
+                <th>@Html.DisplayNameFor(model => model.Categories[0].CategoryCode)</th>
+                <th>@Html.DisplayNameFor(model => model.Categories[0].CategoryName)</th>
+                <th>@Html.DisplayNameFor(model => model.Categories[0].CreateDate)</th>
+                <th>@Html.DisplayNameFor(model => model.Categories[0].UpdateDate)</th>
+                <th>@Html.DisplayNameFor(model => model.Categories[0].UpdateBy)</th>
+                <th>@Html.DisplayNameFor(model => model.Categories[0].CreateBy)</th>
+                <th>@Html.DisplayNameFor(model => model.Categories[0].Status)</th>
+                <th>Actions</th>
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Categories)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.CategoryCode)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CreateDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.UpdateDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.UpdateBy)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CreateBy)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-CategoryId="@item.CategoryId">Chỉnh sửa</a> |
+                        <a asp-page="./Details" asp-route-CategoryId="@item.CategoryId">Chi tiết</a> |
+                        <a asp-page="./Delete" asp-route-CategoryId="@item.CategoryId">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation" style="display: flex; justify-content: center">
+        <ul class="pagination">
+            @if (Model.Categories.PageIndex > 1)
+            {
+                <li class="page-item">
+                    <a asp-route-pageIndex="@(Model.Categories.PageIndex - 1)" asp-route-searchValue="@Model.SearchValue" class="page-link" tabindex="-1">Previous</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+            }
+            @for (int i = 1; i <= Model.Categories.TotalPages; i++)
+            {
+                <li style="margin: 0 10px;" class="page-item @(Model.Categories.PageIndex == i ? "active" : "")">
+                    <a asp-route-pageIndex="@i" asp-route-searchValue="@Model.SearchValue" class="page-link">@i</a>
+                </li>
+            }
+            @if (Model.Categories.PageIndex < Model.Categories.TotalPages)
+            {
+                <li class="page-item">
+                    <a asp-route-pageIndex="@(Model.Categories.PageIndex + 1)" asp-route-searchValue="@Model.SearchValue" class="page-link">Next</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <a class="page-link">Next</a>
+                </li>
+            }
+        </ul>
+    </nav>
+
+    <style>
+        .index-page {
+            padding-top: 100px; /* Adjust this value to create space */
         }
-    </tbody>
-</table>
+    </style>
+</div>

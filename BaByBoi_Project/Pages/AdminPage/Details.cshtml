@@ -10,64 +10,64 @@
         <hr />
         <dl class="row">
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.User.Email)
+                Email
             </dt>
             <dd class="col-sm-10">
                 @(Model.User.Email ?? "N/A")
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.User.Password)
+                Mật khẩu
             </dt>
             <dd class="col-sm-10">
                 @(Model.User.Password ?? "N/A")
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.User.Phone)
+                Số điện thoại
             </dt>
             <dd class="col-sm-10">
                 @(Model.User.Phone ?? "N/A")
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.User.FullName)
+                Tên đầy đủ
             </dt>
             <dd class="col-sm-10">
                 @(Model.User.FullName ?? "N/A")
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.User.CreateDate)
+                Ngày tạo
             </dt>
             <dd class="col-sm-10">
                 @(Model.User.CreateDate != null ? Model.User.CreateDate.Value.ToString("yyyy-MM-dd") : "N/A")
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.User.UpdateDate)
+                Ngày chỉnh sửa
             </dt>
             <dd class="col-sm-10">
                 @(Model.User.UpdateDate != null ? Model.User.UpdateDate.Value.ToString("yyyy-MM-dd") : "N/A")
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.User.Status)
+                Trạng thái
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.User.Status)
+                @(Model.User.Status == 1 ? "Hoạt động" : (Model.User.Status == 2 ? "Bị xóa" : "Bị cấm"))
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.User.BirthDate)
+                Ngày sinh
             </dt>
             <dd class="col-sm-10">
                 @(Model.User.BirthDate != null ? Model.User.BirthDate.Value.ToString("yyyy-MM-dd") : "N/A")
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.User.Gender)
+                Giới tính
             </dt>
             <dd class="col-sm-10">
                 @(Model.User.Gender == 1 ? "Nam" : (Model.User.Gender == 2 ? "Nữ" : "N/A"))
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.User.Role)
+                Vai trò
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.User.Role.RoleName)
+                @(Model.User?.RoleId == 1 ? "Quản trị viên" : (Model.User?.RoleId == 2 ? "Khách hàng" : "N/A"))
             </dd>
         </dl>
         @* <div>
