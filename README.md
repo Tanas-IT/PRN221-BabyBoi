@@ -24,3 +24,8 @@ Tại BaBiBoi, bạn có thể tìm thấy các sản phẩm sau:
 - Hotline: 1900 1234
 - Email: support@babiboi.com
 - Địa chỉ: District 9, Thu Duc City, Ho Chi Minh City
+
+## Account Testing
+- Admin:
+    + username: admin@gmail.com
+    + password: 123456
