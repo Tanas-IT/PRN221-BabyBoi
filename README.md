@@ -20,7 +20,7 @@ Tại BaBiBoi, bạn có thể tìm thấy các sản phẩm sau:
 
 ## Liên hệ với chúng tôi
 
-- Website: https://babyboiproject20240717124147.azurewebsites.net/
+- Website: https://babyboiproject20240717124147.azurewebsites.net/CustomerViewPage/CusViewProduct
 - Hotline: 1900 1234
 - Email: support@babiboi.com
 - Địa chỉ: District 9, Thu Duc City, Ho Chi Minh City
